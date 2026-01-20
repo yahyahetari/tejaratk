@@ -1,0 +1,566 @@
+// prisma/schema.prisma - Schema محسن للمنصة (إدارة الاشتراكات وإعداد المتجر فقط)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// نماذج المستخدمين والمصادقة
+// ============================================
+
+model User {
+  id                String     @id @default(cuid())
+  email             String     @unique
+  password          String
+  role              Role       @default(MERCHANT)
+  emailVerified     Boolean    @default(false)
+  emailVerifiedAt   DateTime?
+  
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  
+  merchant          Merchant?
+  verificationCodes VerificationCode[]
+  activities        Activity[]
+  
+  @@index([email])
+  @@index([role])
+}
+
+model VerificationCode {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  code      String
+  purpose   String   // 'login', 'admin_verification', 'email_verification', 'password_reset'
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  usedAt    DateTime?
+  
+  createdAt DateTime @default(now())
+  
+  @@index([userId])
+  @@index([code])
+  @@index([expiresAt])
+}
+
+enum Role {
+  ADMIN
+  MERCHANT
+}
+
+// ============================================
+// نماذج التجار
+// ============================================
+
+model Merchant {
+  id                String         @id @default(cuid())
+  userId            String         @unique
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  businessName      String
+  contactName       String
+  phone             String?
+  email             String?
+  name              String?
+  status            MerchantStatus @default(PENDING)
+  
+  // معلومات المتجر الأساسية
+  storeName         String?
+  storeSlug         String?        @unique
+  storeDescription  String?        @db.Text
+  storeLogo         String?
+  storeBanner       String?
+  
+  // إعدادات المتجر
+  currency          String         @default("OMR")
+  timezone          String         @default("Asia/Muscat")
+  language          String         @default("ar")
+  
+  // إعدادات الشحن
+  shippingEnabled   Boolean        @default(true)
+  freeShippingMin   Float?
+  defaultShippingCost Float        @default(0)
+  
+  // إعدادات الضرائب
+  taxEnabled        Boolean        @default(false)
+  taxRate           Float          @default(0)
+  
+  // الفترة التجريبية والاشتراك
+  trialEndDate      DateTime?
+  subscription      Subscription?
+  
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  
+  // علاقات المتجر
+  notifications     Notification[]
+  activationKeys    ActivationKey[]
+  activityLogs      ActivityLog[]
+  invoices          Invoice[]
+  store             Store?
+  storeSetup        StoreSetup?
+  brandIdentity     BrandIdentity?
+  
+  @@index([userId])
+  @@index([status])
+  @@index([storeSlug])
+}
+
+enum MerchantStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  CANCELLED
+  OVERDUE
+}
+
+// ============================================
+// نماذج تتبع النشاط
+// ============================================
+
+model Activity {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type        String   // login, logout, settings_update, etc.
+  entity      String?  // subscription, store_setup, etc.
+  entityId    String?
+  description String
+  metadata    Json?
+  
+  ipAddress   String?
+  userAgent   String?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([userId])
+  @@index([type])
+  @@index([entity])
+  @@index([createdAt])
+}
+
+// ============================================
+// نماذج سجل النشاط العام
+// ============================================
+
+model ActivityLog {
+  id          String    @id @default(cuid())
+  merchantId  String?
+  merchant    Merchant? @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  action      String    // ACTIVATION_KEY_CREATED, ACTIVATION_KEY_VERIFICATION_FAILED, etc.
+  description String?
+  metadata    Json?
+  
+  ipAddress   String?
+  userAgent   String?
+  
+  createdAt   DateTime  @default(now())
+  
+  @@index([merchantId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ============================================
+// نماذج الإشعارات
+// ============================================
+
+model Notification {
+  id          String   @id @default(cuid())
+  merchantId  String?
+  merchant    Merchant? @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  userId      String?  // null للإشعارات العامة
+  
+  type        NotificationType
+  title       String
+  message     String   @db.Text
+  
+  // بيانات إضافية
+  data        Json?
+  link        String?
+  
+  // حالة الإشعار
+  read        Boolean  @default(false)
+  readAt      DateTime?
+  
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime?
+  
+  @@index([merchantId])
+  @@index([userId])
+  @@index([type])
+  @@index([read])
+  @@index([createdAt])
+}
+
+enum NotificationType {
+  SYSTEM              // إشعار نظام
+  SUBSCRIPTION        // إشعار اشتراك
+  KEY                 // إشعار كود التفعيل
+  WELCOME             // ترحيب
+  REMINDER            // تذكير
+}
+
+// ============================================
+// نماذج الاشتراكات
+// ============================================
+
+model Subscription {
+  id              String             @id @default(cuid())
+  merchantId      String             @unique
+  merchant        Merchant           @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  // معلومات الخطة
+  planId          String             // BASIC, PREMIUM, ENTERPRISE
+  planName        String
+  planType        String?            // نوع الخطة الفعلي من Paddle
+  billingCycle    BillingCycle       @default(MONTHLY)
+  
+  // حالة الاشتراك
+  status          SubscriptionStatus @default(ACTIVE)
+  
+  // التواريخ
+  startDate       DateTime           @default(now())
+  endDate         DateTime?
+  cancelledAt     DateTime?
+  pausedAt        DateTime?
+  
+  // فترة الاشتراك الحالية
+  currentPeriodStart DateTime?
+  currentPeriodEnd   DateTime?
+  
+  // إلغاء في نهاية الفترة
+  cancelAtPeriodEnd  Boolean          @default(false)
+  
+  // فترة السماح
+  gracePeriodEnd  DateTime?
+  
+  // معلومات الدفع (Paddle)
+  paddleSubscriptionId  String?      @unique
+  paddleCustomerId      String?
+  paddlePriceId         String?
+  
+  // المبالغ
+  amount          Float
+  currency        String             @default("OMR")
+  
+  // تاريخ الدفع
+  nextBillingDate DateTime?
+  lastPaymentDate DateTime?
+  
+  // حالة التأخر
+  isOverdue       Boolean            @default(false)
+  overdueAt       DateTime?
+  
+  // سجل الدفعات
+  payments        Payment[]
+  invoices        Invoice[]
+  
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  
+  @@index([merchantId])
+  @@index([status])
+  @@index([planId])
+  @@index([paddleSubscriptionId])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  subscriptionId  String
+  subscription    Subscription  @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  
+  // معلومات الدفع
+  amount          Float
+  currency        String        @default("OMR")
+  status          PaymentStatus @default(PENDING)
+  
+  // معلومات Paddle
+  paddleTransactionId String?   @unique
+  paddleInvoiceId     String?
+  
+  // طريقة الدفع
+  paymentMethod   String?
+  
+  // التواريخ
+  paidAt          DateTime?
+  failedAt        DateTime?
+  refundedAt      DateTime?
+  
+  // ملاحظات
+  notes           String?       @db.Text
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([paddleTransactionId])
+}
+
+enum PaymentStatus {
+  PENDING       // قيد الانتظار
+  PAID          // مدفوع
+  FAILED        // فشل
+  REFUNDED      // مسترد
+  PARTIALLY_REFUNDED // مسترد جزئياً
+}
+
+// ============================================
+// نماذج الفواتير
+// ============================================
+
+model Invoice {
+  id              String        @id @default(cuid())
+  merchantId      String
+  merchant        Merchant      @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  subscriptionId  String?
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id], onDelete: SetNull)
+  
+  invoiceNumber   String        @unique
+  
+  // المبالغ
+  amount          Float
+  currency        String        @default("OMR")
+  
+  // حالة الفاتورة
+  status          InvoiceStatus @default(DUE)
+  
+  // التواريخ
+  dueDate         DateTime
+  paidAt          DateTime?
+  
+  // معلومات الدفع
+  transactionId   String?       @unique
+  paymentMethod   String?
+  
+  // ملاحظات
+  notes           String?       @db.Text
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@index([merchantId])
+  @@index([subscriptionId])
+  @@index([status])
+  @@index([invoiceNumber])
+}
+
+enum InvoiceStatus {
+  DUE             // مستحقة
+  PAID            // مدفوعة
+  VOID            // ملغاة
+  OVERDUE         // متأخرة
+}
+
+enum SubscriptionStatus {
+  ACTIVE          // نشط
+  PAUSED          // متوقف مؤقتاً
+  CANCELLED       // ملغي
+  EXPIRED         // منتهي
+  PAST_DUE        // متأخر الدفع
+  TRIALING        // في الفترة التجريبية
+  OVERDUE         // متأخر
+}
+
+enum BillingCycle {
+  MONTHLY         // شهري
+  YEARLY          // سنوي
+}
+
+// ============================================
+// نماذج أكواد التفعيل
+// ============================================
+
+model ActivationKey {
+  id              String            @id @default(cuid())
+  merchantId      String
+  merchant        Merchant          @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  key             String            @unique
+  status          ActivationKeyStatus @default(ACTIVE)
+  
+  // معلومات الاستخدام
+  isUsed          Boolean           @default(false)
+  usedAt          DateTime?
+  usedBy          String?           // IP address
+  
+  // معلومات المتجر
+  storeUrl        String?
+  storeDomain     String?
+  
+  // التحقق
+  verificationCount Int             @default(0)
+  lastVerifiedAt  DateTime?
+  
+  // التواريخ
+  expiresAt       DateTime?
+  
+  // ملاحظات
+  notes           String?           @db.Text
+  
+  // العلاقات
+  verifications   KeyVerification[]
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  @@index([merchantId])
+  @@index([key])
+  @@index([status])
+}
+
+model KeyVerification {
+  id              String        @id @default(cuid())
+  keyId           String
+  key             ActivationKey @relation(fields: [keyId], references: [id], onDelete: Cascade)
+  
+  // معلومات التحقق
+  ipAddress       String
+  userAgent       String?
+  storeUrl        String?
+  
+  // النتيجة
+  success         Boolean
+  errorMessage    String?
+  
+  // البيانات
+  requestData     Json?
+  responseData    Json?
+  
+  verifiedAt      DateTime      @default(now())
+  
+  @@index([keyId])
+  @@index([ipAddress])
+  @@index([verifiedAt])
+}
+
+enum ActivationKeyStatus {
+  ACTIVE          // نشط
+  EXPIRED         // منتهي
+  SUSPENDED       // معلق
+  REVOKED         // ملغي
+}
+
+// ============================================
+// نماذج إعدادات المتجر
+// ============================================
+
+model Store {
+  id              String    @id @default(cuid())
+  merchantId      String    @unique
+  merchant        Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  // معلومات المتجر الأساسية
+  brandName       String?
+  tagline         String?
+  description     String?   @db.Text
+  
+  // الإعدادات
+  currency        String    @default("OMR")
+  timezone        String    @default("Asia/Muscat")
+  language        String    @default("ar")
+  
+  // الشعار والصور
+  logo            String?
+  favicon         String?
+  banner          String?
+  
+  // معلومات الاتصال
+  email           String?
+  phone           String?
+  whatsapp        String?
+  
+  // العنوان
+  address         String?
+  city            String?
+  country         String?
+  
+  // روابط التواصل الاجتماعي
+  socialLinks     Json?     // {facebook, twitter, instagram, etc.}
+  
+  // إعدادات SEO
+  metaTitle       String?
+  metaDescription String?   @db.Text
+  
+  // إعدادات متقدمة
+  settings        Json?
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([merchantId])
+}
+
+model StoreSetup {
+  id              String    @id @default(cuid())
+  merchantId      String    @unique
+  merchant        Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  // خطوات الإعداد
+  basicInfoCompleted      Boolean @default(false)
+  brandIdentityCompleted  Boolean @default(false)
+  paymentSetupCompleted   Boolean @default(false)
+  licenseCompleted        Boolean @default(false)
+  
+  // بيانات الإعداد
+  basicInfo       Json?
+  paymentGateway  String?
+  paymentConfig   Json?
+  
+  // حالة الإعداد
+  isCompleted     Boolean   @default(false)
+  completedAt     DateTime?
+  
+  // الخطوة الحالية
+  currentStep     Int       @default(1)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([merchantId])
+  @@index([isCompleted])
+}
+
+model BrandIdentity {
+  id              String    @id @default(cuid())
+  merchantId      String    @unique
+  merchant        Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  // الألوان
+  primaryColor    String?   @default("#3B82F6")
+  secondaryColor  String?   @default("#10B981")
+  accentColor     String?   @default("#F59E0B")
+  
+  // الخطوط
+  headingFont     String?   @default("Cairo")
+  bodyFont        String?   @default("Cairo")
+  
+  // الشعار
+  logo            String?
+  logoLight       String?   // شعار للخلفية الفاتحة
+  logoDark        String?   // شعار للخلفية الداكنة
+  favicon         String?
+  
+  // القالب
+  templateId      String?
+  templateConfig  Json?
+  
+  // إعدادات إضافية
+  customCSS       String?   @db.Text
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  
+  @@index([merchantId])
+}
