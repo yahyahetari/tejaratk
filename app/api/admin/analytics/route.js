@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/db/prisma';
 import { verifyAuth } from '@/lib/auth/session';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API لإحصائيات الأدمن
  * GET /api/admin/analytics
@@ -117,36 +119,10 @@ export async function GET(request) {
       }
     });
 
-    // إحصائيات أكواد التفعيل
-    const totalActivationKeys = await prisma.activationKey.count();
-    const activeKeys = await prisma.activationKey.count({
-      where: { status: 'ACTIVE' }
-    });
-    const expiredKeys = await prisma.activationKey.count({
-      where: { status: 'EXPIRED' }
-    });
-
-    // إحصائيات التحققات
-    const totalVerifications = await prisma.keyVerification.count({
-      where: { verifiedAt: { gte: startDate } }
-    });
-    const successfulVerifications = await prisma.keyVerification.count({
-      where: {
-        success: true,
-        verifiedAt: { gte: startDate }
-      }
-    });
-    const failedVerifications = await prisma.keyVerification.count({
-      where: {
-        success: false,
-        verifiedAt: { gte: startDate }
-      }
-    });
-
     // معدل نمو التجار (مقارنة مع الفترة السابقة)
     const previousPeriodStart = new Date(startDate);
     previousPeriodStart.setTime(previousPeriodStart.getTime() - (now.getTime() - startDate.getTime()));
-    
+
     const previousPeriodMerchants = await prisma.merchant.count({
       where: {
         createdAt: {
@@ -204,26 +180,13 @@ export async function GET(request) {
           paid: paidInvoices,
           pending: pendingInvoices,
           overdue: overdueInvoices
-        },
-        activationKeys: {
-          total: totalActivationKeys,
-          active: activeKeys,
-          expired: expiredKeys
-        },
-        verifications: {
-          total: totalVerifications,
-          successful: successfulVerifications,
-          failed: failedVerifications,
-          successRate: totalVerifications > 0
-            ? Math.round((successfulVerifications / totalVerifications) * 10000) / 100
-            : 0
         }
       }
     });
 
   } catch (error) {
     console.error('Error in admin analytics API:', error);
-    
+
     return NextResponse.json(
       {
         success: false,
@@ -233,3 +196,4 @@ export async function GET(request) {
     );
   }
 }
+
