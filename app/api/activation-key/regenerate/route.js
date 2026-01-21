@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { regenerateActivationKey } from '@/lib/activation-key';
 import { verifyAuth } from '@/lib/auth/session';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 /**
  * API لإعادة توليد كود التفعيل
  * POST /api/activation-key/regenerate
@@ -24,7 +27,7 @@ export async function POST(request) {
 
     // إعادة توليد الكود
     const newKey = await regenerateActivationKey(
-      merchantId, 
+      merchantId,
       reason || 'طلب التاجر'
     );
 
@@ -42,7 +45,7 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Error in activation key regeneration API:', error);
-    
+
     return NextResponse.json(
       {
         success: false,

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getActivationKey } from '@/lib/activation-key';
 import { verifyAuth } from '@/lib/auth/session';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API للحصول على حالة كود التفعيل
  * GET /api/activation-key/status
@@ -54,7 +56,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Error in activation key status API:', error);
-    
+
     return NextResponse.json(
       {
         success: false,

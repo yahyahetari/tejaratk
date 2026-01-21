@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getActivationKey, getKeyVerifications } from '@/lib/activation-key';
 import { verifyAuth } from '@/lib/auth/session';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API للحصول على سجل استخدام كود التفعيل
  * GET /api/activation-key/usage?limit=50
@@ -61,7 +63,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Error in activation key usage API:', error);
-    
+
     return NextResponse.json(
       {
         success: false,

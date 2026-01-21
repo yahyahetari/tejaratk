@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { verifyActivationKey } from '@/lib/activation-key';
 import { headers } from 'next/headers';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * API للتحقق من صحة كود التفعيل
  * هذا الـ endpoint يُستخدم من المتجر الخارجي للتحقق من الكود
@@ -17,8 +19,8 @@ export async function POST(request) {
     // التحقق من وجود الكود
     if (!key) {
       return NextResponse.json(
-        { 
-          success: false, 
+        {
+          success: false,
           error: 'كود التفعيل مطلوب',
           code: 'KEY_REQUIRED'
         },
@@ -28,9 +30,9 @@ export async function POST(request) {
 
     // الحصول على معلومات الطلب
     const headersList = headers();
-    const ipAddress = headersList.get('x-forwarded-for') || 
-                     headersList.get('x-real-ip') || 
-                     'unknown';
+    const ipAddress = headersList.get('x-forwarded-for') ||
+      headersList.get('x-real-ip') ||
+      'unknown';
     const userAgent = headersList.get('user-agent') || 'unknown';
 
     // بيانات الطلب
@@ -74,7 +76,7 @@ export async function POST(request) {
 
   } catch (error) {
     console.error('Error in activation key verification API:', error);
-    
+
     return NextResponse.json(
       {
         success: false,
@@ -95,8 +97,8 @@ export async function GET(request) {
 
   if (!key) {
     return NextResponse.json(
-      { 
-        success: false, 
+      {
+        success: false,
         error: 'كود التفعيل مطلوب',
         code: 'KEY_REQUIRED'
       },
@@ -106,9 +108,9 @@ export async function GET(request) {
 
   try {
     const headersList = headers();
-    const ipAddress = headersList.get('x-forwarded-for') || 
-                     headersList.get('x-real-ip') || 
-                     'unknown';
+    const ipAddress = headersList.get('x-forwarded-for') ||
+      headersList.get('x-real-ip') ||
+      'unknown';
     const userAgent = headersList.get('user-agent') || 'unknown';
 
     const requestData = {
@@ -139,7 +141,7 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Error in activation key verification API:', error);
-    
+
     return NextResponse.json(
       {
         success: false,
