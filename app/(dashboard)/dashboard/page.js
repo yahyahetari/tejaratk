@@ -2,11 +2,10 @@ import { getSession } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import QuickActions from '@/components/dashboard/quick-actions';
-import { 
-  Store, 
-  CreditCard, 
-  CheckCircle, 
-  Key,
+import {
+  Store,
+  CreditCard,
+  CheckCircle,
   Settings,
   ArrowUpRight,
   Clock,
@@ -24,7 +23,7 @@ function formatTimeAgo(date) {
   const minutes = Math.floor(diff / 60000);
   const hours = Math.floor(diff / 3600000);
   const days = Math.floor(diff / 86400000);
-  
+
   if (minutes < 1) return 'الآن';
   if (minutes < 60) return `منذ ${minutes} دقيقة`;
   if (hours < 24) return `منذ ${hours} ساعة`;
@@ -33,13 +32,13 @@ function formatTimeAgo(date) {
 
 export default async function DashboardPage() {
   const session = await getSession();
-  
+
   if (!session) {
     redirect('/login');
   }
-  
+
   const { merchant } = session;
-  
+
   const merchantData = {
     id: merchant?.id || null,
     contactName: merchant?.contactName || null,
@@ -52,25 +51,25 @@ export default async function DashboardPage() {
     email: merchant?.email || 'user@example.com',
     createdAt: merchant?.createdAt || new Date()
   };
-  
+
   const hasSubscription = merchantData.subscriptionStatus === 'ACTIVE';
 
   // بيانات النشاطات الافتراضية
   const recentActivities = [
-    { 
-      icon: Store, 
-      text: 'تم إنشاء الحساب', 
-      time: formatTimeAgo(merchantData.createdAt), 
-      color: 'blue' 
+    {
+      icon: Store,
+      text: 'تم إنشاء الحساب',
+      time: formatTimeAgo(merchantData.createdAt),
+      color: 'blue'
     },
-    { 
-      icon: CheckCircle, 
-      text: 'مرحباً بك في منصة تجارتك', 
-      time: formatTimeAgo(merchantData.createdAt), 
-      color: 'green' 
+    {
+      icon: CheckCircle,
+      text: 'مرحباً بك في منصة تجارتك',
+      time: formatTimeAgo(merchantData.createdAt),
+      color: 'green'
     },
   ];
-  
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile Header - Logo on the far right */}
@@ -88,10 +87,10 @@ export default async function DashboardPage() {
           </Link>
         </div>
       </div>
-      
+
       {/* Top spacing for mobile header */}
       <div className="lg:hidden h-16"></div>
-      
+
       {/* Main Container */}
       <div className="w-full h-full">
         <div className="max-w-[1800px] mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
@@ -102,7 +101,7 @@ export default async function DashboardPage() {
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRjMC0yLjIxLTEuNzktNC00LTRzLTQgMS43OS00IDQgMS43OSA0IDQgNCA0LTEuNzkgNC00eiIvPjwvZz48L2c+PC9zdmc+')] opacity-30"></div>
               <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-white/10 rounded-full blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-purple-500/20 rounded-full blur-3xl"></div>
-              
+
               <div className="relative z-10 p-4 sm:p-6 lg:p-8">
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-5">
                   <div className="text-white">
@@ -121,7 +120,7 @@ export default async function DashboardPage() {
                       مرحباً بك في منصة تجارتك لإدارة الاشتراكات وإعداد متجرك.
                     </p>
                   </div>
-                  
+
                   <div className="flex flex-row gap-2 sm:gap-3">
                     <Link href="/dashboard/store-setup" className="flex-1 sm:flex-initial">
                       <button className="w-full px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 bg-white text-blue-600 rounded-lg sm:rounded-xl font-semibold hover:bg-gray-50 transition-all shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm lg:text-base">
@@ -139,7 +138,7 @@ export default async function DashboardPage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Subscription Banner */}
             {!hasSubscription && (
               <div className="card-premium p-4 sm:p-5 lg:p-6 border-2 border-amber-200 bg-gradient-to-r from-amber-50 to-orange-50 animate-fade-in-up rounded-xl lg:rounded-2xl">
@@ -163,10 +162,10 @@ export default async function DashboardPage() {
                 </div>
               </div>
             )}
-            
+
             {/* Quick Actions */}
             <QuickActions hasStoreSetup={merchantData.hasStoreSetup} />
-            
+
             {/* Main Content Grid */}
             <div className="grid lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
               {/* Quick Links */}
@@ -180,7 +179,7 @@ export default async function DashboardPage() {
                     <p className="text-xs sm:text-sm text-gray-500">إدارة متجرك واشتراكك</p>
                   </div>
                 </div>
-                
+
                 <div className="grid sm:grid-cols-2 gap-3 sm:gap-4">
                   {/* Store Setup */}
                   <Link href="/dashboard/store-setup" className="group">
@@ -197,7 +196,7 @@ export default async function DashboardPage() {
                       </div>
                     </div>
                   </Link>
-                  
+
                   {/* Subscription */}
                   <Link href="/dashboard/subscription" className="group">
                     <div className="p-4 bg-gray-50 hover:bg-emerald-50 rounded-xl transition-all border-2 border-transparent hover:border-emerald-200">
@@ -213,23 +212,7 @@ export default async function DashboardPage() {
                       </div>
                     </div>
                   </Link>
-                  
-                  {/* Activation Key */}
-                  <Link href="/dashboard/activation-key" className="group">
-                    <div className="p-4 bg-gray-50 hover:bg-purple-50 rounded-xl transition-all border-2 border-transparent hover:border-purple-200">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Key className="h-5 w-5 text-purple-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">مفتاح التفعيل</h3>
-                          <p className="text-xs text-gray-500">عرض مفتاح تفعيل متجرك</p>
-                        </div>
-                        <ArrowUpRight className="h-5 w-5 text-gray-400 group-hover:text-purple-600 transition-colors" />
-                      </div>
-                    </div>
-                  </Link>
-                  
+
                   {/* Invoices */}
                   <Link href="/dashboard/invoices" className="group">
                     <div className="p-4 bg-gray-50 hover:bg-amber-50 rounded-xl transition-all border-2 border-transparent hover:border-amber-200">
@@ -247,7 +230,7 @@ export default async function DashboardPage() {
                   </Link>
                 </div>
               </div>
-              
+
               {/* Recent Activity */}
               <div className="card-premium p-4 sm:p-5 lg:p-6 animate-fade-in-up rounded-xl lg:rounded-2xl">
                 <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5">
@@ -262,17 +245,17 @@ export default async function DashboardPage() {
                     <span className="mr-1">اليوم</span>
                   </span>
                 </div>
-                
+
                 <div className="space-y-3">
                   {recentActivities.map((activity, i) => {
                     const ActivityIcon = activity.icon;
                     return (
-                      <div 
-                        key={i} 
+                      <div
+                        key={i}
                         className="flex items-start gap-3 p-3 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors"
                       >
-                        <div className={`w-9 h-9 rounded-lg bg-${activity.color}-100 flex items-center justify-center flex-shrink-0`}>
-                          <ActivityIcon className={`h-4 w-4 text-${activity.color}-600`} />
+                        <div className={`w - 9 h - 9 rounded - lg bg - ${activity.color} -100 flex items - center justify - center flex - shrink - 0`}>
+                          <ActivityIcon className={`h - 4 w - 4 text - ${activity.color} -600`} />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-gray-900 text-sm truncate">{activity.text}</p>
@@ -282,7 +265,7 @@ export default async function DashboardPage() {
                     );
                   })}
                 </div>
-                
+
                 {/* Setup Progress */}
                 {!merchantData.hasStoreSetup && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
@@ -291,9 +274,9 @@ export default async function DashboardPage() {
                       <span className="text-xs text-gray-500">{merchantData.storeSetupStep}/4</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all"
-                        style={{ width: `${(merchantData.storeSetupStep / 4) * 100}%` }}
+                        style={{ width: `${(merchantData.storeSetupStep / 4) * 100}% ` }}
                       ></div>
                     </div>
                     <Link href="/dashboard/store-setup" className="mt-3 block">

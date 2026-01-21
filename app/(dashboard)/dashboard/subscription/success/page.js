@@ -3,13 +3,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { 
-  CheckCircle, 
-  Sparkles, 
-  ArrowLeft, 
+import {
+  CheckCircle,
+  Sparkles,
+  ArrowLeft,
   Loader2,
   Store,
-  Key,
   Rocket,
   Gift,
   Star
@@ -36,7 +35,6 @@ export default function SubscriptionSuccessPage() {
 
   const nextSteps = [
     { icon: Store, title: 'أكمل إعداد المتجر', desc: 'أضف معلومات متجرك', href: '/dashboard/store-setup' },
-    { icon: Key, title: 'احصل على كود التفعيل', desc: 'فعّل متجرك الخارجي', href: '/dashboard/activation-key' },
     { icon: Rocket, title: 'ابدأ البيع', desc: 'أضف منتجاتك وابدأ', href: '/dashboard' },
   ];
 

@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db/prisma';
 import { verifyAuth } from '@/lib/auth/session';
-import { createActivationKey } from '@/lib/activation-key';
-import { notifyStoreSetupCompleted, notifyActivationKeyCreated } from '@/lib/notification-sender';
+import { notifyStoreSetupCompleted } from '@/lib/notification-sender';
 
 /**
- * API لإكمال إعداد المتجر وتوليد كود التفعيل
+ * API لإكمال إعداد المتجر
  * POST /api/store/setup/complete
  */
 export async function POST(request) {
@@ -51,12 +50,12 @@ export async function POST(request) {
       );
     }
 
-    // تحديث حالة المتجر
-    await prisma.store.update({
+    // تحديث حالة إعداد المتجر
+    await prisma.storeSetup.update({
       where: { merchantId },
       data: {
-        setupCompleted: true,
-        setupStep: 5 // الخطوة الأخيرة
+        isCompleted: true,
+        completedAt: new Date()
       }
     });
 
@@ -68,24 +67,6 @@ export async function POST(request) {
       }
     });
 
-    // التحقق من وجود كود تفعيل سابق
-    let activationKey = await prisma.activationKey.findFirst({
-      where: { 
-        merchantId,
-        status: 'ACTIVE'
-      }
-    });
-
-    // إنشاء كود تفعيل جديد إذا لم يكن موجوداً
-    if (!activationKey) {
-      activationKey = await createActivationKey(merchantId, {
-        notes: 'تم الإنشاء عند إكمال إعداد المتجر'
-      });
-
-      // إرسال إشعار بإنشاء الكود
-      await notifyActivationKeyCreated(merchantId, activationKey.key);
-    }
-
     // إرسال إشعار بإكمال الإعداد
     await notifyStoreSetupCompleted(merchantId);
 
@@ -95,9 +76,8 @@ export async function POST(request) {
         merchantId,
         action: 'STORE_SETUP_COMPLETED',
         description: 'تم إكمال إعداد المتجر بنجاح',
-        metadata: { 
-          storeId: store.id,
-          activationKeyId: activationKey.id
+        metadata: {
+          storeId: store.id
         }
       }
     });
@@ -108,21 +88,14 @@ export async function POST(request) {
       data: {
         store: {
           id: store.id,
-          brandName: store.brandName,
-          setupCompleted: true
-        },
-        activationKey: {
-          id: activationKey.id,
-          key: activationKey.key,
-          status: activationKey.status,
-          expiresAt: activationKey.expiresAt
+          brandName: store.brandName
         }
       }
     });
 
   } catch (error) {
     console.error('Error completing store setup:', error);
-    
+
     return NextResponse.json(
       {
         success: false,

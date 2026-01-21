@@ -3,12 +3,12 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Store, 
-  CreditCard, 
-  Key, 
-  Settings, 
+import {
+  LayoutDashboard,
+  Store,
+  CreditCard,
+  Key,
+  Settings,
   HelpCircle,
   ChevronLeft,
   ChevronRight,
@@ -56,9 +56,9 @@ export default function Sidebar({ merchant }) {
 
   const handleLogout = async () => {
     if (loggingOut) return;
-    
+
     setLoggingOut(true);
-    
+
     try {
       const response = await fetch('/api/auth/logout', {
         method: 'POST',
@@ -96,12 +96,6 @@ export default function Sidebar({ merchant }) {
       href: '/dashboard/subscription',
       icon: CreditCard,
       badge: 'PRO',
-    },
-    {
-      title: 'كود التفعيل',
-      href: '/dashboard/activation-key',
-      icon: Key,
-      badge: null,
     },
     {
       title: 'الفواتير',
@@ -183,15 +177,15 @@ export default function Sidebar({ merchant }) {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
-            
+
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 className={`
                   flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group
-                  ${active 
-                    ? 'gradient-primary text-white shadow-lg shadow-blue-500/30' 
+                  ${active
+                    ? 'gradient-primary text-white shadow-lg shadow-blue-500/30'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                   }
                   ${collapsed ? 'justify-center' : ''}
@@ -203,15 +197,14 @@ export default function Sidebar({ merchant }) {
                   <>
                     <span className="font-semibold flex-1">{item.title}</span>
                     {item.badge && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                        active ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-600'
-                      }`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-600'
+                        }`}>
                         {item.badge}
                       </span>
                     )}
                   </>
                 )}
-                
+
                 {active && !collapsed && (
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
                 )}
@@ -269,7 +262,7 @@ export default function Sidebar({ merchant }) {
             </div>
           </div>
         )}
-        
+
         <LogoutButton isCollapsed={collapsed} />
       </div>
     </>
@@ -295,7 +288,7 @@ export default function Sidebar({ merchant }) {
       )}
 
       {/* Desktop Sidebar */}
-      <aside 
+      <aside
         className={`
           hidden lg:flex
           bg-white border-r border-gray-100 min-h-screen transition-all duration-300 flex-col shadow-xl shadow-gray-200/50
@@ -335,15 +328,15 @@ export default function Sidebar({ merchant }) {
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
-                
+
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={`
                       flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group
-                      ${active 
-                        ? 'gradient-primary text-white shadow-lg shadow-blue-500/30' 
+                      ${active
+                        ? 'gradient-primary text-white shadow-lg shadow-blue-500/30'
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       }
                     `}
@@ -351,13 +344,12 @@ export default function Sidebar({ merchant }) {
                     <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'} transition-colors`} />
                     <span className="font-semibold flex-1">{item.title}</span>
                     {item.badge && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                        active ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-600'
-                      }`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-600'
+                        }`}>
                         {item.badge}
                       </span>
                     )}
-                    
+
                     {active && (
                       <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
                     )}
@@ -394,7 +386,7 @@ export default function Sidebar({ merchant }) {
                 <p className="text-xs text-gray-500 truncate">{displayEmail}</p>
               </div>
             </div>
-            
+
             <LogoutButton isCollapsed={false} />
           </div>
         </div>
