@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { verifyAuth } from '@/lib/auth/session';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
-export const fetchCache = 'force-no-store';
 
 /**
  * API لإحصائيات الأدمن
@@ -12,6 +9,10 @@ export const fetchCache = 'force-no-store';
  */
 export async function GET(request) {
   try {
+    // Dynamic imports to avoid static analysis issues
+    const { verifyAuth } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     // التحقق من المصادقة والصلاحيات
     const auth = await verifyAuth(request);
     if (!auth.authenticated || auth.user.role !== 'ADMIN') {
@@ -22,7 +23,7 @@ export async function GET(request) {
     }
 
     const { searchParams } = new URL(request.url);
-    const period = searchParams.get('period') || 'month'; // day, week, month, year, all
+    const period = searchParams.get('period') || 'month';
 
     // حساب تاريخ البداية بناءً على الفترة
     const now = new Date();
@@ -42,7 +43,7 @@ export async function GET(request) {
         startDate = new Date(now.setFullYear(now.getFullYear() - 1));
         break;
       default:
-        startDate = new Date(0); // كل الوقت
+        startDate = new Date(0);
     }
 
     // إحصائيات التجار
@@ -88,16 +89,6 @@ export async function GET(request) {
       }
     });
 
-    const revenueByMonth = await prisma.payment.groupBy({
-      by: ['processedAt'],
-      _sum: { amount: true },
-      where: {
-        status: 'SUCCESS',
-        processedAt: { gte: startDate }
-      },
-      orderBy: { processedAt: 'asc' }
-    });
-
     // إحصائيات الفواتير
     const totalInvoices = await prisma.invoice.count({
       where: { createdAt: { gte: startDate } }
@@ -121,24 +112,7 @@ export async function GET(request) {
       }
     });
 
-    // معدل نمو التجار (مقارنة مع الفترة السابقة)
-    const previousPeriodStart = new Date(startDate);
-    previousPeriodStart.setTime(previousPeriodStart.getTime() - (now.getTime() - startDate.getTime()));
-
-    const previousPeriodMerchants = await prisma.merchant.count({
-      where: {
-        createdAt: {
-          gte: previousPeriodStart,
-          lt: startDate
-        }
-      }
-    });
-
-    const growthRate = previousPeriodMerchants > 0
-      ? ((newMerchants - previousPeriodMerchants) / previousPeriodMerchants) * 100
-      : 0;
-
-    // معدل التحويل (Conversion Rate)
+    // معدل التحويل
     const conversionRate = totalMerchants > 0
       ? (activeMerchants / totalMerchants) * 100
       : 0;
@@ -156,7 +130,6 @@ export async function GET(request) {
           total: totalMerchants,
           active: activeMerchants,
           new: newMerchants,
-          growthRate: Math.round(growthRate * 100) / 100,
           conversionRate: Math.round(conversionRate * 100) / 100
         },
         subscriptions: {
@@ -171,11 +144,7 @@ export async function GET(request) {
         },
         revenue: {
           total: totalRevenue._sum.amount || 0,
-          avgPerMerchant: Math.round(avgRevenuePerMerchant * 100) / 100,
-          byMonth: revenueByMonth.map(item => ({
-            month: item.processedAt,
-            amount: item._sum.amount || 0
-          }))
+          avgPerMerchant: Math.round(avgRevenuePerMerchant * 100) / 100
         },
         invoices: {
           total: totalInvoices,
@@ -198,4 +167,3 @@ export async function GET(request) {
     );
   }
 }
-
