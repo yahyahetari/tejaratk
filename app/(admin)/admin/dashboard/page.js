@@ -1,80 +1,21 @@
-import { buildMetadata } from "@/lib/seo/metadata";
-import prisma from '@/lib/db/prisma';
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Users,
   Store,
   CreditCard,
-  DollarSign,
   TrendingUp,
-  TrendingDown,
   ArrowUpRight,
-  Package,
   ShoppingBag,
-  Activity,
   CheckCircle,
   Clock,
   AlertCircle,
   Sparkles,
-  Eye,
-  BarChart3
+  BarChart3,
+  Loader2
 } from 'lucide-react';
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-export const metadata = buildMetadata({
-  title: "لوحة تحكم المسؤول",
-  path: "/admin/dashboard",
-  noIndex: true
-});
-
-async function getAdminStats() {
-  try {
-    const [
-      totalUsers,
-      totalMerchants,
-      activeMerchants,
-      pendingMerchants,
-      recentUsers,
-      recentMerchants
-    ] = await Promise.all([
-      prisma.user.count(),
-      prisma.merchant.count(),
-      prisma.merchant.count({ where: { status: 'ACTIVE' } }),
-      prisma.merchant.count({ where: { status: 'PENDING' } }),
-      prisma.user.findMany({
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        select: { id: true, email: true, role: true, createdAt: true }
-      }),
-      prisma.merchant.findMany({
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        include: { user: { select: { email: true } } }
-      })
-    ]);
-
-    return {
-      totalUsers,
-      totalMerchants,
-      activeMerchants,
-      pendingMerchants,
-      recentUsers,
-      recentMerchants
-    };
-  } catch (error) {
-    console.error('Error fetching admin stats:', error);
-    return {
-      totalUsers: 0,
-      totalMerchants: 0,
-      activeMerchants: 0,
-      pendingMerchants: 0,
-      recentUsers: [],
-      recentMerchants: []
-    };
-  }
-}
 
 function formatTimeAgo(date) {
   const now = new Date();
@@ -89,8 +30,50 @@ function formatTimeAgo(date) {
   return `منذ ${days} يوم`;
 }
 
-export default async function AdminDashboardPage() {
-  const stats = await getAdminStats();
+export default function AdminDashboardPage() {
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    totalMerchants: 0,
+    activeMerchants: 0,
+    pendingMerchants: 0,
+    recentUsers: [],
+    recentMerchants: []
+  });
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/admin/analytics?period=month');
+      const data = await response.json();
+      if (data.success) {
+        setStats({
+          totalUsers: data.data?.merchants?.total || 0,
+          totalMerchants: data.data?.merchants?.total || 0,
+          activeMerchants: data.data?.merchants?.active || 0,
+          pendingMerchants: data.data?.merchants?.pending || 0,
+          recentUsers: [],
+          recentMerchants: []
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
 
   const statCards = [
     {
@@ -169,7 +152,7 @@ export default async function AdminDashboardPage() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-        {statCards.map((stat, index) => (
+        {statCards.map((stat) => (
           <div
             key={stat.name}
             className={`bg-white rounded-2xl p-5 lg:p-6 border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 ${stat.shadowColor}`}
@@ -195,152 +178,33 @@ export default async function AdminDashboardPage() {
         ))}
       </div>
 
-      {/* Main Content Grid */}
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Recent Users */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="p-5 lg:p-6 border-b border-gray-100 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-                <Users className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">آخر المستخدمين</h2>
-                <p className="text-sm text-gray-500">المستخدمين المسجلين حديثاً</p>
-              </div>
-            </div>
-            <Link href="/admin/users" className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1">
-              عرض الكل
-              <ArrowUpRight className="h-4 w-4" />
-            </Link>
-          </div>
-
-          <div className="divide-y divide-gray-50">
-            {stats.recentUsers.length > 0 ? stats.recentUsers.map((user) => (
-              <div key={user.id} className="p-4 lg:p-5 hover:bg-gray-50 transition-colors">
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center">
-                    <Users className="h-5 w-5 text-gray-500" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 truncate">{user.email}</p>
-                    <p className="text-sm text-gray-500">{formatTimeAgo(user.createdAt)}</p>
-                  </div>
-                  <span className={`px-2 py-1 rounded-lg text-xs font-medium ${user.role === 'ADMIN' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
-                    }`}>
-                    {user.role === 'ADMIN' ? 'مسؤول' : 'تاجر'}
-                  </span>
-                </div>
-              </div>
-            )) : (
-              <div className="p-8 text-center text-gray-500">
-                <Users className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                <p>لا يوجد مستخدمين بعد</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="p-5 lg:p-6 border-b border-gray-100">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-gray-900">إجراءات سريعة</h2>
-                <p className="text-sm text-gray-500">وصول سريع للأقسام</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-4 space-y-3">
-            {quickActions.map((action, i) => (
-              <Link key={i} href={action.href}>
-                <div className="flex items-center gap-4 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all hover:shadow-md group">
-                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center group-hover:scale-110 transition-transform`}>
-                    <action.icon className="h-5 w-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-bold text-gray-900">{action.title}</p>
-                    <p className="text-sm text-gray-500">{action.desc}</p>
-                  </div>
-                  <ArrowUpRight className="h-5 w-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Recent Merchants */}
+      {/* Quick Actions */}
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="p-5 lg:p-6 border-b border-gray-100 flex items-center justify-between">
+        <div className="p-5 lg:p-6 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-              <Store className="h-5 w-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+              <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-gray-900">آخر المتاجر</h2>
-              <p className="text-sm text-gray-500">المتاجر المسجلة حديثاً</p>
+              <h2 className="text-lg font-bold text-gray-900">إجراءات سريعة</h2>
+              <p className="text-sm text-gray-500">وصول سريع للأقسام</p>
             </div>
           </div>
-          <Link href="/admin/stores" className="text-blue-600 hover:text-blue-700 font-semibold text-sm flex items-center gap-1">
-            عرض الكل
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">المتجر</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">البريد الإلكتروني</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">الحالة</th>
-                <th className="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase">تاريخ التسجيل</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-50">
-              {stats.recentMerchants.length > 0 ? stats.recentMerchants.map((merchant) => (
-                <tr key={merchant.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                        <Store className="h-5 w-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">{merchant.businessName}</p>
-                        <p className="text-sm text-gray-500">{merchant.contactName}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-gray-600">{merchant.user?.email}</td>
-                  <td className="px-6 py-4">
-                    <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${merchant.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' :
-                        merchant.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
-                          'bg-red-100 text-red-700'
-                      }`}>
-                      {merchant.status === 'ACTIVE' && <CheckCircle className="h-3 w-3" />}
-                      {merchant.status === 'PENDING' && <Clock className="h-3 w-3" />}
-                      {merchant.status === 'ACTIVE' ? 'نشط' : merchant.status === 'PENDING' ? 'في الانتظار' : 'معلق'}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-gray-500 text-sm">
-                    {formatTimeAgo(merchant.createdAt)}
-                  </td>
-                </tr>
-              )) : (
-                <tr>
-                  <td colSpan={4} className="px-6 py-12 text-center text-gray-500">
-                    <Store className="h-12 w-12 mx-auto mb-3 opacity-30" />
-                    <p>لا يوجد متاجر بعد</p>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+        <div className="p-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {quickActions.map((action, i) => (
+            <Link key={i} href={action.href}>
+              <div className="flex flex-col items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-all hover:shadow-md group">
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${action.gradient} flex items-center justify-center group-hover:scale-110 transition-transform`}>
+                  <action.icon className="h-6 w-6 text-white" />
+                </div>
+                <div className="text-center">
+                  <p className="font-bold text-gray-900 text-sm">{action.title}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
 

@@ -1,5 +1,6 @@
-import { buildMetadata } from "@/lib/seo/metadata";
-import prisma from '@/lib/db/prisma';
+'use client';
+
+import { useState, useEffect } from 'react';
 import {
   Activity,
   User,
@@ -10,40 +11,10 @@ import {
   Settings,
   FileText,
   Clock,
-  Filter,
   Key,
-  Mail
+  Mail,
+  Loader2
 } from 'lucide-react';
-
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
-
-export const metadata = buildMetadata({
-  title: "سجل النشاط",
-  path: "/admin/activity",
-  noIndex: true
-});
-
-async function getActivityLogs() {
-  try {
-    const logs = await prisma.activityLog.findMany({
-      take: 50,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        merchant: {
-          select: {
-            businessName: true,
-            user: { select: { email: true } }
-          }
-        }
-      }
-    });
-    return logs;
-  } catch (error) {
-    console.error('Error fetching activity logs:', error);
-    return [];
-  }
-}
 
 function formatTimeAgo(date) {
   const now = new Date();
@@ -72,8 +43,36 @@ function getActivityIcon(action) {
   return { icon: Activity, color: 'bg-gray-100 text-gray-600' };
 }
 
-export default async function AdminActivityPage() {
-  const activityLogs = await getActivityLogs();
+export default function AdminActivityPage() {
+  const [loading, setLoading] = useState(true);
+  const [activityLogs, setActivityLogs] = useState([]);
+
+  useEffect(() => {
+    fetchActivityLogs();
+  }, []);
+
+  const fetchActivityLogs = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/admin/activity');
+      const data = await response.json();
+      if (data.success) {
+        setActivityLogs(data.logs || []);
+      }
+    } catch (error) {
+      console.error('Error fetching activity logs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 lg:space-y-8">
@@ -109,12 +108,9 @@ export default async function AdminActivityPage() {
             return (
               <div key={log.id} className="p-4 lg:p-6 hover:bg-gray-50 transition-colors">
                 <div className="flex items-start gap-4">
-                  {/* Icon */}
                   <div className={`w-10 h-10 rounded-xl ${color} flex items-center justify-center flex-shrink-0`}>
                     <Icon className="h-5 w-5" />
                   </div>
-
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900">{log.description || log.action}</p>
                     <div className="flex flex-wrap items-center gap-3 mt-1 text-sm text-gray-500">
@@ -126,8 +122,6 @@ export default async function AdminActivityPage() {
                       <span>{formatTimeAgo(log.createdAt)}</span>
                     </div>
                   </div>
-
-                  {/* Time */}
                   <div className="text-sm text-gray-400 flex-shrink-0 hidden lg:block">
                     {new Date(log.createdAt).toLocaleString('ar-SA', {
                       hour: '2-digit',
@@ -150,4 +144,3 @@ export default async function AdminActivityPage() {
     </div>
   );
 }
-
