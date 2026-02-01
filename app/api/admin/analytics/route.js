@@ -3,6 +3,8 @@ import prisma from '@/lib/db/prisma';
 import { verifyAuth } from '@/lib/auth/session';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+export const fetchCache = 'force-no-store';
 
 /**
  * API لإحصائيات الأدمن
