@@ -15,6 +15,9 @@ import {
   Mail
 } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata = buildMetadata({
   title: "سجل النشاط",
   path: "/admin/activity",

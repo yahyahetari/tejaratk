@@ -1,8 +1,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 import prisma from '@/lib/db/prisma';
 import ReportsCharts from '@/components/admin/reports-charts';
-import { 
-  BarChart3, 
+import {
+  BarChart3,
   TrendingUp,
   Users,
   Store,
@@ -14,10 +14,13 @@ import {
   ArrowDownRight
 } from 'lucide-react';
 
-export const metadata = buildMetadata({ 
-  title: "التقارير والإحصائيات", 
-  path: "/admin/reports", 
-  noIndex: true 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export const metadata = buildMetadata({
+  title: "التقارير والإحصائيات",
+  path: "/admin/reports",
+  noIndex: true
 });
 
 async function getReportsData() {
@@ -54,10 +57,10 @@ async function getReportsData() {
     ]);
 
     // حساب نسب النمو
-    const userGrowth = usersLastMonth > 0 
+    const userGrowth = usersLastMonth > 0
       ? Math.round(((usersThisMonth - usersLastMonth) / usersLastMonth) * 100)
       : 100;
-    
+
     const merchantGrowth = merchantsLastMonth > 0
       ? Math.round(((merchantsThisMonth - merchantsLastMonth) / merchantsLastMonth) * 100)
       : 100;
@@ -67,7 +70,7 @@ async function getReportsData() {
     for (let i = 5; i >= 0; i--) {
       const monthStart = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const monthEnd = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
-      
+
       const [users, merchants] = await Promise.all([
         prisma.user.count({ where: { createdAt: { gte: monthStart, lte: monthEnd } } }),
         prisma.merchant.count({ where: { createdAt: { gte: monthStart, lte: monthEnd } } })
@@ -154,7 +157,7 @@ export default async function AdminReportsPage() {
             <p className="text-gray-500">نظرة شاملة على أداء المنصة</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <select className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 cursor-pointer">
             <option value="month">هذا الشهر</option>
@@ -178,9 +181,8 @@ export default async function AdminReportsPage() {
                 <stat.icon className="h-6 w-6 text-white" />
               </div>
               {stat.change !== undefined && (
-                <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${
-                  stat.change >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
-                }`}>
+                <div className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-bold ${stat.change >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'
+                  }`}>
                   {stat.change >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                   <span>{Math.abs(stat.change)}%</span>
                 </div>
@@ -228,7 +230,7 @@ export default async function AdminReportsPage() {
                       <span className="text-sm text-gray-500">{100 - i * 15}%</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div 
+                      <div
                         className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all"
                         style={{ width: `${100 - i * 15}%` }}
                       ></div>
@@ -262,7 +264,7 @@ export default async function AdminReportsPage() {
                       <span className="text-sm text-gray-500">{plan.value}%</span>
                     </div>
                     <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div 
+                      <div
                         className={`${plan.color} h-2 rounded-full transition-all`}
                         style={{ width: `${plan.value}%` }}
                       ></div>

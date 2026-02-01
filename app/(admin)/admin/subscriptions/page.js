@@ -1,8 +1,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 import prisma from '@/lib/db/prisma';
 import SubscriptionsTable from '@/components/admin/subscriptions-table';
-import { 
-  CreditCard, 
+import {
+  CreditCard,
   CheckCircle,
   Clock,
   XCircle,
@@ -10,10 +10,13 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-export const metadata = buildMetadata({ 
-  title: "إدارة الاشتراكات", 
-  path: "/admin/subscriptions", 
-  noIndex: true 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export const metadata = buildMetadata({
+  title: "إدارة الاشتراكات",
+  path: "/admin/subscriptions",
+  noIndex: true
 });
 
 async function getSubscriptions(searchParams) {
@@ -24,11 +27,11 @@ async function getSubscriptions(searchParams) {
   const status = searchParams?.status || '';
 
   const where = {};
-  
+
   if (plan) {
     where.plan = plan;
   }
-  
+
   if (status) {
     where.status = status;
   }
@@ -157,8 +160,8 @@ export default async function AdminSubscriptionsPage({ searchParams }) {
       </div>
 
       {/* Subscriptions Table */}
-      <SubscriptionsTable 
-        subscriptions={data.subscriptions} 
+      <SubscriptionsTable
+        subscriptions={data.subscriptions}
         total={data.total}
         pages={data.pages}
         currentPage={data.currentPage}

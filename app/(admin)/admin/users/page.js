@@ -1,8 +1,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 import prisma from '@/lib/db/prisma';
 import UsersTable from '@/components/admin/users-table';
-import { 
-  Users, 
+import {
+  Users,
   UserPlus,
   Search,
   Filter,
@@ -11,10 +11,13 @@ import {
   ShoppingBag
 } from 'lucide-react';
 
-export const metadata = buildMetadata({ 
-  title: "إدارة المستخدمين", 
-  path: "/admin/users", 
-  noIndex: true 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export const metadata = buildMetadata({
+  title: "إدارة المستخدمين",
+  path: "/admin/users",
+  noIndex: true
 });
 
 async function getUsers(searchParams) {
@@ -25,11 +28,11 @@ async function getUsers(searchParams) {
   const role = searchParams?.role || '';
 
   const where = {};
-  
+
   if (search) {
     where.email = { contains: search, mode: 'insensitive' };
   }
-  
+
   if (role) {
     where.role = role;
   }
@@ -113,7 +116,7 @@ export default async function AdminUsersPage({ searchParams }) {
             <p className="text-gray-500">عرض وإدارة جميع المستخدمين في المنصة</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
             <Download className="h-4 w-4" />
@@ -142,8 +145,8 @@ export default async function AdminUsersPage({ searchParams }) {
       </div>
 
       {/* Users Table */}
-      <UsersTable 
-        users={data.users} 
+      <UsersTable
+        users={data.users}
         total={data.total}
         pages={data.pages}
         currentPage={data.currentPage}

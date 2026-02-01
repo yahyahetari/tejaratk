@@ -1,8 +1,8 @@
 import { buildMetadata } from "@/lib/seo/metadata";
 import prisma from '@/lib/db/prisma';
 import StoresTable from '@/components/admin/stores-table';
-import { 
-  Store, 
+import {
+  Store,
   Plus,
   CheckCircle,
   Clock,
@@ -10,10 +10,13 @@ import {
   TrendingUp
 } from 'lucide-react';
 
-export const metadata = buildMetadata({ 
-  title: "إدارة المتاجر", 
-  path: "/admin/stores", 
-  noIndex: true 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export const metadata = buildMetadata({
+  title: "إدارة المتاجر",
+  path: "/admin/stores",
+  noIndex: true
 });
 
 async function getStores(searchParams) {
@@ -24,14 +27,14 @@ async function getStores(searchParams) {
   const status = searchParams?.status || '';
 
   const where = {};
-  
+
   if (search) {
     where.OR = [
       { businessName: { contains: search, mode: 'insensitive' } },
       { contactName: { contains: search, mode: 'insensitive' } }
     ];
   }
-  
+
   if (status) {
     where.status = status;
   }
@@ -126,8 +129,8 @@ export default async function AdminStoresPage({ searchParams }) {
       </div>
 
       {/* Stores Table */}
-      <StoresTable 
-        stores={data.stores} 
+      <StoresTable
+        stores={data.stores}
         total={data.total}
         pages={data.pages}
         currentPage={data.currentPage}
