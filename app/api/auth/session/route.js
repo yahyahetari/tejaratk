@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getSession } from '@/lib/auth/session';
 
-/**
- * GET /api/auth/session
- * Returns current session status
- */
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET() {
   try {
+    const { getSession } = await import('@/lib/auth/session');
     const session = await getSession();
-    
+
     if (!session) {
       return NextResponse.json({
         authenticated: false,
@@ -16,7 +15,7 @@ export async function GET() {
         merchant: null,
       });
     }
-    
+
     return NextResponse.json({
       authenticated: true,
       user: session.user,

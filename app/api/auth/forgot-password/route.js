@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { generateVerificationCode, saveVerificationCode } from '@/lib/auth/verification-code';
-import { sendPasswordResetEmail } from '@/lib/email/sender';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(request) {
   try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { generateVerificationCode, saveVerificationCode } = await import('@/lib/auth/verification-code');
+    const { sendPasswordResetEmail } = await import('@/lib/email/sender');
+
     const body = await request.json();
     const { email } = body;
 
@@ -15,12 +19,10 @@ export async function POST(request) {
       );
     }
 
-    // البحث عن المستخدم
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
     });
 
-    // لا نكشف ما إذا كان البريد موجوداً أم لا لأسباب أمنية
     if (!user) {
       return NextResponse.json({
         success: true,
@@ -28,18 +30,13 @@ export async function POST(request) {
       });
     }
 
-    // إنشاء رمز استعادة كلمة المرور
     const code = generateVerificationCode();
-    
-    // حفظ رمز الاستعادة
     await saveVerificationCode(user.id, code, 'password_reset');
-    
-    // إرسال البريد الإلكتروني
+
     try {
       await sendPasswordResetEmail(email, code);
     } catch (emailError) {
       console.error('Error sending email:', emailError);
-      // نستمر حتى لو فشل إرسال البريد
     }
 
     return NextResponse.json({

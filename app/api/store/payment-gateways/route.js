@@ -1,222 +1,122 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { verifyAuth } from '@/lib/auth/session';
 
-/**
- * API لتحديث بوابات الدفع
- * POST /api/store/payment-gateways
- */
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST(request) {
   try {
-    // التحقق من المصادقة
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { verifyAuth } = await import('@/lib/auth/session');
+
     const auth = await verifyAuth(request);
     if (!auth.authenticated) {
-      return NextResponse.json(
-        { success: false, error: 'غير مصرح' },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
     }
 
     const merchantId = auth.user.id;
     const body = await request.json();
+    const { paymentGateways, gatewayConfigs } = body;
 
-    const {
-      paymentGateways,
-      gatewayConfigs
-    } = body;
-
-    // التحقق من البيانات
     if (!Array.isArray(paymentGateways)) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'بيانات بوابات الدفع غير صحيحة'
-        },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'بيانات بوابات الدفع غير صحيحة' }, { status: 400 });
     }
 
-    // البحث عن المتجر
-    const store = await prisma.store.findUnique({
-      where: { merchantId }
-    });
+    const store = await prisma.store.findUnique({ where: { merchantId } });
 
     if (!store) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'لم يتم العثور على المتجر'
-        },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'لم يتم العثور على المتجر' }, { status: 404 });
     }
-
-    // تحديث بوابات الدفع
-    const updatedStore = await prisma.store.update({
-      where: { merchantId },
-      data: {
-        paymentGateways: paymentGateways,
-        updatedAt: new Date()
-      }
-    });
-
-    // حفظ إعدادات البوابات (إذا وجدت)
-    if (gatewayConfigs && typeof gatewayConfigs === 'object') {
-      // TODO: حفظ الإعدادات في جدول منفصل مشفر
-      // يجب تشفير مفاتيح API قبل الحفظ
-    }
-
-    // تسجيل النشاط
-    await prisma.activityLog.create({
-      data: {
-        merchantId,
-        action: 'PAYMENT_GATEWAYS_UPDATED',
-        description: `تم تحديث بوابات الدفع - ${paymentGateways.length} بوابة`,
-        metadata: { 
-          storeId: store.id,
-          gateways: paymentGateways
-        }
-      }
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'تم تحديث بوابات الدفع بنجاح',
-      data: {
-        paymentGateways: updatedStore.paymentGateways
-      }
-    });
-
-  } catch (error) {
-    console.error('Error in payment gateways API:', error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'حدث خطأ أثناء تحديث بوابات الدفع'
-      },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * GET - الحصول على بوابات الدفع المفعلة
- */
-export async function GET(request) {
-  try {
-    const auth = await verifyAuth(request);
-    if (!auth.authenticated) {
-      return NextResponse.json(
-        { success: false, error: 'غير مصرح' },
-        { status: 401 }
-      );
-    }
-
-    const merchantId = auth.user.id;
-
-    const store = await prisma.store.findUnique({
-      where: { merchantId },
-      select: {
-        paymentGateways: true
-      }
-    });
-
-    if (!store) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'لم يتم العثور على المتجر'
-        },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      success: true,
-      data: {
-        paymentGateways: store.paymentGateways || []
-      }
-    });
-
-  } catch (error) {
-    console.error('Error getting payment gateways:', error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'حدث خطأ أثناء جلب بوابات الدفع'
-      },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * DELETE - حذف بوابة دفع
- */
-export async function DELETE(request) {
-  try {
-    const auth = await verifyAuth(request);
-    if (!auth.authenticated) {
-      return NextResponse.json(
-        { success: false, error: 'غير مصرح' },
-        { status: 401 }
-      );
-    }
-
-    const merchantId = auth.user.id;
-    const { searchParams } = new URL(request.url);
-    const gatewayId = searchParams.get('gateway');
-
-    if (!gatewayId) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'معرف البوابة مطلوب'
-        },
-        { status: 400 }
-      );
-    }
-
-    const store = await prisma.store.findUnique({
-      where: { merchantId }
-    });
-
-    if (!store) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'لم يتم العثور على المتجر'
-        },
-        { status: 404 }
-      );
-    }
-
-    // إزالة البوابة من القائمة
-    const updatedGateways = (store.paymentGateways || []).filter(g => g !== gatewayId);
 
     await prisma.store.update({
       where: { merchantId },
       data: {
-        paymentGateways: updatedGateways
+        paymentGateways: paymentGateways,
+        paymentGatewayConfigs: gatewayConfigs || {},
+        updatedAt: new Date()
       }
     });
 
+    await prisma.activityLog.create({
+      data: {
+        merchantId, action: 'PAYMENT_GATEWAYS_UPDATED',
+        description: `تم تحديث بوابات الدفع: ${paymentGateways.join(', ')}`,
+        metadata: { paymentGateways }
+      }
+    });
+
+    return NextResponse.json({ success: true, message: 'تم حفظ بوابات الدفع بنجاح' });
+
+  } catch (error) {
+    console.error('Error updating payment gateways:', error);
+    return NextResponse.json({ success: false, error: 'حدث خطأ أثناء حفظ بوابات الدفع' }, { status: 500 });
+  }
+}
+
+export async function GET(request) {
+  try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { verifyAuth } = await import('@/lib/auth/session');
+
+    const auth = await verifyAuth(request);
+    if (!auth.authenticated) {
+      return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
+    }
+
+    const store = await prisma.store.findUnique({
+      where: { merchantId: auth.user.id },
+      select: { paymentGateways: true, paymentGatewayConfigs: true }
+    });
+
+    if (!store) {
+      return NextResponse.json({ success: true, paymentGateways: [], gatewayConfigs: {} });
+    }
+
     return NextResponse.json({
       success: true,
-      message: 'تم حذف بوابة الدفع بنجاح'
+      paymentGateways: store.paymentGateways || [],
+      gatewayConfigs: store.paymentGatewayConfigs || {}
     });
 
   } catch (error) {
+    console.error('Error getting payment gateways:', error);
+    return NextResponse.json({ success: false, error: 'حدث خطأ أثناء جلب بوابات الدفع' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request) {
+  try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { verifyAuth } = await import('@/lib/auth/session');
+
+    const auth = await verifyAuth(request);
+    if (!auth.authenticated) {
+      return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const gateway = searchParams.get('gateway');
+
+    if (!gateway) {
+      return NextResponse.json({ success: false, error: 'معرف البوابة مطلوب' }, { status: 400 });
+    }
+
+    const store = await prisma.store.findUnique({ where: { merchantId: auth.user.id } });
+
+    if (!store) {
+      return NextResponse.json({ success: false, error: 'لم يتم العثور على المتجر' }, { status: 404 });
+    }
+
+    const updatedGateways = (store.paymentGateways || []).filter(g => g !== gateway);
+
+    await prisma.store.update({
+      where: { merchantId: auth.user.id },
+      data: { paymentGateways: updatedGateways, updatedAt: new Date() }
+    });
+
+    return NextResponse.json({ success: true, message: 'تم حذف بوابة الدفع بنجاح' });
+
+  } catch (error) {
     console.error('Error deleting payment gateway:', error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'حدث خطأ أثناء حذف بوابة الدفع'
-      },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: 'حدث خطأ أثناء حذف بوابة الدفع' }, { status: 500 });
   }
 }

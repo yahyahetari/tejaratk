@@ -1,33 +1,31 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { verifyAuth } from '@/lib/auth/session';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(request) {
   try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { verifyAuth } = await import('@/lib/auth/session');
+
     const session = await verifyAuth(request);
-    if (!session) {
+    if (!session || !session.authenticated) {
       return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
     }
 
-    // Get merchant
     const merchant = await prisma.merchant.findUnique({
-      where: { userId: session.userId },
+      where: { userId: session.user?.id },
     });
 
     if (!merchant) {
       return NextResponse.json({ error: 'التاجر غير موجود' }, { status: 404 });
     }
 
-    // Get invoices
     const invoices = await prisma.invoice.findMany({
       where: { merchantId: merchant.id },
       orderBy: { createdAt: 'desc' },
       include: {
-        subscription: {
-          select: {
-            planName: true,
-          },
-        },
+        subscription: { select: { planName: true } },
       },
     });
 

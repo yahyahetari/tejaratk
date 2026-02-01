@@ -1,39 +1,31 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { generateVerificationCode, saveVerificationCode } from '@/lib/auth/verification-code';
-import { sendVerificationEmail } from '@/lib/email/sender';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(request) {
   try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { generateVerificationCode, saveVerificationCode } = await import('@/lib/auth/verification-code');
+    const { sendVerificationEmail } = await import('@/lib/email/sender');
+
     const body = await request.json();
     const { email, purpose = 'login' } = body;
 
     if (!email) {
-      return NextResponse.json(
-        { error: 'البريد الإلكتروني مطلوب' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'البريد الإلكتروني مطلوب' }, { status: 400 });
     }
 
-    // البحث عن المستخدم
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'المستخدم غير موجود' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'المستخدم غير موجود' }, { status: 404 });
     }
 
-    // إنشاء رمز التحقق
     const code = generateVerificationCode();
-    
-    // حفظ رمز التحقق
     await saveVerificationCode(user.id, code, purpose);
-    
-    // إرسال البريد الإلكتروني
     await sendVerificationEmail(email, code);
 
     return NextResponse.json({

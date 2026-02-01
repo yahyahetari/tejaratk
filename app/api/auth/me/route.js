@@ -1,25 +1,21 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { getSession } from '@/lib/auth/session';
 
-/**
- * Get Current User API
- * GET /api/auth/me
- */
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function GET(request) {
   try {
+    const { getSession } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     const session = await getSession();
-    
+
     if (!session) {
-      return NextResponse.json(
-        { error: 'غير مصرح' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
     }
 
-    // Get user with merchant and subscription data
     const user = await prisma.user.findUnique({
-      where: { id: session.userId },
+      where: { id: session.user?.id },
       select: {
         id: true,
         email: true,
@@ -47,16 +43,10 @@ export async function GET(request) {
     });
 
     if (!user) {
-      return NextResponse.json(
-        { error: 'المستخدم غير موجود' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'المستخدم غير موجود' }, { status: 404 });
     }
 
-    return NextResponse.json({
-      success: true,
-      user,
-    });
+    return NextResponse.json({ success: true, user });
   } catch (error) {
     console.error('Get user error:', error);
     return NextResponse.json(

@@ -1,28 +1,23 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { verifyAuth } from '@/lib/auth/session';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(request) {
   try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { verifyAuth } = await import('@/lib/auth/session');
+
     const session = await verifyAuth(request);
-    if (!session) {
+    if (!session || !session.authenticated) {
       return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
     }
 
     const merchant = await prisma.merchant.findUnique({
-      where: { userId: session.userId },
+      where: { userId: session.user?.id },
       select: {
-        id: true,
-        businessName: true,
-        contactName: true,
-        phone: true,
-        email: true,
-        address: true,
-        city: true,
-        country: true,
-        currency: true,
-        taxRate: true,
-        shippingCost: true,
+        id: true, businessName: true, contactName: true, phone: true, email: true,
+        address: true, city: true, country: true, currency: true, taxRate: true, shippingCost: true,
       },
     });
 
@@ -52,33 +47,22 @@ export async function GET(request) {
 
 export async function POST(request) {
   try {
+    const prisma = (await import('@/lib/db/prisma')).default;
+    const { verifyAuth } = await import('@/lib/auth/session');
+
     const session = await verifyAuth(request);
-    if (!session) {
+    if (!session || !session.authenticated) {
       return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
     }
 
     const body = await request.json();
-    const {
-      storeName,
-      storeEmail,
-      storePhone,
-      storeAddress,
-      storeCity,
-      storeCountry,
-      currency,
-      taxRate,
-      shippingCost,
-    } = body;
+    const { storeName, storeEmail, storePhone, storeAddress, storeCity, storeCountry, currency, taxRate, shippingCost } = body;
 
     const merchant = await prisma.merchant.update({
-      where: { userId: session.userId },
+      where: { userId: session.user?.id },
       data: {
-        businessName: storeName,
-        email: storeEmail,
-        phone: storePhone,
-        address: storeAddress,
-        city: storeCity,
-        country: storeCountry,
+        businessName: storeName, email: storeEmail, phone: storePhone,
+        address: storeAddress, city: storeCity, country: storeCountry,
         currency: currency || 'SAR',
         taxRate: parseFloat(taxRate) || 0,
         shippingCost: parseFloat(shippingCost) || 0,

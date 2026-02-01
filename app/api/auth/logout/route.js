@@ -1,13 +1,11 @@
 import { NextResponse } from 'next/server';
-import { destroySession } from '@/lib/auth/session';
 
-/**
- * Logout API Route
- * POST /api/auth/logout
- */
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST() {
   try {
-    // Destroy session cookie
+    const { destroySession } = await import('@/lib/auth/session');
     await destroySession();
 
     return NextResponse.json({

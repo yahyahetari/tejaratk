@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/db/prisma";
-import { generateVerificationCode, saveVerificationCode } from "@/lib/auth/verification";
-import { sendEmailVerificationCode } from "@/lib/email/sender";
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function POST(req) {
   try {
+    const prisma = (await import("@/lib/db/prisma")).default;
+    const { generateVerificationCode, saveVerificationCode } = await import("@/lib/auth/verification");
+    const { sendEmailVerificationCode } = await import("@/lib/email/sender");
+
     const body = await req.json();
     const { email, userId } = body;
 
-    // التحقق من وجود البيانات المطلوبة
     if (!email && !userId) {
       return NextResponse.json(
         { error: "البريد الإلكتروني أو معرف المستخدم مطلوب" },
@@ -16,7 +19,6 @@ export async function POST(req) {
       );
     }
 
-    // البحث عن المستخدم
     let user;
     if (userId) {
       user = await prisma.user.findUnique({
@@ -31,49 +33,30 @@ export async function POST(req) {
     }
 
     if (!user) {
-      return NextResponse.json(
-        { error: "المستخدم غير موجود" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "المستخدم غير موجود" }, { status: 404 });
     }
 
-    // التحقق من أن البريد لم يتم تأكيده مسبقاً
     if (user.emailVerified) {
-      return NextResponse.json(
-        { error: "البريد الإلكتروني مؤكد مسبقاً" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "البريد الإلكتروني مؤكد مسبقاً" }, { status: 400 });
     }
 
-    // التحقق من عدم إرسال رمز جديد خلال فترة قصيرة (منع الإساءة)
     const recentCode = await prisma.verificationCode.findFirst({
       where: {
         userId: user.id,
         purpose: 'email_verification',
-        createdAt: {
-          gte: new Date(Date.now() - 60 * 1000) // خلال آخر دقيقة
-        }
+        createdAt: { gte: new Date(Date.now() - 60 * 1000) }
       }
     });
 
     if (recentCode) {
-      return NextResponse.json(
-        { error: "يرجى الانتظار قبل طلب رمز جديد" },
-        { status: 429 }
-      );
+      return NextResponse.json({ error: "يرجى الانتظار قبل طلب رمز جديد" }, { status: 429 });
     }
 
-    // توليد رمز جديد وحفظه
     const verificationCode = generateVerificationCode();
     await saveVerificationCode(user.id, verificationCode, 'email_verification');
 
-    // إرسال رمز التحقق عبر البريد الإلكتروني
     try {
-      await sendEmailVerificationCode(
-        user.email,
-        verificationCode,
-        user.merchant?.contactName || 'المستخدم'
-      );
+      await sendEmailVerificationCode(user.email, verificationCode, user.merchant?.contactName || 'المستخدم');
     } catch (emailError) {
       console.error("خطأ في إرسال البريد:", emailError);
       return NextResponse.json(
@@ -82,10 +65,7 @@ export async function POST(req) {
       );
     }
 
-    return NextResponse.json({
-      ok: true,
-      message: "تم إرسال رمز التحقق بنجاح",
-    });
+    return NextResponse.json({ ok: true, message: "تم إرسال رمز التحقق بنجاح" });
 
   } catch (error) {
     console.error("خطأ في إعادة إرسال رمز التحقق:", error);
