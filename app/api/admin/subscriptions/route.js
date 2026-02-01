@@ -1,13 +1,17 @@
 // app/api/admin/subscriptions/route.js
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { requireAdmin } from '@/lib/auth/session';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 // GET /api/admin/subscriptions - الحصول على جميع الاشتراكات
 export async function GET(request) {
   try {
+    const { requireAdmin } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     await requireAdmin();
-    
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
     const planId = searchParams.get('planId');
@@ -51,7 +55,6 @@ export async function GET(request) {
       prisma.subscription.count({ where }),
     ]);
 
-    // إحصائيات الاشتراكات
     const stats = await prisma.subscription.groupBy({
       by: ['status'],
       _count: { id: true },
@@ -89,8 +92,11 @@ export async function GET(request) {
 // PUT /api/admin/subscriptions - تحديث اشتراك
 export async function PUT(request) {
   try {
+    const { requireAdmin } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     await requireAdmin();
-    
+
     const body = await request.json();
     const { subscriptionId, status, endDate } = body;
 

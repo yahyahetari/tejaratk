@@ -1,14 +1,17 @@
 // app/api/admin/settings/route.js
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { requireAdmin } from '@/lib/auth/session';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 // GET /api/admin/settings - الحصول على إعدادات النظام
 export async function GET(request) {
   try {
+    const { requireAdmin } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     await requireAdmin();
 
-    // إحصائيات عامة للنظام
     const [
       totalUsers,
       totalMerchants,
@@ -56,12 +59,11 @@ export async function GET(request) {
 // PUT /api/admin/settings - تحديث إعدادات النظام
 export async function PUT(request) {
   try {
+    const { requireAdmin } = await import('@/lib/auth/session');
+
     await requireAdmin();
 
     const body = await request.json();
-
-    // هنا يمكن إضافة منطق تحديث الإعدادات
-    // مثل حفظها في قاعدة البيانات أو ملف تكوين
 
     return NextResponse.json({
       success: true,

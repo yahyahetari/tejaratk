@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { verifyAuth } from '@/lib/auth/session';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 /**
  * API لإدارة التجار (Admin)
@@ -8,7 +9,9 @@ import { verifyAuth } from '@/lib/auth/session';
  */
 export async function GET(request) {
   try {
-    // التحقق من المصادقة والصلاحيات
+    const { verifyAuth } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     const auth = await verifyAuth(request);
     if (!auth.authenticated || auth.user.role !== 'ADMIN') {
       return NextResponse.json(
@@ -21,13 +24,12 @@ export async function GET(request) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
     const search = searchParams.get('search') || '';
-    const status = searchParams.get('status') || 'all'; // all, active, expired, suspended
+    const status = searchParams.get('status') || 'all';
     const sortBy = searchParams.get('sortBy') || 'createdAt';
     const sortOrder = searchParams.get('sortOrder') || 'desc';
 
     const skip = (page - 1) * limit;
 
-    // بناء شروط البحث
     const where = {};
 
     if (search) {
@@ -44,7 +46,6 @@ export async function GET(request) {
       };
     }
 
-    // جلب التجار
     const merchants = await prisma.merchant.findMany({
       where,
       include: {
@@ -58,19 +59,9 @@ export async function GET(request) {
             setupCompleted: true
           }
         },
-        activationKeys: {
-          take: 1,
-          orderBy: { createdAt: 'desc' },
-          select: {
-            key: true,
-            status: true,
-            lastVerifiedAt: true
-          }
-        },
         _count: {
           select: {
-            invoices: true,
-            payments: true
+            invoices: true
           }
         }
       },
@@ -81,7 +72,6 @@ export async function GET(request) {
       take: limit
     });
 
-    // عدد التجار الكلي
     const total = await prisma.merchant.count({ where });
 
     return NextResponse.json({
@@ -104,14 +94,8 @@ export async function GET(request) {
             startDate: merchant.subscription.startDate,
             endDate: merchant.subscription.endDate
           } : null,
-          activationKey: merchant.activationKeys?.[0] ? {
-            key: merchant.activationKeys[0].key,
-            status: merchant.activationKeys[0].status,
-            lastVerifiedAt: merchant.activationKeys[0].lastVerifiedAt
-          } : null,
           stats: {
-            invoicesCount: merchant._count.invoices,
-            paymentsCount: merchant._count.payments
+            invoicesCount: merchant._count.invoices
           }
         })),
         pagination: {
@@ -125,12 +109,8 @@ export async function GET(request) {
 
   } catch (error) {
     console.error('Error in admin merchants API:', error);
-
     return NextResponse.json(
-      {
-        success: false,
-        error: 'حدث خطأ أثناء جلب التجار'
-      },
+      { success: false, error: 'حدث خطأ أثناء جلب التجار' },
       { status: 500 }
     );
   }
@@ -141,6 +121,9 @@ export async function GET(request) {
  */
 export async function PATCH(request) {
   try {
+    const { verifyAuth } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     const auth = await verifyAuth(request);
     if (!auth.authenticated || auth.user.role !== 'ADMIN') {
       return NextResponse.json(
@@ -154,10 +137,7 @@ export async function PATCH(request) {
 
     if (!merchantId || !action) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'معرف التاجر والإجراء مطلوبان'
-        },
+        { success: false, error: 'معرف التاجر والإجراء مطلوبان' },
         { status: 400 }
       );
     }
@@ -166,7 +146,6 @@ export async function PATCH(request) {
 
     switch (action) {
       case 'suspend':
-        // تعليق الاشتراك
         result = await prisma.subscription.update({
           where: { merchantId },
           data: { status: 'SUSPENDED' }
@@ -174,7 +153,6 @@ export async function PATCH(request) {
         break;
 
       case 'activate':
-        // تفعيل الاشتراك
         result = await prisma.subscription.update({
           where: { merchantId },
           data: { status: 'ACTIVE' }
@@ -182,17 +160,13 @@ export async function PATCH(request) {
         break;
 
       case 'extend':
-        // تمديد الاشتراك
         const subscription = await prisma.subscription.findUnique({
           where: { merchantId }
         });
 
         if (!subscription) {
           return NextResponse.json(
-            {
-              success: false,
-              error: 'لا يوجد اشتراك لهذا التاجر'
-            },
+            { success: false, error: 'لا يوجد اشتراك لهذا التاجر' },
             { status: 404 }
           );
         }
@@ -203,42 +177,23 @@ export async function PATCH(request) {
 
         result = await prisma.subscription.update({
           where: { merchantId },
-          data: {
-            endDate: newEndDate,
-            status: 'ACTIVE'
-          }
-        });
-        break;
-
-      case 'updateRole':
-        // تغيير الدور
-        result = await prisma.merchant.update({
-          where: { id: merchantId },
-          data: { role: data?.role || 'MERCHANT' }
+          data: { endDate: newEndDate, status: 'ACTIVE' }
         });
         break;
 
       default:
         return NextResponse.json(
-          {
-            success: false,
-            error: 'إجراء غير معروف'
-          },
+          { success: false, error: 'إجراء غير معروف' },
           { status: 400 }
         );
     }
 
-    // تسجيل النشاط
     await prisma.activityLog.create({
       data: {
         merchantId: auth.user.id,
         action: `ADMIN_${action.toUpperCase()}`,
         description: `Admin action: ${action} on merchant ${merchantId}`,
-        metadata: {
-          targetMerchantId: merchantId,
-          action,
-          data
-        }
+        metadata: { targetMerchantId: merchantId, action, data }
       }
     });
 
@@ -250,12 +205,8 @@ export async function PATCH(request) {
 
   } catch (error) {
     console.error('Error in admin merchants PATCH:', error);
-
     return NextResponse.json(
-      {
-        success: false,
-        error: 'حدث خطأ أثناء تنفيذ الإجراء'
-      },
+      { success: false, error: 'حدث خطأ أثناء تنفيذ الإجراء' },
       { status: 500 }
     );
   }
@@ -266,6 +217,9 @@ export async function PATCH(request) {
  */
 export async function DELETE(request) {
   try {
+    const { verifyAuth } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     const auth = await verifyAuth(request);
     if (!auth.authenticated || auth.user.role !== 'ADMIN') {
       return NextResponse.json(
@@ -279,20 +233,15 @@ export async function DELETE(request) {
 
     if (!merchantId) {
       return NextResponse.json(
-        {
-          success: false,
-          error: 'معرف التاجر مطلوب'
-        },
+        { success: false, error: 'معرف التاجر مطلوب' },
         { status: 400 }
       );
     }
 
-    // حذف جميع البيانات المرتبطة (Cascade)
     await prisma.merchant.delete({
       where: { id: merchantId }
     });
 
-    // تسجيل النشاط
     await prisma.activityLog.create({
       data: {
         merchantId: auth.user.id,
@@ -309,12 +258,8 @@ export async function DELETE(request) {
 
   } catch (error) {
     console.error('Error in admin merchants DELETE:', error);
-
     return NextResponse.json(
-      {
-        success: false,
-        error: 'حدث خطأ أثناء حذف التاجر'
-      },
+      { success: false, error: 'حدث خطأ أثناء حذف التاجر' },
       { status: 500 }
     );
   }

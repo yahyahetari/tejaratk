@@ -1,13 +1,16 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/db/prisma';
-import { getSession } from '@/lib/auth/session';
+
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function PATCH(request, { params }) {
   try {
-    // التحقق من صلاحيات المسؤول
+    const { getSession } = await import('@/lib/auth/session');
+    const prisma = (await import('@/lib/db/prisma')).default;
+
     const session = await getSession();
-    
-    if (!session || session.role !== 'ADMIN') {
+
+    if (!session || session.user?.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'غير مصرح لك بهذا الإجراء' },
         { status: 403 }
@@ -17,7 +20,6 @@ export async function PATCH(request, { params }) {
     const { id } = params;
     const { status } = await request.json();
 
-    // التحقق من صحة الحالة
     const validStatuses = ['ACTIVE', 'PENDING', 'SUSPENDED'];
     if (!validStatuses.includes(status)) {
       return NextResponse.json(
@@ -26,7 +28,6 @@ export async function PATCH(request, { params }) {
       );
     }
 
-    // تحديث حالة المتجر
     const merchant = await prisma.merchant.update({
       where: { id },
       data: { status },
@@ -40,17 +41,16 @@ export async function PATCH(request, { params }) {
       }
     });
 
-    // تسجيل النشاط
     try {
       await prisma.activityLog.create({
         data: {
-          type: 'STORE_STATUS_CHANGE',
-          userId: session.userId,
           merchantId: id,
-          details: JSON.stringify({
+          action: 'STORE_STATUS_CHANGE',
+          description: `Status changed to ${status}`,
+          metadata: {
             newStatus: status,
             storeName: merchant.businessName
-          })
+          }
         }
       });
     } catch (logError) {
@@ -64,7 +64,7 @@ export async function PATCH(request, { params }) {
 
   } catch (error) {
     console.error('Error updating store status:', error);
-    
+
     if (error.code === 'P2025') {
       return NextResponse.json(
         { error: 'المتجر غير موجود' },
