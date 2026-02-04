@@ -2,6 +2,8 @@ import { getSession } from '@/lib/auth/session';
 import DashboardSidebar from '@/components/layout/sidebar';
 import DashboardHeader from '@/components/layout/header';
 
+export const dynamic = 'force-dynamic';
+
 /**
  * Dashboard Layout Component
  * Note: Authentication is handled by middleware
@@ -9,7 +11,7 @@ import DashboardHeader from '@/components/layout/header';
 export default async function DashboardLayout({ children }) {
   // Get session (middleware already verified authentication)
   const session = await getSession();
-  
+
   // This should never happen due to middleware, but just in case
   if (!session || !session.merchant) {
     return (
@@ -24,17 +26,17 @@ export default async function DashboardLayout({ children }) {
       </div>
     );
   }
-  
+
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <DashboardSidebar merchant={session.merchant} />
-      
+
       {/* Main Content */}
       <div className="flex-1">
         {/* Header */}
         <DashboardHeader session={session} />
-        
+
         {/* Page Content */}
         <main>
           {children}

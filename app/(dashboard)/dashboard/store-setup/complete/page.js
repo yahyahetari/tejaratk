@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { verifyAuth } from '@/lib/auth/session';
-import prisma from '@/lib/db/prisma';
 import Link from 'next/link';
 import {
   CheckCircle,
@@ -13,7 +12,6 @@ import {
   Sparkles,
   ArrowRight,
   Rocket,
-  Shield,
   Zap
 } from 'lucide-react';
 
@@ -31,6 +29,8 @@ export default async function CompletePage() {
   }
 
   const merchantId = auth.user.id;
+
+  const prisma = (await import('@/lib/db/prisma')).default;
 
   const store = await prisma.store.findUnique({
     where: { merchantId }
