@@ -338,7 +338,7 @@ export default function SettingsPage() {
           <div className="space-y-3">
             <div className="space-y-1">
               <label className="text-sm font-semibold text-gray-700">
-                اكتب "<span className="text-red-600">حذف حسابي</span>" للتأكيد
+                اكتب &quot;<span className="text-red-600">حذف حسابي</span>&quot; للتأكيد
               </label>
               <input
                 type="text"

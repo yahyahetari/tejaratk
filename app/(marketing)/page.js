@@ -78,6 +78,32 @@ function useCountUp(end, duration = 2000, startOnView = true) {
   return { count, ref };
 }
 
+function StatCard({ stat, i }) {
+  const counterHook = useCountUp(stat.number, 1500);
+  return (
+    <ScrollReveal
+      delay={i * 100}
+      threshold={0.2}
+    >
+      <div
+        ref={counterHook.ref}
+        className="group relative bg-white/[0.03] rounded-2xl p-5 border border-white/5 hover:border-white/10 shadow-lg shadow-black/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 overflow-hidden"
+      >
+        <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
+        <div className="relative z-10 text-center">
+          <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
+            <stat.icon className="h-6 w-6 text-white" />
+          </div>
+          <div className="text-2xl md:text-3xl font-black text-white mb-0.5" dir="ltr">
+            {stat.prefix}{counterHook.count}{stat.suffix}
+          </div>
+          <div className="text-xs md:text-sm text-gray-500 font-semibold">{stat.label}</div>
+        </div>
+      </div>
+    </ScrollReveal>
+  );
+}
+
 export default function LandingPage() {
   const [activeStep, setActiveStep] = useState(0);
 
@@ -373,32 +399,9 @@ export default function LandingPage() {
       <section className="py-6 relative -mt-8">
         <div className="container-custom">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-            {stats.map((stat, i) => {
-              const counterHook = useCountUp(stat.number, 1500);
-              return (
-                <ScrollReveal
-                  key={i}
-                  delay={i * 100}
-                  threshold={0.2}
-                >
-                  <div
-                    ref={counterHook.ref}
-                    className="group relative bg-white/[0.03] rounded-2xl p-5 border border-white/5 hover:border-white/10 shadow-lg shadow-black/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 overflow-hidden"
-                  >
-                    <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
-                    <div className="relative z-10 text-center">
-                      <div className={`w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
-                        <stat.icon className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="text-2xl md:text-3xl font-black text-white mb-0.5" dir="ltr">
-                        {stat.prefix}{counterHook.count}{stat.suffix}
-                      </div>
-                      <div className="text-xs md:text-sm text-gray-500 font-semibold">{stat.label}</div>
-                    </div>
-                  </div>
-                </ScrollReveal>
-              );
-            })}
+            {stats.map((stat, i) => (
+              <StatCard key={i} stat={stat} i={i} />
+            ))}
           </div>
         </div>
       </section>
