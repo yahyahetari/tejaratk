@@ -1,27 +1,66 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  Store, 
-  User, 
-  Mail, 
-  Phone, 
-  FileText, 
-  Globe, 
-  CreditCard, 
-  Palette, 
+import {
+  Store,
+  User,
+  Mail,
+  Phone,
+  FileText,
+  CreditCard,
+  Palette,
   Upload,
   Check,
   Loader2,
   Save,
-  Sparkles,
   Shield,
   ChevronDown,
   ChevronUp,
   Image as ImageIcon,
   AlertCircle
 } from 'lucide-react';
+
+/**
+ * مكون القسم القابل للطي - مُعرّف خارج المكون الرئيسي لمنع فقدان التركيز
+ */
+function Section({ id, icon: Icon, title, description, children, badge, isExpanded, onToggle }) {
+  return (
+    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all hover:shadow-md">
+      <button
+        type="button"
+        onClick={() => onToggle(id)}
+        className="w-full px-6 py-5 flex items-center justify-between text-right hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+            <Icon className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <h3 className="text-lg font-bold text-gray-900">{title}</h3>
+              {badge && (
+                <span className="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
+                  {badge}
+                </span>
+              )}
+            </div>
+            <p className="text-sm text-gray-500 mt-0.5">{description}</p>
+          </div>
+        </div>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isExpanded ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
+          {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+        </div>
+      </button>
+
+      {isExpanded && (
+        <div className="px-6 pb-6 pt-2 border-t border-gray-100 animate-fade-in">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /**
  * نموذج إعداد المتجر الموحد - جميع الخطوات في صفحة واحدة
@@ -31,12 +70,13 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  
+
   // حالة الأقسام المفتوحة/المغلقة
   const [expandedSections, setExpandedSections] = useState({
     basic: true,
     license: false,
     payment: false,
+    store: false,
     brand: false
   });
 
@@ -47,16 +87,23 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
     brandName: initialData.brandName || '',
     email: initialData.email || '',
     phone: initialData.phone || '',
-    
+
     // الترخيص
     hasLicense: initialData.hasLicense || false,
     licenseNumber: initialData.licenseNumber || '',
     country: initialData.country || '',
-    
+
     // بوابات الدفع
     paymentGateways: initialData.paymentGateways || [],
     gatewayConfigs: initialData.gatewayConfigs || {},
-    
+
+    // إعدادات المتجر
+    address: initialData.address || '',
+    city: initialData.city || '',
+    currency: initialData.currency || 'SAR',
+    taxRate: initialData.taxRate || 0,
+    shippingCost: initialData.shippingCost || 0,
+
     // الهوية البصرية
     logo: initialData.logo || '',
     primaryColor: initialData.primaryColor || '#3B82F6',
@@ -65,6 +112,10 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
 
   const [errors, setErrors] = useState({});
   const [logoPreview, setLogoPreview] = useState(initialData.logo || null);
+  const [savedData, setSavedData] = useState({ ...formData });
+
+  // هل تم تعديل البيانات؟
+  const hasChanges = JSON.stringify(formData) !== JSON.stringify(savedData);
 
   // بوابات الدفع المتاحة
   const paymentGateways = [
@@ -97,31 +148,36 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
     { code: 'JO', nameAr: 'الأردن', flag: '🇯🇴' }
   ];
 
-  const toggleSection = (section) => {
+  const toggleSection = useCallback((section) => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section]
     }));
-  };
+  }, []);
 
-  const handleChange = (field, value) => {
+  const handleChange = useCallback((field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
+    setErrors(prev => {
+      if (prev[field]) {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      }
+      return prev;
+    });
     setError('');
-  };
+  }, []);
 
-  const togglePaymentGateway = (gatewayId) => {
+  const togglePaymentGateway = useCallback((gatewayId) => {
     setFormData(prev => {
       const gateways = prev.paymentGateways.includes(gatewayId)
         ? prev.paymentGateways.filter(id => id !== gatewayId)
         : [...prev.paymentGateways, gatewayId];
       return { ...prev, paymentGateways: gateways };
     });
-  };
+  }, []);
 
-  const handleLogoUpload = (e) => {
+  const handleLogoUpload = useCallback((e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
@@ -131,11 +187,11 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogoPreview(reader.result);
-        handleChange('logo', reader.result);
+        setFormData(prev => ({ ...prev, logo: reader.result }));
       };
       reader.readAsDataURL(file);
     }
-  };
+  }, []);
 
   const validate = () => {
     const newErrors = {};
@@ -163,89 +219,92 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return {
+      isValid: Object.keys(newErrors).length === 0,
+      errors: newErrors
+    };
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!validate()) {
-      // فتح القسم الذي يحتوي على أخطاء
-      if (errors.fullName || errors.brandName || errors.email || errors.phone) {
-        setExpandedSections(prev => ({ ...prev, basic: true }));
+
+    const { isValid, errors: validationErrors } = validate();
+    if (!isValid) {
+      // تحديد أول حقل به خطأ وتوسيع القسم الخاص به
+      const errorFields = Object.keys(validationErrors);
+      if (errorFields.length > 0) {
+        const firstErrorField = errorFields[0];
+
+        // خريطة الحقول للأقسام
+        const fieldToSection = {
+          fullName: 'basic',
+          brandName: 'basic',
+          email: 'basic',
+          phone: 'basic',
+          licenseNumber: 'license'
+        };
+
+        const sectionToExpand = fieldToSection[firstErrorField];
+        if (sectionToExpand) {
+          setExpandedSections(prev => ({ ...prev, [sectionToExpand]: true }));
+
+          // التمرير إلى الحقل بعد وقت قصير للتأكد من توسيع القسم
+          setTimeout(() => {
+            const element = document.getElementsByName(firstErrorField)[0] ||
+              document.getElementById(firstErrorField) ||
+              document.querySelector(`[data-field="${firstErrorField}"]`);
+            if (element) {
+              // التمرير ليكون الحقل في المنتصف العلوي قليلاً
+              element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+              // وضع مؤشر الكتابة
+              element.focus();
+
+              // تأكيد إضافي لرفع السكرول قليلاً لو كان في الأسفل
+              if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
+                element.style.outline = '2px solid #3B82F6';
+                setTimeout(() => {
+                  element.style.outline = '';
+                }, 2000);
+              }
+            }
+          }, 300);
+        }
       }
       return;
     }
 
-    setLoading(true);
+    // ✅ تحديث متفائل: عرض النجاح فوراً وإخفاء الزر
+    setSavedData({ ...formData });
+    setSuccess(true);
     setError('');
-    setSuccess(false);
+    setLoading(false);
 
-    try {
-      const response = await fetch('/api/store-setup', {
-        method: isUpdate ? 'PUT' : 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          merchantId,
-          ...formData
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'حدث خطأ أثناء الحفظ');
-      }
-
-      setSuccess(true);
-      router.refresh();
-
-      setTimeout(() => {
-        setSuccess(false);
-      }, 3000);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
+    // إرسال الشعار فقط إذا تغيّر
+    const dataToSend = { ...formData, merchantId };
+    if (formData.logo === initialData.logo) {
+      delete dataToSend.logo;
     }
-  };
 
-  // مكون القسم القابل للطي
-  const Section = ({ id, icon: Icon, title, description, children, badge }) => (
-    <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden transition-all hover:shadow-md">
-      <button
-        type="button"
-        onClick={() => toggleSection(id)}
-        className="w-full px-6 py-5 flex items-center justify-between text-right hover:bg-gray-50 transition-colors"
-      >
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-            <Icon className="h-6 w-6 text-white" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-lg font-bold text-gray-900">{title}</h3>
-              {badge && (
-                <span className="px-2 py-0.5 text-xs font-medium bg-amber-100 text-amber-700 rounded-full">
-                  {badge}
-                </span>
-              )}
-            </div>
-            <p className="text-sm text-gray-500 mt-0.5">{description}</p>
-          </div>
-        </div>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${expandedSections[id] ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
-          {expandedSections[id] ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
-        </div>
-      </button>
-      
-      {expandedSections[id] && (
-        <div className="px-6 pb-6 pt-2 border-t border-gray-100 animate-fade-in">
-          {children}
-        </div>
-      )}
-    </div>
-  );
+    // حفظ في الخلفية
+    fetch('/api/store-setup', {
+      method: isUpdate ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dataToSend)
+    }).then(async (response) => {
+      const data = await response.json();
+      if (!response.ok) {
+        setSuccess(false);
+        setSavedData(prev => prev); // إرجاع الحالة السابقة
+        setError(data.error || 'حدث خطأ أثناء الحفظ - يرجى المحاولة مرة أخرى');
+      }
+    }).catch(() => {
+      setSuccess(false);
+      setError('فشل الاتصال بالخادم - يرجى المحاولة مرة أخرى');
+    });
+
+    setTimeout(() => setSuccess(false), 3000);
+  };
 
   return (
     <div className="space-y-6" dir="rtl">
@@ -294,6 +353,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
           icon={User}
           title="المعلومات الأساسية"
           description="معلوماتك الشخصية ومعلومات المتجر"
+          isExpanded={expandedSections.basic}
+          onToggle={toggleSection}
         >
           <div className="grid md:grid-cols-2 gap-6 mt-4">
             {/* الاسم الكامل */}
@@ -304,6 +365,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               </label>
               <input
                 type="text"
+                name="fullName"
+                id="fullName"
                 placeholder="أدخل اسمك الكامل"
                 value={formData.fullName}
                 onChange={(e) => handleChange('fullName', e.target.value)}
@@ -320,6 +383,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               </label>
               <input
                 type="text"
+                name="brandName"
+                id="brandName"
                 placeholder="اسم متجرك أو علامتك التجارية"
                 value={formData.brandName}
                 onChange={(e) => handleChange('brandName', e.target.value)}
@@ -332,17 +397,16 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
                 <Mail className="h-4 w-4 text-gray-400" />
-                البريد الإلكتروني <span className="text-red-500">*</span>
+                البريد الإلكتروني
               </label>
               <input
                 type="email"
-                placeholder="example@domain.com"
                 value={formData.email}
-                onChange={(e) => handleChange('email', e.target.value)}
-                className={`input-premium ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
+                readOnly
+                className="input-premium bg-gray-100 text-gray-500 cursor-not-allowed"
                 dir="ltr"
               />
-              {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+              <p className="text-xs text-gray-400">لا يمكن تعديل البريد الإلكتروني</p>
             </div>
 
             {/* رقم الهاتف */}
@@ -353,6 +417,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               </label>
               <input
                 type="tel"
+                name="phone"
+                id="phone"
                 placeholder="+966 5X XXX XXXX"
                 value={formData.phone}
                 onChange={(e) => handleChange('phone', e.target.value)}
@@ -371,6 +437,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
           title="الترخيص التجاري"
           description="معلومات الترخيص التجاري (اختياري)"
           badge="اختياري"
+          isExpanded={expandedSections.license}
+          onToggle={toggleSection}
         >
           <div className="space-y-6 mt-4">
             {/* هل يوجد ترخيص */}
@@ -378,11 +446,10 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               <button
                 type="button"
                 onClick={() => handleChange('hasLicense', true)}
-                className={`flex-1 p-4 rounded-xl border-2 transition-all ${
-                  formData.hasLicense 
-                    ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+                className={`flex-1 p-4 rounded-xl border-2 transition-all ${formData.hasLicense
+                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  : 'border-gray-200 hover:border-gray-300'
+                  }`}
               >
                 <Check className={`h-5 w-5 mx-auto mb-2 ${formData.hasLicense ? 'text-blue-600' : 'text-gray-400'}`} />
                 <span className="font-semibold">نعم، لدي ترخيص</span>
@@ -390,11 +457,10 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               <button
                 type="button"
                 onClick={() => handleChange('hasLicense', false)}
-                className={`flex-1 p-4 rounded-xl border-2 transition-all ${
-                  !formData.hasLicense 
-                    ? 'border-blue-500 bg-blue-50 text-blue-700' 
-                    : 'border-gray-200 hover:border-gray-300'
-                }`}
+                className={`flex-1 p-4 rounded-xl border-2 transition-all ${!formData.hasLicense
+                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  : 'border-gray-200 hover:border-gray-300'
+                  }`}
               >
                 <span className="font-semibold">لا، ليس لدي ترخيص</span>
               </button>
@@ -408,6 +474,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                   </label>
                   <input
                     type="text"
+                    name="licenseNumber"
+                    id="licenseNumber"
                     placeholder="أدخل رقم الترخيص التجاري"
                     value={formData.licenseNumber}
                     onChange={(e) => handleChange('licenseNumber', e.target.value)}
@@ -451,6 +519,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
           title="بوابات الدفع"
           description="اختر طرق الدفع المتاحة في متجرك"
           badge="اختياري"
+          isExpanded={expandedSections.payment}
+          onToggle={toggleSection}
         >
           <div className="space-y-4 mt-4">
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -461,11 +531,10 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                     key={gateway.id}
                     type="button"
                     onClick={() => togglePaymentGateway(gateway.id)}
-                    className={`p-4 rounded-xl border-2 text-right transition-all ${
-                      isSelected 
-                        ? 'border-blue-500 bg-blue-50' 
-                        : 'border-gray-200 hover:border-gray-300'
-                    }`}
+                    className={`p-4 rounded-xl border-2 text-right transition-all ${isSelected
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                      }`}
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -480,9 +549,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                         </div>
                         <p className="text-sm text-gray-500 mt-1">{gateway.description}</p>
                       </div>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${
-                        isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
-                      }`}>
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                        }`}>
                         {isSelected && <Check className="h-4 w-4 text-white" />}
                       </div>
                     </div>
@@ -501,13 +569,117 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
           </div>
         </Section>
 
-        {/* القسم 4: الهوية البصرية */}
+        {/* القسم 4: إعدادات المتجر */}
+        <Section
+          id="store"
+          icon={Store}
+          title="إعدادات المتجر"
+          description="العنوان والعملة والضريبة والشحن"
+          badge="اختياري"
+          isExpanded={expandedSections.store}
+          onToggle={toggleSection}
+        >
+          <div className="space-y-6 mt-4">
+            {/* العنوان والمدينة */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  📍 العنوان
+                </label>
+                <input
+                  type="text"
+                  placeholder="مثال: شارع الملك فهد، حي الورود"
+                  value={formData.address}
+                  onChange={(e) => handleChange('address', e.target.value)}
+                  className="input-premium"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  🏙️ المدينة
+                </label>
+                <input
+                  type="text"
+                  placeholder="مثال: الرياض"
+                  value={formData.city}
+                  onChange={(e) => handleChange('city', e.target.value)}
+                  className="input-premium"
+                />
+              </div>
+            </div>
+
+            {/* العملة */}
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                💰 العملة
+              </label>
+              <select
+                value={formData.currency}
+                onChange={(e) => handleChange('currency', e.target.value)}
+                className="input-premium"
+              >
+                <option value="SAR">🇸🇦 ريال سعودي (SAR)</option>
+                <option value="AED">🇦🇪 درهم إماراتي (AED)</option>
+                <option value="KWD">🇰🇼 دينار كويتي (KWD)</option>
+                <option value="BHD">🇧🇭 دينار بحريني (BHD)</option>
+                <option value="QAR">🇶🇦 ريال قطري (QAR)</option>
+                <option value="OMR">🇴🇲 ريال عماني (OMR)</option>
+                <option value="EGP">🇪🇬 جنيه مصري (EGP)</option>
+                <option value="JOD">🇯🇴 دينار أردني (JOD)</option>
+                <option value="YER">🇾🇪 ريال يمني (YER)</option>
+                <option value="USD">🇺🇸 دولار أمريكي (USD)</option>
+                <option value="EUR">🇪🇺 يورو (EUR)</option>
+              </select>
+            </div>
+
+            {/* الضريبة والشحن */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  🧾 نسبة الضريبة (%)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  placeholder="0"
+                  value={formData.taxRate}
+                  onChange={(e) => handleChange('taxRate', e.target.value)}
+                  className="input-premium"
+                  dir="ltr"
+                />
+                <p className="text-xs text-gray-400">مثال: 15 للضريبة 15%</p>
+              </div>
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+                  🚚 تكلفة الشحن الافتراضية
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0"
+                  value={formData.shippingCost}
+                  onChange={(e) => handleChange('shippingCost', e.target.value)}
+                  className="input-premium"
+                  dir="ltr"
+                />
+                <p className="text-xs text-gray-400">بالعملة المختارة، 0 = شحن مجاني</p>
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* القسم 5: الهوية البصرية */}
         <Section
           id="brand"
           icon={Palette}
           title="الهوية البصرية"
           description="الشعار والألوان الخاصة بمتجرك"
           badge="اختياري"
+          isExpanded={expandedSections.brand}
+          onToggle={toggleSection}
         >
           <div className="space-y-6 mt-4">
             {/* رفع الشعار */}
@@ -553,14 +725,12 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                     key={preset.name}
                     type="button"
                     onClick={() => {
-                      handleChange('primaryColor', preset.primary);
-                      handleChange('secondaryColor', preset.secondary);
+                      setFormData(prev => ({ ...prev, primaryColor: preset.primary, secondaryColor: preset.secondary }));
                     }}
-                    className={`p-3 rounded-xl border-2 transition-all hover:scale-105 ${
-                      formData.primaryColor === preset.primary 
-                        ? 'border-blue-500 ring-2 ring-blue-200' 
-                        : 'border-gray-200'
-                    }`}
+                    className={`p-3 rounded-xl border-2 transition-all hover:scale-105 ${formData.primaryColor === preset.primary
+                      ? 'border-blue-500 ring-2 ring-blue-200'
+                      : 'border-gray-200'
+                      }`}
                   >
                     <div className="flex gap-1 mb-2 justify-center">
                       <div className="w-6 h-6 rounded" style={{ backgroundColor: preset.primary }} />
@@ -615,33 +785,42 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
         </Section>
 
         {/* زر الحفظ */}
-        <div className="sticky bottom-4 z-10">
-          <div className="bg-white/80 backdrop-blur-lg rounded-2xl border border-gray-200 shadow-xl p-4">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-              <div className="flex items-center gap-3 text-gray-600">
-                <Shield className="h-5 w-5" />
-                <span className="text-sm">جميع بياناتك محمية ومشفرة</span>
-              </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full sm:w-auto btn-primary px-8 py-3 text-lg flex items-center justify-center gap-3 disabled:opacity-50"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-5 w-5 animate-spin" />
-                    <span>جاري الحفظ...</span>
-                  </>
-                ) : (
-                  <>
+        {(hasChanges || success || error) && (
+          <div className="sticky bottom-4 z-10 animate-fade-in">
+            <div className={`backdrop-blur-lg rounded-2xl border shadow-xl p-4 transition-colors ${success ? 'bg-emerald-50/90 border-emerald-200' : error ? 'bg-red-50/90 border-red-200' : 'bg-white/80 border-gray-200'}`}>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  {success ? (
+                    <div className="flex items-center gap-2 text-emerald-600">
+                      <Check className="h-5 w-5" />
+                      <span className="text-sm font-bold">تم الحفظ بنجاح! ✅</span>
+                    </div>
+                  ) : error ? (
+                    <div className="flex items-center gap-2 text-red-600">
+                      <AlertCircle className="h-5 w-5" />
+                      <span className="text-sm font-bold">{error}</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 text-amber-600">
+                      <AlertCircle className="h-5 w-5" />
+                      <span className="text-sm font-bold">لديك تغييرات غير محفوظة</span>
+                    </div>
+                  )}
+                </div>
+                {hasChanges && (
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full sm:w-auto btn-primary px-8 py-3 text-lg flex items-center justify-center gap-3 disabled:opacity-50"
+                  >
                     <Save className="h-5 w-5" />
-                    <span>{isUpdate ? 'تحديث المعلومات' : 'حفظ وإنشاء المتجر'}</span>
-                  </>
+                    <span>{isUpdate ? 'حفظ التغييرات' : 'حفظ وإنشاء المتجر'}</span>
+                  </button>
                 )}
-              </button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </form>
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
 // إنشاء Context للمصادقة
@@ -9,9 +9,9 @@ const AuthContext = createContext({
   merchant: null,
   isLoading: true,
   isAuthenticated: false,
-  login: async () => {},
-  logout: async () => {},
-  refreshSession: async () => {}
+  login: async () => { },
+  logout: async () => { },
+  refreshSession: async () => { }
 });
 
 /**
@@ -23,21 +23,14 @@ export function AuthProvider({ children, initialSession = null }) {
   const [isLoading, setIsLoading] = useState(!initialSession);
   const router = useRouter();
 
-  // التحقق من الجلسة عند التحميل
-  useEffect(() => {
-    if (!initialSession) {
-      refreshSession();
-    }
-  }, []);
-
   /**
    * تحديث الجلسة
    */
-  const refreshSession = async () => {
+  const refreshSession = useCallback(async () => {
     try {
       setIsLoading(true);
       const response = await fetch('/api/auth/session');
-      
+
       if (response.ok) {
         const data = await response.json();
         setUser(data.user || null);
@@ -53,7 +46,14 @@ export function AuthProvider({ children, initialSession = null }) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
+
+  // التحقق من الجلسة عند التحميل
+  useEffect(() => {
+    if (!initialSession) {
+      refreshSession();
+    }
+  }, [initialSession, refreshSession]);
 
   /**
    * تسجيل الدخول
@@ -117,11 +117,11 @@ export function AuthProvider({ children, initialSession = null }) {
  */
 export function useAuth() {
   const context = useContext(AuthContext);
-  
+
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  
+
   return context;
 }
 

@@ -7,10 +7,20 @@ export async function POST(request) {
   try {
     const { getSession } = await import('@/lib/auth/session');
     const { uploadToImageKit, validateFile, generateUniqueFileName } = await import('@/lib/upload/imagekit');
+    const { rateLimit } = await import('@/lib/utils/rate-limit');
 
     const session = await getSession();
     if (!session) {
       return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+    }
+
+    // Rate limiting - 10 uploads per minute
+    const rateLimitResult = await rateLimit(request, 10, 60000);
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: rateLimitResult.error },
+        { status: 429 }
+      );
     }
 
     const formData = await request.formData();

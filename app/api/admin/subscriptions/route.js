@@ -32,9 +32,24 @@ export async function GET(request) {
     const [subscriptions, total] = await Promise.all([
       prisma.subscription.findMany({
         where,
-        include: {
+        select: {
+          id: true,
+          planId: true,
+          planName: true,
+          planType: true,
+          billingCycle: true,
+          status: true,
+          startDate: true,
+          endDate: true,
+          amount: true,
+          currency: true,
+          nextBillingDate: true,
+          createdAt: true,
           merchant: {
-            include: {
+            select: {
+              id: true,
+              businessName: true,
+              contactName: true,
               user: {
                 select: {
                   id: true,
@@ -44,8 +59,14 @@ export async function GET(request) {
             },
           },
           payments: {
+            select: {
+              id: true,
+              amount: true,
+              status: true,
+              createdAt: true,
+            },
             orderBy: { createdAt: 'desc' },
-            take: 5,
+            take: 3,
           },
         },
         orderBy: { createdAt: 'desc' },

@@ -48,15 +48,32 @@ export async function GET(request) {
 
     const merchants = await prisma.merchant.findMany({
       where,
-      include: {
+      select: {
+        id: true,
+        businessName: true,
+        contactName: true,
+        status: true,
+        createdAt: true,
         user: {
-          select: { email: true, emailVerified: true, createdAt: true }
+          select: {
+            email: true,
+            emailVerified: true,
+            createdAt: true,
+          }
         },
-        subscription: true,
+        subscription: {
+          select: {
+            id: true,
+            planType: true,
+            billingCycle: true,
+            status: true,
+            startDate: true,
+            endDate: true,
+          }
+        },
         store: {
           select: {
             brandName: true,
-            setupCompleted: true
           }
         },
         _count: {
@@ -117,7 +134,14 @@ export async function GET(request) {
 }
 
 /**
- * PATCH - تحديث بيانات تاجر
+ * PUT - تحديث حالة تاجر (alias for PATCH)
+ */
+export async function PUT(request) {
+  return PATCH(request);
+}
+
+/**
+ * PATCH - تحديث بيانات/حالة تاجر
  */
 export async function PATCH(request) {
   try {
@@ -142,24 +166,42 @@ export async function PATCH(request) {
       );
     }
 
-    let result;
+    let message = '';
 
     switch (action) {
-      case 'suspend':
-        result = await prisma.subscription.update({
-          where: { merchantId },
-          data: { status: 'SUSPENDED' }
-        });
+      case 'suspend': {
+        // إيقاف التاجر + الاشتراك
+        await prisma.$transaction([
+          prisma.merchant.update({
+            where: { id: merchantId },
+            data: { status: 'SUSPENDED' }
+          }),
+          prisma.subscription.updateMany({
+            where: { merchantId },
+            data: { status: 'PAUSED' }
+          })
+        ]);
+        message = 'تم إيقاف حساب التاجر بنجاح';
         break;
+      }
 
-      case 'activate':
-        result = await prisma.subscription.update({
-          where: { merchantId },
-          data: { status: 'ACTIVE' }
-        });
+      case 'activate': {
+        // تفعيل التاجر + الاشتراك
+        await prisma.$transaction([
+          prisma.merchant.update({
+            where: { id: merchantId },
+            data: { status: 'ACTIVE' }
+          }),
+          prisma.subscription.updateMany({
+            where: { merchantId },
+            data: { status: 'ACTIVE' }
+          })
+        ]);
+        message = 'تم تفعيل حساب التاجر بنجاح';
         break;
+      }
 
-      case 'extend':
+      case 'extend': {
         const subscription = await prisma.subscription.findUnique({
           where: { merchantId }
         });
@@ -172,14 +214,43 @@ export async function PATCH(request) {
         }
 
         const extensionDays = data?.days || 30;
-        const newEndDate = new Date(subscription.endDate);
+        const baseDate = subscription.endDate || subscription.currentPeriodEnd || new Date();
+        const newEndDate = new Date(baseDate);
         newEndDate.setDate(newEndDate.getDate() + extensionDays);
 
-        result = await prisma.subscription.update({
+        await prisma.subscription.update({
           where: { merchantId },
-          data: { endDate: newEndDate, status: 'ACTIVE' }
+          data: {
+            endDate: newEndDate,
+            currentPeriodEnd: newEndDate,
+            status: 'ACTIVE'
+          }
         });
+        message = `تم تمديد الاشتراك ${extensionDays} يوماً بنجاح`;
         break;
+      }
+
+      case 'delete': {
+        // حذف التاجر وحسابه بالكامل (cascade يحذف كل البيانات المرتبطة)
+        const merchant = await prisma.merchant.findUnique({
+          where: { id: merchantId },
+          select: { userId: true }
+        });
+
+        if (!merchant) {
+          return NextResponse.json(
+            { success: false, error: 'التاجر غير موجود' },
+            { status: 404 }
+          );
+        }
+
+        // حذف المستخدم (cascade يحذف Merchant وكل البيانات)
+        await prisma.user.delete({
+          where: { id: merchant.userId }
+        });
+        message = 'تم حذف الحساب بالكامل';
+        break;
+      }
 
       default:
         return NextResponse.json(
@@ -188,23 +259,24 @@ export async function PATCH(request) {
         );
     }
 
-    await prisma.activityLog.create({
-      data: {
-        merchantId: auth.user.id,
-        action: `ADMIN_${action.toUpperCase()}`,
-        description: `Admin action: ${action} on merchant ${merchantId}`,
-        metadata: { targetMerchantId: merchantId, action, data }
-      }
-    });
+    // تسجيل النشاط (لا نسجل عند الحذف لأن التاجر لم يعد موجوداً)
+    if (action !== 'delete') {
+      try {
+        await prisma.activityLog.create({
+          data: {
+            merchantId,
+            action: `ADMIN_${action.toUpperCase()}`,
+            description: `Admin action: ${action} on merchant ${merchantId}`,
+            metadata: { targetMerchantId: merchantId, action, adminId: auth.user.id }
+          }
+        });
+      } catch (e) { /* تجاهل أخطاء التسجيل */ }
+    }
 
-    return NextResponse.json({
-      success: true,
-      message: 'تم تنفيذ الإجراء بنجاح',
-      data: result
-    });
+    return NextResponse.json({ success: true, message });
 
   } catch (error) {
-    console.error('Error in admin merchants PATCH:', error);
+    console.error('Error in admin merchants action:', error);
     return NextResponse.json(
       { success: false, error: 'حدث خطأ أثناء تنفيذ الإجراء' },
       { status: 500 }
@@ -212,55 +284,3 @@ export async function PATCH(request) {
   }
 }
 
-/**
- * DELETE - حذف تاجر
- */
-export async function DELETE(request) {
-  try {
-    const { verifyAuth } = await import('@/lib/auth/session');
-    const prisma = (await import('@/lib/db/prisma')).default;
-
-    const auth = await verifyAuth(request);
-    if (!auth.authenticated || auth.user.role !== 'ADMIN') {
-      return NextResponse.json(
-        { success: false, error: 'غير مصرح - صلاحيات أدمن مطلوبة' },
-        { status: 403 }
-      );
-    }
-
-    const { searchParams } = new URL(request.url);
-    const merchantId = searchParams.get('merchantId');
-
-    if (!merchantId) {
-      return NextResponse.json(
-        { success: false, error: 'معرف التاجر مطلوب' },
-        { status: 400 }
-      );
-    }
-
-    await prisma.merchant.delete({
-      where: { id: merchantId }
-    });
-
-    await prisma.activityLog.create({
-      data: {
-        merchantId: auth.user.id,
-        action: 'ADMIN_DELETE_MERCHANT',
-        description: `Admin deleted merchant ${merchantId}`,
-        metadata: { deletedMerchantId: merchantId }
-      }
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: 'تم حذف التاجر بنجاح'
-    });
-
-  } catch (error) {
-    console.error('Error in admin merchants DELETE:', error);
-    return NextResponse.json(
-      { success: false, error: 'حدث خطأ أثناء حذف التاجر' },
-      { status: 500 }
-    );
-  }
-}

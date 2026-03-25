@@ -15,11 +15,11 @@ export default async function DashboardLayout({ children }) {
   // This should never happen due to middleware, but just in case
   if (!session || !session.merchant) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-[#0a0a0f]">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">خطأ في الجلسة</h1>
-          <p className="text-gray-600 mb-4">لم يتم العثور على بيانات الجلسة</p>
-          <a href="/login" className="text-blue-600 hover:underline">
+          <h1 className="text-2xl font-bold text-white mb-2">خطأ في الجلسة</h1>
+          <p className="text-gray-400 mb-4">لم يتم العثور على بيانات الجلسة</p>
+          <a href="/login" className="text-blue-400 hover:underline">
             العودة لتسجيل الدخول
           </a>
         </div>
@@ -28,7 +28,7 @@ export default async function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-[#0a0a0f] flex">
       {/* Sidebar */}
       <DashboardSidebar merchant={session.merchant} />
 

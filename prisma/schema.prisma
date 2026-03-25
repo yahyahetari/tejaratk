@@ -5,7 +5,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "cockroachdb"
   url      = env("DATABASE_URL")
 }
 
@@ -74,7 +74,7 @@ model Merchant {
   // معلومات المتجر الأساسية
   storeName         String?
   storeSlug         String?        @unique
-  storeDescription  String?        @db.Text
+  storeDescription  String?
   storeLogo         String?
   storeBanner       String?
   
@@ -181,7 +181,7 @@ model Notification {
   
   type        NotificationType
   title       String
-  message     String   @db.Text
+  message     String
   
   // بيانات إضافية
   data        Json?
@@ -296,7 +296,7 @@ model Payment {
   refundedAt      DateTime?
   
   // ملاحظات
-  notes           String?       @db.Text
+  notes           String?
   
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -344,7 +344,7 @@ model Invoice {
   paymentMethod   String?
   
   // ملاحظات
-  notes           String?       @db.Text
+  notes           String?
   
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -389,7 +389,7 @@ model Store {
   // معلومات المتجر الأساسية
   brandName       String?
   tagline         String?
-  description     String?   @db.Text
+  description     String?
   
   // الإعدادات
   currency        String    @default("OMR")
@@ -416,7 +416,7 @@ model Store {
   
   // إعدادات SEO
   metaTitle       String?
-  metaDescription String?   @db.Text
+  metaDescription String?
   
   // إعدادات متقدمة
   settings        Json?
@@ -482,7 +482,7 @@ model BrandIdentity {
   templateConfig  Json?
   
   // إعدادات إضافية
-  customCSS       String?   @db.Text
+  customCSS       String?
   
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt

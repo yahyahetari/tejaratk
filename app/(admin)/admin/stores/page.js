@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Store,
   CheckCircle,
@@ -18,11 +18,7 @@ export default function AdminStoresPage() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  useEffect(() => {
-    fetchStores();
-  }, [statusFilter]);
-
-  const fetchStores = async () => {
+  const fetchStores = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/admin/merchants?status=${statusFilter}`);
@@ -41,7 +37,11 @@ export default function AdminStoresPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [statusFilter]);
+
+  useEffect(() => {
+    fetchStores();
+  }, [fetchStores]);
 
   const statCards = [
     { label: 'إجمالي المتاجر', value: stats.total, icon: Store, gradient: 'from-blue-500 to-indigo-600' },
@@ -133,8 +133,8 @@ export default function AdminStoresPage() {
                     </div>
                   </div>
                   <span className={`px-2.5 py-1 rounded-lg text-xs font-medium ${store.status === 'ACTIVE' ? 'bg-emerald-100 text-emerald-700' :
-                      store.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
-                        'bg-red-100 text-red-700'
+                    store.status === 'PENDING' ? 'bg-amber-100 text-amber-700' :
+                      'bg-red-100 text-red-700'
                     }`}>
                     {store.status === 'ACTIVE' ? 'نشط' : store.status === 'PENDING' ? 'قيد الانتظار' : 'موقوف'}
                   </span>

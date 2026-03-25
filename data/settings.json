@@ -1,0 +1,49 @@
+{
+  "general": {
+    "appName": "تجارتك",
+    "appDescription": "منصة SaaS متكاملة لإنشاء وإدارة المتاجر الإلكترونية",
+    "supportEmail": "support@tejaratk.com",
+    "defaultCurrency": "USD",
+    "defaultLanguage": "ar",
+    "defaultTimezone": "Asia/Riyadh",
+    "maintenanceMode": false
+  },
+  "email": {
+    "smtpHost": "smtp.gmail.com",
+    "smtpPort": "587",
+    "smtpUser": "",
+    "smtpPass": "",
+    "fromEmail": "",
+    "fromName": "تجارتك"
+  },
+  "payment": {
+    "paddleEnabled": true,
+    "paddleVendorId": "",
+    "paddleApiKey": "",
+    "paddleWebhookSecret": "",
+    "paddleEnvironment": "sandbox"
+  },
+  "security": {
+    "requireEmailVerification": true,
+    "sessionTimeout": 24,
+    "maxLoginAttempts": 5,
+    "passwordMinLength": 8,
+    "requireStrongPassword": true,
+    "enableTwoFactor": false
+  },
+  "notifications": {
+    "emailNewUser": true,
+    "emailNewOrder": true,
+    "emailSubscription": true,
+    "emailPayment": true,
+    "pushEnabled": false,
+    "smsEnabled": false
+  },
+  "appearance": {
+    "theme": "light",
+    "primaryColor": "#3B82F6",
+    "accentColor": "#8B5CF6",
+    "logoUrl": "",
+    "faviconUrl": ""
+  }
+}

@@ -11,7 +11,7 @@ export async function POST(req) {
     const { sendEmailVerificationCode } = await import("@/lib/email/sender");
     const { rateLimit } = await import("@/lib/utils/rate-limit");
 
-    const rateLimitResult = rateLimit(req, 3, 60000);
+    const rateLimitResult = await rateLimit(req, 3, 60000);
     if (!rateLimitResult.allowed) {
       return NextResponse.json(
         { error: rateLimitResult.error },

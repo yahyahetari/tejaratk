@@ -29,15 +29,12 @@ export default function Sidebar({ merchant }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
 
-  // Only show sidebar in dashboard routes
   const isDashboardRoute = pathname.startsWith('/dashboard');
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = 'hidden';
@@ -49,23 +46,16 @@ export default function Sidebar({ merchant }) {
     };
   }, [mobileOpen]);
 
-  // Don't render sidebar if not in dashboard
   if (!isDashboardRoute) {
     return null;
   }
 
   const handleLogout = async () => {
     if (loggingOut) return;
-
     setLoggingOut(true);
-
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-      });
-
+      const response = await fetch('/api/auth/logout', { method: 'POST' });
       if (response.ok) {
-        // Redirect to login page
         router.push('/login');
         router.refresh();
       } else {
@@ -79,48 +69,16 @@ export default function Sidebar({ merchant }) {
   };
 
   const menuItems = [
-    {
-      title: 'لوحة التحكم',
-      href: '/dashboard',
-      icon: LayoutDashboard,
-      badge: null,
-    },
-    {
-      title: 'إعداد المتجر',
-      href: '/dashboard/store-setup',
-      icon: Store,
-      badge: null,
-    },
-    {
-      title: 'الاشتراك',
-      href: '/dashboard/subscription',
-      icon: CreditCard,
-      badge: 'PRO',
-    },
-    {
-      title: 'الفواتير',
-      href: '/dashboard/invoices',
-      icon: FileText,
-      badge: null,
-    },
-    {
-      title: 'الإعدادات',
-      href: '/dashboard/settings',
-      icon: Settings,
-      badge: null,
-    },
-    {
-      title: 'المساعدة',
-      href: '/dashboard/help',
-      icon: HelpCircle,
-      badge: null,
-    },
+    { title: 'لوحة التحكم', href: '/dashboard', icon: LayoutDashboard },
+    { title: 'إعداد المتجر', href: '/dashboard/store-setup', icon: Store },
+    { title: 'الاشتراك', href: '/dashboard/subscription', icon: CreditCard, badge: 'PRO' },
+    { title: 'الفواتير', href: '/dashboard/invoices', icon: FileText },
+    { title: 'الإعدادات', href: '/dashboard/settings', icon: Settings },
+    { title: 'المساعدة', href: '/dashboard/help', icon: HelpCircle },
   ];
 
   const isActive = (href) => {
-    if (href === '/dashboard') {
-      return pathname === '/dashboard';
-    }
+    if (href === '/dashboard') return pathname === '/dashboard';
     return pathname.startsWith(href);
   };
 
@@ -132,7 +90,7 @@ export default function Sidebar({ merchant }) {
       onClick={handleLogout}
       disabled={loggingOut}
       className={`
-        w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all
+        w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all
         disabled:opacity-50 disabled:cursor-not-allowed
         ${isCollapsed ? 'justify-center' : ''}
       `}
@@ -152,18 +110,18 @@ export default function Sidebar({ merchant }) {
 
   const SidebarContent = ({ showLogo = true }) => (
     <>
-      {/* Logo - Only show on desktop */}
+      {/* Logo */}
       {showLogo && (
-        <div className="p-5 border-b border-gray-100">
+        <div className="p-5 border-b border-white/5">
           <Link href="/dashboard" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="absolute inset-0 gradient-primary blur-xl opacity-50 group-hover:opacity-75 transition-opacity rounded-full"></div>
-              <div className="relative w-11 h-11 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 blur-xl opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
+              <div className="relative w-11 h-11 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
                 <ShoppingCart className="h-5 w-5 text-white" />
               </div>
             </div>
             {!collapsed && (
-              <span className="text-xl font-black gradient-text">
+              <span className="text-xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
                 تجارتك
               </span>
             )}
@@ -177,7 +135,6 @@ export default function Sidebar({ merchant }) {
           {menuItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
-
             return (
               <Link
                 key={item.href}
@@ -185,28 +142,26 @@ export default function Sidebar({ merchant }) {
                 className={`
                   flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group
                   ${active
-                    ? 'gradient-primary text-white shadow-lg shadow-blue-500/30'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-blue-500/10 text-blue-400'
+                    : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                   }
                   ${collapsed ? 'justify-center' : ''}
                 `}
                 title={collapsed ? item.title : undefined}
               >
-                <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'} transition-colors`} />
+                {active && (
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-blue-500 rounded-l-full"></div>
+                )}
+                <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-blue-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`} />
                 {!collapsed && (
                   <>
-                    <span className="font-semibold flex-1">{item.title}</span>
+                    <span className={`font-semibold flex-1 ${active ? 'text-blue-400' : ''}`}>{item.title}</span>
                     {item.badge && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-600'
-                        }`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-500/10 text-blue-400'}`}>
                         {item.badge}
                       </span>
                     )}
                   </>
-                )}
-
-                {active && !collapsed && (
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
                 )}
               </Link>
             );
@@ -217,14 +172,14 @@ export default function Sidebar({ merchant }) {
       {/* Upgrade Card */}
       {!collapsed && (
         <div className="p-4">
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-100">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/10">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-5 w-5 text-blue-600" />
-              <span className="font-bold text-gray-900">ترقية الخطة</span>
+              <Sparkles className="h-5 w-5 text-blue-400" />
+              <span className="font-bold text-gray-200">ترقية الخطة</span>
             </div>
-            <p className="text-sm text-gray-600 mb-3">احصل على مميزات إضافية مع الخطة الاحترافية</p>
+            <p className="text-sm text-gray-500 mb-3">احصل على مميزات إضافية مع الخطة الاحترافية</p>
             <Link href="/dashboard/subscription">
-              <button className="w-full btn-primary text-sm py-2.5">
+              <button className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all">
                 ترقية الآن
               </button>
             </Link>
@@ -232,11 +187,11 @@ export default function Sidebar({ merchant }) {
         </div>
       )}
 
-      {/* Collapse Button - Desktop Only */}
-      <div className="hidden lg:block p-4 border-t border-gray-100">
+      {/* Collapse Button - Desktop */}
+      <div className="hidden lg:block p-4 border-t border-white/5">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-gray-500 hover:bg-gray-50 hover:text-gray-700 rounded-xl transition-all"
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 text-gray-600 hover:bg-white/5 hover:text-gray-400 rounded-xl transition-all"
         >
           {collapsed ? (
             <ChevronRight className="h-5 w-5" />
@@ -250,19 +205,18 @@ export default function Sidebar({ merchant }) {
       </div>
 
       {/* User & Logout */}
-      <div className="p-4 border-t border-gray-100">
+      <div className="p-4 border-t border-white/5">
         {!collapsed && (
-          <div className="flex items-center gap-3 mb-3 p-3 bg-gray-50 rounded-xl">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <div className="flex items-center gap-3 mb-3 p-3 bg-white/[0.03] rounded-xl border border-white/5">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
               <User className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-semibold text-gray-900 truncate">{displayName}</p>
-              <p className="text-xs text-gray-500 truncate">{displayEmail}</p>
+              <p className="font-semibold text-gray-200 truncate">{displayName}</p>
+              <p className="text-xs text-gray-600 truncate">{displayEmail}</p>
             </div>
           </div>
         )}
-
         <LogoutButton isCollapsed={collapsed} />
       </div>
     </>
@@ -273,7 +227,7 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-white rounded-xl shadow-lg flex items-center justify-center text-gray-700 hover:text-blue-600 transition-colors border border-gray-200"
+        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-[#12121a] rounded-xl shadow-lg flex items-center justify-center text-gray-400 hover:text-blue-400 transition-colors border border-white/5"
         aria-label="فتح القائمة"
       >
         <Menu className="h-6 w-6" />
@@ -282,7 +236,7 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Overlay */}
       {mobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/60 z-40 animate-fade-in backdrop-blur-sm"
+          className="lg:hidden fixed inset-0 bg-black/70 z-40 animate-fade-in backdrop-blur-sm"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -291,7 +245,7 @@ export default function Sidebar({ merchant }) {
       <aside
         className={`
           hidden lg:flex
-          bg-white border-r border-gray-100 min-h-screen transition-all duration-300 flex-col shadow-xl shadow-gray-200/50
+          bg-[#0e0e16] border-r border-white/5 min-h-screen transition-all duration-300 flex-col
           ${collapsed ? 'w-20' : 'w-72'}
         `}
       >
@@ -301,22 +255,22 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Sidebar */}
       <aside
         className={`
-          lg:hidden fixed top-0 left-0 bottom-0 z-50 bg-white border-r border-gray-100 shadow-2xl flex flex-col
+          lg:hidden fixed top-0 left-0 bottom-0 z-50 bg-[#0e0e16] border-r border-white/5 shadow-2xl flex flex-col
           transition-transform duration-300 ease-in-out w-72
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
       >
         {/* Mobile Header */}
-        <div className="p-4 border-b border-gray-100">
+        <div className="p-4 border-b border-white/5">
           <div className="flex items-center justify-between">
             <button
               onClick={() => setMobileOpen(false)}
-              className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+              className="w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-300 hover:bg-white/5 rounded-lg transition-colors"
               aria-label="إغلاق القائمة"
             >
               <X className="h-5 w-5" />
             </button>
-            <h2 className="text-lg font-bold text-gray-900">القائمة الرئيسية</h2>
+            <h2 className="text-lg font-bold text-gray-200">القائمة الرئيسية</h2>
             <div className="w-10"></div>
           </div>
         </div>
@@ -328,7 +282,6 @@ export default function Sidebar({ merchant }) {
               {menuItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.href);
-
                 return (
                   <Link
                     key={item.href}
@@ -336,22 +289,20 @@ export default function Sidebar({ merchant }) {
                     className={`
                       flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group
                       ${active
-                        ? 'gradient-primary text-white shadow-lg shadow-blue-500/30'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-blue-500/10 text-blue-400'
+                        : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                       }
                     `}
                   >
-                    <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-white' : 'text-gray-500 group-hover:text-blue-600'} transition-colors`} />
-                    <span className="font-semibold flex-1">{item.title}</span>
+                    {active && (
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-blue-500 rounded-l-full"></div>
+                    )}
+                    <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-blue-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`} />
+                    <span className={`font-semibold flex-1 ${active ? 'text-blue-400' : ''}`}>{item.title}</span>
                     {item.badge && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-white/20 text-white' : 'bg-blue-100 text-blue-600'
-                        }`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-500/10 text-blue-400'}`}>
                         {item.badge}
                       </span>
-                    )}
-
-                    {active && (
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full"></div>
                     )}
                   </Link>
                 );
@@ -361,14 +312,14 @@ export default function Sidebar({ merchant }) {
 
           {/* Upgrade Card - Mobile */}
           <div className="p-4">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-50 to-purple-50 border border-blue-100">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/10">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="h-5 w-5 text-blue-600" />
-                <span className="font-bold text-gray-900">ترقية الخطة</span>
+                <Sparkles className="h-5 w-5 text-blue-400" />
+                <span className="font-bold text-gray-200">ترقية الخطة</span>
               </div>
-              <p className="text-sm text-gray-600 mb-3">احصل على مميزات إضافية مع الخطة الاحترافية</p>
+              <p className="text-sm text-gray-500 mb-3">احصل على مميزات إضافية مع الخطة الاحترافية</p>
               <Link href="/dashboard/subscription">
-                <button className="w-full btn-primary text-sm py-2.5">
+                <button className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all">
                   ترقية الآن
                 </button>
               </Link>
@@ -376,17 +327,16 @@ export default function Sidebar({ merchant }) {
           </div>
 
           {/* User & Logout - Mobile */}
-          <div className="p-4 border-t border-gray-100">
-            <div className="flex items-center gap-3 mb-3 p-3 bg-gray-50 rounded-xl">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+          <div className="p-4 border-t border-white/5">
+            <div className="flex items-center gap-3 mb-3 p-3 bg-white/[0.03] rounded-xl border border-white/5">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
                 <User className="h-5 w-5 text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 truncate">{displayName}</p>
-                <p className="text-xs text-gray-500 truncate">{displayEmail}</p>
+                <p className="font-semibold text-gray-200 truncate">{displayName}</p>
+                <p className="text-xs text-gray-600 truncate">{displayEmail}</p>
               </div>
             </div>
-
             <LogoutButton isCollapsed={false} />
           </div>
         </div>

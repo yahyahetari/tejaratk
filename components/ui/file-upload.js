@@ -36,25 +36,9 @@ export default function FileUpload({
     }
   }, []);
 
-  const handleDrop = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setDragActive(false);
-    
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      handleFile(e.dataTransfer.files[0]);
-    }
-  }, []);
-
-  const handleChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      handleFile(e.target.files[0]);
-    }
-  };
-
   const handleFile = async (file) => {
     setError('');
-    
+
     // Validate file size
     if (file.size > maxSize * 1024 * 1024) {
       setError(`حجم الملف يتجاوز الحد المسموح (${maxSize}MB)`);
@@ -96,7 +80,7 @@ export default function FileUpload({
       }
 
       setUploadedFile(data.file);
-      
+
       if (onUpload) {
         onUpload(data.file);
       }
@@ -104,6 +88,23 @@ export default function FileUpload({
       setError(err.message);
     } finally {
       setUploading(false);
+    }
+  };
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFile(e.dataTransfer.files[0]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleFile(e.target.files[0]);
     }
   };
 
@@ -125,11 +126,10 @@ export default function FileUpload({
       {/* Upload Area */}
       {!uploadedFile && (
         <div
-          className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${
-            dragActive
-              ? 'border-blue-500 bg-blue-50'
-              : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-          } ${uploading ? 'pointer-events-none opacity-50' : ''}`}
+          className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${dragActive
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+            } ${uploading ? 'pointer-events-none opacity-50' : ''}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}

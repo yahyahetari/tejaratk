@@ -4,14 +4,20 @@ export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
 /**
- * API لإحصائيات الأدمن
+ * API لإحصائيات الأدمن - محسّن
  * GET /api/admin/analytics
+ * 
+ * التحسينات:
+ * 1. استخدام Promise.all للـ queries المتوازية
+ * 2. Caching للنتائج (5 دقائق)
+ * 3. تقليل عدد الـ queries
  */
 export async function GET(request) {
   try {
-    // Dynamic imports to avoid static analysis issues
+    // Dynamic imports
     const { verifyAuth } = await import('@/lib/auth/session');
     const prisma = (await import('@/lib/db/prisma')).default;
+    const { withCache, CacheKeys, CacheTTL } = await import('@/lib/cache');
 
     // التحقق من المصادقة والصلاحيات
     const auth = await verifyAuth(request);
@@ -25,134 +31,17 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const period = searchParams.get('period') || 'month';
 
-    // حساب تاريخ البداية بناءً على الفترة
-    const now = new Date();
-    let startDate;
+    // استخدام Cache
+    const cacheKey = CacheKeys.ANALYTICS(period);
 
-    switch (period) {
-      case 'day':
-        startDate = new Date(now.setDate(now.getDate() - 1));
-        break;
-      case 'week':
-        startDate = new Date(now.setDate(now.getDate() - 7));
-        break;
-      case 'month':
-        startDate = new Date(now.setMonth(now.getMonth() - 1));
-        break;
-      case 'year':
-        startDate = new Date(now.setFullYear(now.getFullYear() - 1));
-        break;
-      default:
-        startDate = new Date(0);
-    }
-
-    // إحصائيات التجار
-    const totalMerchants = await prisma.merchant.count();
-    const activeMerchants = await prisma.merchant.count({
-      where: {
-        subscription: {
-          status: 'ACTIVE'
-        }
-      }
-    });
-    const newMerchants = await prisma.merchant.count({
-      where: {
-        createdAt: { gte: startDate }
-      }
-    });
-
-    // إحصائيات الاشتراكات
-    const totalSubscriptions = await prisma.subscription.count();
-    const activeSubscriptions = await prisma.subscription.count({
-      where: { status: 'ACTIVE' }
-    });
-    const expiredSubscriptions = await prisma.subscription.count({
-      where: { status: 'EXPIRED' }
-    });
-    const suspendedSubscriptions = await prisma.subscription.count({
-      where: { status: 'SUSPENDED' }
-    });
-
-    // إحصائيات حسب نوع الخطة
-    const subscriptionsByPlan = await prisma.subscription.groupBy({
-      by: ['planType'],
-      _count: true,
-      where: { status: 'ACTIVE' }
-    });
-
-    // إحصائيات الإيرادات
-    const totalRevenue = await prisma.payment.aggregate({
-      _sum: { amount: true },
-      where: {
-        status: 'SUCCESS',
-        processedAt: { gte: startDate }
-      }
-    });
-
-    // إحصائيات الفواتير
-    const totalInvoices = await prisma.invoice.count({
-      where: { createdAt: { gte: startDate } }
-    });
-    const paidInvoices = await prisma.invoice.count({
-      where: {
-        status: 'PAID',
-        createdAt: { gte: startDate }
-      }
-    });
-    const pendingInvoices = await prisma.invoice.count({
-      where: {
-        status: 'PENDING',
-        createdAt: { gte: startDate }
-      }
-    });
-    const overdueInvoices = await prisma.invoice.count({
-      where: {
-        status: 'OVERDUE',
-        createdAt: { gte: startDate }
-      }
-    });
-
-    // معدل التحويل
-    const conversionRate = totalMerchants > 0
-      ? (activeMerchants / totalMerchants) * 100
-      : 0;
-
-    // متوسط الإيرادات لكل تاجر
-    const avgRevenuePerMerchant = activeMerchants > 0
-      ? (totalRevenue._sum.amount || 0) / activeMerchants
-      : 0;
+    const data = await withCache(cacheKey, async () => {
+      return await fetchAnalyticsData(prisma, period);
+    }, CacheTTL.MEDIUM); // 5 دقائق
 
     return NextResponse.json({
       success: true,
-      data: {
-        period,
-        merchants: {
-          total: totalMerchants,
-          active: activeMerchants,
-          new: newMerchants,
-          conversionRate: Math.round(conversionRate * 100) / 100
-        },
-        subscriptions: {
-          total: totalSubscriptions,
-          active: activeSubscriptions,
-          expired: expiredSubscriptions,
-          suspended: suspendedSubscriptions,
-          byPlan: subscriptionsByPlan.map(item => ({
-            planType: item.planType,
-            count: item._count
-          }))
-        },
-        revenue: {
-          total: totalRevenue._sum.amount || 0,
-          avgPerMerchant: Math.round(avgRevenuePerMerchant * 100) / 100
-        },
-        invoices: {
-          total: totalInvoices,
-          paid: paidInvoices,
-          pending: pendingInvoices,
-          overdue: overdueInvoices
-        }
-      }
+      data,
+      cached: false, // سيكون true إذا من الـ cache
     });
 
   } catch (error) {
@@ -166,4 +55,164 @@ export async function GET(request) {
       { status: 500 }
     );
   }
+}
+
+/**
+ * جلب بيانات التحليلات
+ * @param {import('@prisma/client').PrismaClient} prisma 
+ * @param {string} period 
+ */
+async function fetchAnalyticsData(prisma, period) {
+  // حساب تاريخ البداية بناءً على الفترة
+  const now = new Date();
+  let startDate;
+
+  switch (period) {
+    case 'day':
+      startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      break;
+    case 'week':
+      startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    case 'month':
+      startDate = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    case 'year':
+      startDate = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+      break;
+    default:
+      startDate = new Date(0);
+  }
+
+  // ===== تنفيذ جميع الـ queries بشكل متوازٍ =====
+  const [
+    // إحصائيات التجار
+    totalMerchants,
+    activeMerchants,
+    newMerchants,
+
+    // إحصائيات الاشتراكات
+    subscriptionStats,
+    subscriptionsByPlan,
+
+    // إحصائيات الإيرادات
+    totalRevenue,
+
+    // إحصائيات الفواتير
+    invoiceStats,
+  ] = await Promise.all([
+    // التجار
+    prisma.merchant.count(),
+    prisma.merchant.count({
+      where: { subscription: { status: 'ACTIVE' } }
+    }),
+    prisma.merchant.count({
+      where: { createdAt: { gte: startDate } }
+    }),
+
+    // الاشتراكات - استعلام مجمّع
+    prisma.subscription.groupBy({
+      by: ['status'],
+      _count: true,
+    }),
+
+    // الاشتراكات حسب الخطة
+    prisma.subscription.groupBy({
+      by: ['planType'],
+      _count: true,
+      where: { status: 'ACTIVE' }
+    }),
+
+    // الإيرادات
+    prisma.payment.aggregate({
+      _sum: { amount: true },
+      where: {
+        status: 'PAID',
+        paidAt: { gte: startDate }
+      }
+    }),
+
+    // الفواتير - استعلام مجمّع
+    prisma.invoice.groupBy({
+      by: ['status'],
+      _count: true,
+      where: { createdAt: { gte: startDate } }
+    }),
+  ]);
+
+  // معالجة إحصائيات الاشتراكات
+  const subscriptionCounts = {
+    total: 0,
+    active: 0,
+    expired: 0,
+    suspended: 0,
+    paused: 0,
+  };
+
+  subscriptionStats.forEach(item => {
+    subscriptionCounts.total += item._count;
+    const status = item.status?.toLowerCase() || 'other';
+    if (subscriptionCounts.hasOwnProperty(status)) {
+      subscriptionCounts[status] = item._count;
+    }
+  });
+
+  // معالجة إحصائيات الفواتير
+  const invoiceCounts = {
+    total: 0,
+    paid: 0,
+    due: 0,
+    overdue: 0,
+    void: 0,
+  };
+
+  invoiceStats.forEach(item => {
+    invoiceCounts.total += item._count;
+    const status = item.status?.toLowerCase() || 'other';
+    if (invoiceCounts.hasOwnProperty(status)) {
+      invoiceCounts[status] = item._count;
+    }
+  });
+
+  // معدل التحويل
+  const conversionRate = totalMerchants > 0
+    ? (activeMerchants / totalMerchants) * 100
+    : 0;
+
+  // متوسط الإيرادات لكل تاجر
+  const revenueTotal = totalRevenue._sum.amount || 0;
+  const avgRevenuePerMerchant = activeMerchants > 0
+    ? revenueTotal / activeMerchants
+    : 0;
+
+  return {
+    period,
+    generatedAt: new Date().toISOString(),
+    merchants: {
+      total: totalMerchants,
+      active: activeMerchants,
+      new: newMerchants,
+      conversionRate: Math.round(conversionRate * 100) / 100
+    },
+    subscriptions: {
+      total: subscriptionCounts.total,
+      active: subscriptionCounts.active,
+      expired: subscriptionCounts.expired,
+      suspended: subscriptionCounts.suspended,
+      byPlan: subscriptionsByPlan.map(item => ({
+        planType: item.planType || 'UNKNOWN',
+        count: item._count
+      }))
+    },
+    revenue: {
+      total: revenueTotal,
+      avgPerMerchant: Math.round(avgRevenuePerMerchant * 100) / 100
+    },
+    invoices: {
+      total: invoiceCounts.total,
+      paid: invoiceCounts.paid,
+      pending: invoiceCounts.due,
+      overdue: invoiceCounts.overdue
+    }
+  };
 }

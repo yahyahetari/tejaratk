@@ -1,85 +1,81 @@
 import React from 'react';
-import { Target, Lightbulb, Code, Smartphone, Headphones, Zap } from 'lucide-react';
+import { Target, Lightbulb, Code, Smartphone, Headphones, Zap, Heart, Award } from 'lucide-react';
 
 export default function About() {
+  const capabilities = [
+    { icon: Code, title: 'تطوير احترافي', desc: 'كود نظيف ومحسّن', gradient: 'from-blue-500 to-purple-600' },
+    { icon: Smartphone, title: 'تصاميم متجاوبة', desc: 'جميع الأجهزة', gradient: 'from-purple-500 to-pink-600' },
+    { icon: Headphones, title: 'دعم متواصل', desc: 'متابعة مستمرة', gradient: 'from-green-500 to-emerald-600' },
+    { icon: Zap, title: 'تسليم سريع', desc: 'أيام معدودة', gradient: 'from-orange-500 to-red-600' },
+  ];
+
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-10 items-center">
-          <div className="bg-gradient-to-br from-blue-500 via-purple-500 to-purple-600 rounded-3xl p-10 text-white shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+    <section className="py-20 relative overflow-hidden">
+      {/* Background */}
+      <div className="absolute inset-0 bg-[#0d0d16]"></div>
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px]"></div>
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-[100px]"></div>
 
-            <div className="relative z-10">
-              <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center mb-6">
-                <Lightbulb className="h-8 w-8 text-white" />
+      <div className="container-custom relative z-10">
+        <div className="grid lg:grid-cols-2 gap-14 items-center">
+          {/* Vision Card */}
+          <div className="relative animate-fade-in-up">
+            <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-10 text-white shadow-2xl shadow-blue-600/10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
+
+              <div className="relative z-10">
+                <div className="w-16 h-16 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center mb-6">
+                  <Lightbulb className="h-8 w-8 text-white" />
+                </div>
+
+                <h3 className="text-2xl font-bold mb-4">رؤيتي</h3>
+                <p className="text-blue-100 leading-relaxed text-lg mb-8">
+                  أؤمن بقوة التجارة الإلكترونية في تحويل الأفكار إلى مشاريع ناجحة. هدفي مساعدتك في بناء متجر احترافي يعكس هوية علامتك ويحقق أهدافك باستخدام أحدث التقنيات والذكاء الاصطناعي.
+                </p>
+
+                <div className="flex items-center gap-4 pt-4 border-t border-white/20">
+                  <div className="flex items-center gap-2">
+                    <Heart className="h-5 w-5 text-pink-300" />
+                    <span className="text-blue-100 text-sm font-semibold">شغف بالتطوير</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Award className="h-5 w-5 text-amber-300" />
+                    <span className="text-blue-100 text-sm font-semibold">جودة عالية</span>
+                  </div>
+                </div>
               </div>
-
-              <h3 className="text-2xl font-bold mb-4">رؤيتي</h3>
-              <p className="text-blue-100 leading-relaxed">
-                أؤمن بقوة التجارة الإلكترونية في تحويل الأفكار إلى مشاريع ناجحة. هدفي مساعدتك في بناء متجر احترافي يعكس هوية علامتك ويحقق أهدافك باستخدام أحدث التقنيات والذكاء الاصطناعي.
-              </p>
             </div>
           </div>
 
-          <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-50 to-purple-50 rounded-full border border-blue-200">
-              <Target className="h-4 w-4 text-blue-600" />
-              <span className="text-sm font-semibold text-blue-700">🎯 من أنا</span>
+          {/* Info Side */}
+          <div className="space-y-6 animate-fade-in-up delay-200">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-lg shadow-blue-500/20">
+              <Target className="h-4 w-4 text-white" />
+              <span className="text-sm font-bold text-white">من أنا</span>
             </div>
 
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
-              مطور متخصص في المتاجر الإلكترونية
+            <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
+              مطور متخصص في<br />
+              <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">المتاجر الإلكترونية</span>
             </h2>
 
-            <p className="text-lg text-gray-600 leading-relaxed">
-              أساعدك في إطلاق متجرك بشكل احترافي
-            </p>
-
-            <p className="text-gray-600 leading-relaxed text-sm">
+            <p className="text-lg text-gray-400 leading-relaxed">
               أنا يحيى، مطور متخصص في التجارة الإلكترونية. أستخدم أحدث التقنيات والذكاء الاصطناعي لتطوير حلول مبتكرة تساعد أصحاب الأعمال في النجاح عبر الإنترنت.
             </p>
 
             <div className="grid grid-cols-2 gap-4 pt-2">
-              <div className="flex items-center gap-3 bg-white rounded-xl p-4 border border-gray-200">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                  <Code className="h-5 w-5 text-white" />
+              {capabilities.map((cap, i) => (
+                <div key={i} className="group flex items-center gap-3 bg-white/[0.03] hover:bg-white/[0.06] rounded-xl p-4 border border-white/5 hover:border-white/10 transition-all">
+                  <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${cap.gradient} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform`}>
+                    <cap.icon className="h-5 w-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-200 text-sm">{cap.title}</div>
+                    <div className="text-xs text-gray-500">{cap.desc}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-sm">تطوير احترافي</div>
-                  <div className="text-xs text-gray-600">كود نظيف</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 bg-white rounded-xl p-4 border border-gray-200">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-                  <Smartphone className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-sm">تصاميم متجاوبة</div>
-                  <div className="text-xs text-gray-600">جميع الأجهزة</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 bg-white rounded-xl p-4 border border-gray-200">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center">
-                  <Headphones className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-sm">دعم متواصل</div>
-                  <div className="text-xs text-gray-600">متابعة مستمرة</div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 bg-white rounded-xl p-4 border border-gray-200">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-red-600 flex items-center justify-center">
-                  <Zap className="h-5 w-5 text-white" />
-                </div>
-                <div>
-                  <div className="font-bold text-gray-900 text-sm">تسليم سريع</div>
-                  <div className="text-xs text-gray-600">أيام معدودة</div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

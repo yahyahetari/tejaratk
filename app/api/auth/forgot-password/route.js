@@ -8,6 +8,16 @@ export async function POST(request) {
     const prisma = (await import('@/lib/db/prisma')).default;
     const { generateVerificationCode, saveVerificationCode } = await import('@/lib/auth/verification-code');
     const { sendPasswordResetEmail } = await import('@/lib/email/sender');
+    const { rateLimit } = await import('@/lib/utils/rate-limit');
+
+    // Rate limiting - 5 requests per minute
+    const rateLimitResult = await rateLimit(request, 5, 60000);
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: rateLimitResult.error },
+        { status: 429 }
+      );
+    }
 
     const body = await request.json();
     const { email } = body;

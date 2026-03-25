@@ -33,8 +33,8 @@ const menuItems = [
     icon: Users,
   },
   {
-    title: 'المتاجر',
-    href: '/admin/stores',
+    title: 'التجار',
+    href: '/admin/merchants',
     icon: Store,
   },
   {
@@ -109,8 +109,8 @@ export default function AdminSidebar() {
               onClick={() => setIsMobileOpen(false)}
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
-                ${isActive 
-                  ? 'bg-gradient-to-l from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30' 
+                ${isActive
+                  ? 'bg-gradient-to-l from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30'
                   : 'text-gray-400 hover:text-white hover:bg-gray-800'
                 }
               `}

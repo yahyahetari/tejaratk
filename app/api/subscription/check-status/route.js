@@ -13,7 +13,15 @@ export async function GET(request) {
       return NextResponse.json({ success: false, error: 'غير مصرح' }, { status: 401 });
     }
 
-    const merchantId = auth.user.id;
+    // استخدام merchant.id بدلاً من user.id
+    const merchantId = auth.merchant?.id;
+    if (!merchantId) {
+      return NextResponse.json(
+        { success: false, error: 'لا يوجد ملف تاجر مرتبط بهذا الحساب', hasSubscription: false },
+        { status: 404 }
+      );
+    }
+
     const result = await checkSubscriptionStatus(merchantId);
 
     if (!result.subscription) {

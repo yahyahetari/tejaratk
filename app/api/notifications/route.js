@@ -59,11 +59,21 @@ export async function PATCH(request) {
   try {
     const prisma = (await import('@/lib/db/prisma')).default;
     const { getSession } = await import('@/lib/auth/session');
+    const { rateLimit } = await import('@/lib/utils/rate-limit');
 
     const session = await getSession();
 
     if (!session) {
       return NextResponse.json({ error: 'غير مصرح' }, { status: 401 });
+    }
+
+    // Rate limiting - 30 requests per minute
+    const rateLimitResult = await rateLimit(request, 30, 60000);
+    if (!rateLimitResult.allowed) {
+      return NextResponse.json(
+        { error: rateLimitResult.error },
+        { status: 429 }
+      );
     }
 
     const { notificationId, markAllRead } = await request.json();
@@ -74,8 +84,12 @@ export async function PATCH(request) {
         data: { read: true }
       });
     } else if (notificationId) {
-      await prisma.notification.update({
-        where: { id: notificationId },
+      // التحقق من ملكية الإشعار قبل التحديث
+      await prisma.notification.updateMany({
+        where: {
+          id: notificationId,
+          userId: session.user?.id
+        },
         data: { read: true }
       });
     }

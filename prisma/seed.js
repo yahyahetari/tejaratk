@@ -9,14 +9,14 @@ async function main() {
   // إنشاء المستخدم المسؤول
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@tejaratk.com';
   const adminPassword = process.env.ADMIN_PASSWORD || 'Admin@123456';
-  
+
   const existingAdmin = await prisma.user.findUnique({
     where: { email: adminEmail },
   });
 
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash(adminPassword, 12);
-    
+
     const admin = await prisma.user.create({
       data: {
         email: adminEmail,
@@ -34,14 +34,14 @@ async function main() {
   // إنشاء مستخدم تجريبي (اختياري)
   const demoEmail = 'demo@tejaratk.com';
   const demoPassword = 'Demo@123456';
-  
+
   const existingDemo = await prisma.user.findUnique({
     where: { email: demoEmail },
   });
 
   if (!existingDemo) {
     const hashedPassword = await bcrypt.hash(demoPassword, 12);
-    
+
     // حساب تاريخ انتهاء الفترة التجريبية (30 يوم)
     const trialEndDate = new Date();
     trialEndDate.setDate(trialEndDate.getDate() + 30);
@@ -74,26 +74,6 @@ async function main() {
     });
 
     console.log(`✅ تم إنشاء المستخدم التجريبي: ${demoUser.email}`);
-    
-    // إنشاء فئات افتراضية للمتجر التجريبي
-    const categories = [
-      { name: 'إلكترونيات', slug: 'electronics', description: 'أجهزة إلكترونية ومستلزماتها' },
-      { name: 'ملابس', slug: 'clothing', description: 'ملابس رجالية ونسائية وأطفال' },
-      { name: 'أحذية', slug: 'shoes', description: 'أحذية متنوعة' },
-      { name: 'إكسسوارات', slug: 'accessories', description: 'إكسسوارات ومجوهرات' },
-      { name: 'منزل ومطبخ', slug: 'home-kitchen', description: 'مستلزمات المنزل والمطبخ' },
-    ];
-
-    for (const category of categories) {
-      await prisma.category.create({
-        data: {
-          ...category,
-          merchantId: demoUser.merchant.id,
-        },
-      });
-    }
-
-    console.log(`✅ تم إنشاء ${categories.length} فئات افتراضية`);
   } else {
     console.log(`ℹ️ المستخدم التجريبي موجود مسبقاً: ${demoEmail}`);
   }

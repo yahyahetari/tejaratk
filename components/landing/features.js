@@ -3,35 +3,90 @@ import { Star, Zap, Target, DollarSign, Shield, Headphones, Code } from 'lucide-
 
 export default function Features() {
   const features = [
-    { icon: Zap, title: 'تسليم سريع', description: 'متجرك جاهز خلال 3-7 أيام', gradient: 'from-blue-500 to-blue-600' },
-    { icon: Target, title: 'ذكاء اصطناعي', description: 'توصيف تلقائي للمنتجات', gradient: 'from-purple-500 to-purple-600' },
-    { icon: DollarSign, title: 'أسعار منافسة', description: 'باقات تبدأ من $49', gradient: 'from-green-500 to-green-600' },
-    { icon: Shield, title: 'ضمان الجودة', description: 'كود نظيف وأداء محسّن', gradient: 'from-orange-500 to-orange-600' },
-    { icon: Headphones, title: 'دعم مستمر', description: 'دعم فني 24/7', gradient: 'from-pink-500 to-pink-600' },
-    { icon: Code, title: 'تصميم مخصص', description: 'تصاميم تعكس هويتك', gradient: 'from-indigo-500 to-indigo-600' },
+    {
+      icon: Zap,
+      title: 'تسليم سريع',
+      description: 'متجرك جاهز خلال 3-7 أيام عمل بتصميم كامل ومحتوى جاهز للإطلاق',
+      gradient: 'from-blue-500 to-blue-600',
+      highlight: 'سريع',
+    },
+    {
+      icon: Target,
+      title: 'ذكاء اصطناعي',
+      description: 'إضافة وتوصيف المنتجات تلقائياً باستخدام أحدث تقنيات AI',
+      gradient: 'from-purple-500 to-purple-600',
+      highlight: 'ذكي',
+    },
+    {
+      icon: DollarSign,
+      title: 'أسعار منافسة',
+      description: 'باقات مرنة تبدأ من $49 تناسب جميع أحجام المتاجر والميزانيات',
+      gradient: 'from-green-500 to-green-600',
+      highlight: 'مرن',
+    },
+    {
+      icon: Shield,
+      title: 'ضمان الجودة',
+      description: 'كود نظيف ومحسّن مع أعلى معايير الأمان وحماية البيانات',
+      gradient: 'from-orange-500 to-orange-600',
+      highlight: 'آمن',
+    },
+    {
+      icon: Headphones,
+      title: 'دعم فني متواصل',
+      description: 'فريق دعم متخصص جاهز لمساعدتك على مدار الساعة',
+      gradient: 'from-pink-500 to-pink-600',
+      highlight: '24/7',
+    },
+    {
+      icon: Code,
+      title: 'تصميم مخصص',
+      description: 'تصاميم فريدة مصممة خصيصاً لتعكس هوية علامتك التجارية',
+      gradient: 'from-indigo-500 to-indigo-600',
+      highlight: 'فريد',
+    },
   ];
 
   return (
-    <section className="py-16 bg-white">
-      <div className="container-custom">
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-full mb-4 border border-yellow-200">
-            <Star className="h-4 w-4 text-yellow-600" />
-            <span className="text-sm font-semibold text-yellow-700">لماذا تختارنا</span>
+    <section className="py-20 relative">
+      <div className="absolute inset-0 bg-[#0d0d16]"></div>
+      <div className="container-custom relative z-10">
+        <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full mb-5 shadow-lg shadow-amber-500/20">
+            <Star className="h-4 w-4 text-white" />
+            <span className="text-sm font-bold text-white">لماذا تختارنا</span>
           </div>
-          <h3 className="text-3xl lg:text-4xl text-gray-900 mb-4">
-            مزايا حقيقية لنجاحك
-          </h3>
+          <h2 className="text-3xl lg:text-5xl font-black text-white mb-5 leading-tight">
+            مزايا حقيقية لنجاح <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">متجرك</span>
+          </h2>
+          <p className="text-lg text-gray-500">
+            نقدم لك كل ما تحتاجه لإطلاق متجر إلكتروني ناجح ومميز
+          </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {features.map((item, i) => (
-            <div key={i} className="group bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all">
-              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                <item.icon className="h-7 w-7 text-white" />
+            <div
+              key={i}
+              className="group relative bg-white/[0.03] rounded-2xl p-7 border border-white/5 hover:border-white/10 transition-all duration-500 hover:-translate-y-1 overflow-hidden"
+            >
+              {/* Hover Gradient */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
+
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-4">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all`}>
+                    <item.icon className="h-7 w-7 text-white" />
+                  </div>
+                  <span className={`text-xs font-black px-3 py-1 rounded-full bg-gradient-to-r ${item.gradient} text-white shadow-sm`}>
+                    {item.highlight}
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-2">{item.title}</h3>
-              <p className="text-gray-600 text-sm">{item.description}</p>
             </div>
           ))}
         </div>

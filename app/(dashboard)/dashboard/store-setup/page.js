@@ -19,31 +19,63 @@ export default async function StoreSetupPage() {
   }
 
   // جلب بيانات الإعداد الحالية إن وجدت
-  let storeSetup = null;
+  let merchantData = null;
   if (session.merchant?.id) {
     const prisma = (await import('@/lib/db/prisma')).default;
-    storeSetup = await prisma.merchant.findUnique({
+    merchantData = await prisma.merchant.findUnique({
       where: { id: session.merchant.id },
       select: {
         id: true,
         businessName: true,
         contactName: true,
         phone: true,
+        email: true,
         status: true,
+        storeLogo: true,
         user: {
           select: {
             email: true
+          }
+        },
+        store: {
+          select: {
+            brandName: true,
+            email: true,
+            phone: true,
+            country: true,
+          }
+        },
+        storeSetup: {
+          select: {
+            basicInfoCompleted: true,
+            licenseCompleted: true,
+            paymentSetupCompleted: true,
+            brandIdentityCompleted: true,
+            paymentGateway: true,
+          }
+        },
+        brandIdentity: {
+          select: {
+            primaryColor: true,
+            secondaryColor: true,
+            logo: true,
           }
         }
       }
     });
   }
 
-  const initialData = storeSetup ? {
-    fullName: storeSetup.contactName || '',
-    brandName: storeSetup.businessName || '',
-    email: storeSetup.user?.email || session.email || '',
-    phone: storeSetup.phone || '',
+  const initialData = merchantData ? {
+    fullName: merchantData.contactName || '',
+    brandName: merchantData.store?.brandName || merchantData.businessName || '',
+    email: merchantData.store?.email || merchantData.email || merchantData.user?.email || session.email || '',
+    phone: merchantData.store?.phone || merchantData.phone || '',
+    hasLicense: merchantData.storeSetup?.licenseCompleted || false,
+    country: merchantData.store?.country || '',
+    paymentGateways: merchantData.storeSetup?.paymentConfig?.selected || (merchantData.storeSetup?.paymentGateway ? merchantData.storeSetup.paymentGateway.split(',').filter(Boolean) : []),
+    logo: merchantData.brandIdentity?.logo || merchantData.storeLogo || '',
+    primaryColor: merchantData.brandIdentity?.primaryColor || '#3B82F6',
+    secondaryColor: merchantData.brandIdentity?.secondaryColor || '#10B981',
   } : {
     email: session.email || ''
   };
@@ -54,7 +86,7 @@ export default async function StoreSetupPage() {
         <UnifiedStoreSetupForm
           merchantId={session.merchant?.id}
           initialData={initialData}
-          isUpdate={!!storeSetup}
+          isUpdate={!!merchantData}
         />
       </div>
     </div>

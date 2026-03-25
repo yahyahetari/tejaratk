@@ -9,11 +9,13 @@ import {
   Download,
   ArrowUpRight,
   ArrowDownRight,
-  Loader2
+  Loader2,
+  FileText
 } from 'lucide-react';
 
 export default function AdminReportsPage() {
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
   const [data, setData] = useState({
     usersThisMonth: 0, merchantsThisMonth: 0, userGrowth: 0, merchantGrowth: 0,
     totalUsers: 0, totalMerchants: 0, activeMerchants: 0
@@ -46,6 +48,60 @@ export default function AdminReportsPage() {
     }
   };
 
+  // وظيفة تصدير التقرير
+  const handleExport = async () => {
+    try {
+      setExporting(true);
+
+      const reportDate = new Date().toLocaleDateString('ar-SA', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
+      // تحضير محتوى التقرير
+      const reportContent = `
+تقرير إحصائيات منصة تجارتك
+========================
+تاريخ التقرير: ${reportDate}
+
+ملخص الإحصائيات
+--------------
+إجمالي المستخدمين: ${data.totalUsers}
+إجمالي المتاجر: ${data.totalMerchants}
+المتاجر النشطة: ${data.activeMerchants}
+معدل التحويل: ${data.totalUsers > 0 ? Math.round((data.totalMerchants / data.totalUsers) * 100) : 0}%
+
+النمو الشهري
+-----------
+المستخدمين الجدد هذا الشهر: ${data.usersThisMonth}
+المتاجر الجديدة هذا الشهر: ${data.merchantsThisMonth}
+معدل نمو المستخدمين: ${data.userGrowth}%
+معدل نمو المتاجر: ${data.merchantGrowth}%
+
+التفاصيل
+-------
+نسبة المتاجر النشطة: ${data.totalMerchants > 0 ? Math.round((data.activeMerchants / data.totalMerchants) * 100) : 0}%
+      `.trim();
+
+      // تحميل كملف نصي
+      const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `tejaratk_report_${new Date().toISOString().split('T')[0]}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Export error:', error);
+      alert('حدث خطأ أثناء التصدير');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -75,9 +131,17 @@ export default function AdminReportsPage() {
           </div>
         </div>
 
-        <button className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
-          <Download className="h-4 w-4" />
-          <span>تصدير</span>
+        <button
+          onClick={handleExport}
+          disabled={exporting}
+          className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors disabled:opacity-50"
+        >
+          {exporting ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Download className="h-4 w-4" />
+          )}
+          <span>{exporting ? 'جاري التصدير...' : 'تصدير التقرير'}</span>
         </button>
       </div>
 

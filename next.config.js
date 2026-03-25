@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  
+
   // السماح بالصور من المصادر الخارجية
   images: {
     domains: [
@@ -12,8 +12,8 @@ const nextConfig = {
     ],
     formats: ['image/avif', 'image/webp'],
   },
-  
-  // Headers للأمان
+
+  // Headers للأمان والأداء
   async headers() {
     return [
       {
@@ -42,18 +42,42 @@ const nextConfig = {
           {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin'
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()'
+          }
+        ]
+      },
+      // Cache headers للـ static assets
+      {
+        source: '/images/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      // Cache headers للـ fonts
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
           }
         ]
       }
     ];
   },
-  
+
   // Environment variables
   env: {
     NEXT_PUBLIC_APP_NAME: 'تجارتك',
     NEXT_PUBLIC_APP_VERSION: '2.0.0',
   },
-  
+
   // Webpack config
   webpack: (config, { isServer }) => {
     if (!isServer) {
