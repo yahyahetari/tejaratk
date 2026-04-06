@@ -49,7 +49,7 @@ export default function Features() {
 
   return (
     <section className="py-20 relative">
-      <div className="absolute inset-0 bg-[#0d0d16]"></div>
+      <div className="absolute inset-0 bg-transparent"></div>
       <div className="container-custom relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full mb-5 shadow-lg shadow-amber-500/20">

@@ -12,7 +12,7 @@ export default function About() {
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Background */}
-      <div className="absolute inset-0 bg-[#0d0d16]"></div>
+      <div className="absolute inset-0 bg-transparent"></div>
       <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px]"></div>
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-[100px]"></div>
 
