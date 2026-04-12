@@ -7,6 +7,15 @@ export async function POST(req) {
   try {
     const prisma = (await import("@/lib/db/prisma")).default;
     const { createSession, setSessionCookie } = await import("@/lib/auth/session");
+    const { validateEnv, getSafeEnvSnapshot } = await import('@/lib/utils/env-check');
+
+    // التشخيص في بيئة الإنتاج
+    if (process.env.NODE_ENV === 'production') {
+      const envCheck = validateEnv();
+      if (!envCheck.valid) {
+        console.error('Environment check failed:', getSafeEnvSnapshot());
+      }
+    }
 
     const body = await req.json();
     const { email, code } = body;
@@ -71,9 +80,21 @@ export async function POST(req) {
     });
 
   } catch (error) {
-    console.error("خطأ في تأكيد البريد الإلكتروني:", error);
+    console.error("CRITICAL VERIFY EMAIL ERROR:", {
+      message: error.message,
+      stack: error.stack,
+      env: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+    });
+
+    if (error.message.includes('JWT_SECRET') || error.message.includes('DATABASE_URL')) {
+      return NextResponse.json(
+        { error: `خطأ في إعدادات الخادم: ${error.message}` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: "حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى" },
+      { error: "حدث خطأ غير متوقع أثناء تأكيد البريد الإلكتروني. يرجى مراجعة سجلات الخادم." },
       { status: 500 }
     );
   }

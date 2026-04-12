@@ -141,12 +141,7 @@ export default function CheckoutPage() {
     }
   };
 
-  const guarantees = [
-    { icon: Shield, text: 'ضمان استرداد 30 يوم' },
-    { icon: Lock, text: 'دفع آمن ومشفر' },
-    { icon: Clock, text: 'تفعيل فوري' },
-    { icon: Gift, text: 'دعم مجاني' },
-  ];
+
 
   return (
     <div className="min-h-screen gradient-mesh py-12">
@@ -311,21 +306,6 @@ export default function CheckoutPage() {
                   سياسة الخصوصية
                 </Link>
               </p>
-            </div>
-
-            {/* Guarantees */}
-            <div className="card-premium p-6 animate-fade-in-up delay-200">
-              <h3 className="font-bold text-gray-900 mb-4">ضماناتنا</h3>
-              <div className="space-y-3">
-                {guarantees.map((item, i) => (
-                  <div key={i} className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
-                      <item.icon className="h-4 w-4 text-emerald-600" />
-                    </div>
-                    <span className="text-sm text-gray-600">{item.text}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>

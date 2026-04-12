@@ -7,6 +7,15 @@ export async function POST(request) {
   try {
     const prisma = (await import('@/lib/db/prisma')).default;
     const { createSession, setSessionCookie } = await import('@/lib/auth/session');
+    const { validateEnv, getSafeEnvSnapshot } = await import('@/lib/utils/env-check');
+
+    // التشخيص في بيئة الإنتاج
+    if (process.env.NODE_ENV === 'production') {
+      const envCheck = validateEnv();
+      if (!envCheck.valid) {
+        console.error('Environment check failed:', getSafeEnvSnapshot());
+      }
+    }
 
     const { email, code } = await request.json();
 
@@ -55,9 +64,21 @@ export async function POST(request) {
     });
 
   } catch (error) {
-    console.error('Verify code error:', error);
+    console.error('CRITICAL VERIFY CODE ERROR:', {
+      message: error.message,
+      stack: error.stack,
+      env: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+    });
+
+    if (error.message.includes('JWT_SECRET') || error.message.includes('DATABASE_URL')) {
+      return NextResponse.json(
+        { error: `خطأ في إعدادات الخادم: ${error.message}` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'حدث خطأ أثناء التحقق' },
+      { error: 'حدث خطأ غير متوقع أثناء التحقق. يرجى مراجعة سجلات الخادم.' },
       { status: 500 }
     );
   }

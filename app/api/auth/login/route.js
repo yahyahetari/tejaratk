@@ -10,6 +10,15 @@ export async function POST(request) {
     const { createSession, setSessionCookie } = await import('@/lib/auth/session');
     const { sendEmailVerificationCode } = await import('@/lib/email/sender');
     const { rateLimit } = await import('@/lib/utils/rate-limit');
+    const { validateEnv, getSafeEnvSnapshot } = await import('@/lib/utils/env-check');
+
+    // التشخيص في بيئة الإنتاج
+    if (process.env.NODE_ENV === 'production') {
+      const envCheck = validateEnv();
+      if (!envCheck.valid) {
+        console.error('Environment check failed:', getSafeEnvSnapshot());
+      }
+    }
 
     const rateLimitResult = await rateLimit(request, 5, 60000);
     if (!rateLimitResult.allowed) {
@@ -116,9 +125,22 @@ export async function POST(request) {
       merchant: user.merchant,
     });
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('CRITICAL LOGIN ERROR:', {
+      message: error.message,
+      stack: error.stack,
+      env: process.env.NODE_ENV === 'production' ? 'production' : 'development'
+    });
+
+    // إرجاع تفاصيل أكثر في حالة وجود خطأ في الإعدادات
+    if (error.message.includes('JWT_SECRET') || error.message.includes('DATABASE_URL')) {
+      return NextResponse.json(
+        { error: `خطأ في إعدادات الخادم: ${error.message}` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'حدث خطأ أثناء تسجيل الدخول' },
+      { error: 'حدث خطأ غير متوقع أثناء تسجيل الدخول. يرجى مراجعة سجلات الخادم.' },
       { status: 500 }
     );
   }
