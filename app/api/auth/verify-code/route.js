@@ -64,8 +64,12 @@ export async function POST(request) {
     });
 
   } catch (error) {
+    const { handlePrismaError } = await import('@/lib/db/prisma');
+    const prismaError = handlePrismaError(error);
+
     console.error('CRITICAL VERIFY CODE ERROR:', {
       message: error.message,
+      code: error.code,
       stack: error.stack,
       env: process.env.NODE_ENV === 'production' ? 'production' : 'development'
     });
@@ -77,8 +81,15 @@ export async function POST(request) {
       );
     }
 
+    if (error.code && error.code.startsWith('P')) {
+      return NextResponse.json(
+        { error: `خطأ في قاعدة البيانات: ${prismaError.message} (${error.code})` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'حدث خطأ غير متوقع أثناء التحقق. يرجى مراجعة سجلات الخادم.' },
+      { error: `حدث خطأ غير متوقع أثناء التحقق: ${error.message.substring(0, 50)}...` },
       { status: 500 }
     );
   }

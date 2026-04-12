@@ -125,8 +125,12 @@ export async function POST(request) {
       merchant: user.merchant,
     });
   } catch (error) {
+    const { handlePrismaError } = await import('@/lib/db/prisma');
+    const prismaError = handlePrismaError(error);
+
     console.error('CRITICAL LOGIN ERROR:', {
       message: error.message,
+      code: error.code,
       stack: error.stack,
       env: process.env.NODE_ENV === 'production' ? 'production' : 'development'
     });
@@ -139,8 +143,16 @@ export async function POST(request) {
       );
     }
 
+    // إذا كان خطأ من Prisma ومعروف
+    if (error.code && error.code.startsWith('P')) {
+      return NextResponse.json(
+        { error: `خطأ في قاعدة البيانات: ${prismaError.message} (${error.code})` },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
-      { error: 'حدث خطأ غير متوقع أثناء تسجيل الدخول. يرجى مراجعة سجلات الخادم.' },
+      { error: `حدث خطأ غير متوقع: ${error.message.substring(0, 50)}... يرجى مراجعة سجلات الخادم.` },
       { status: 500 }
     );
   }
