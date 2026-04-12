@@ -65,7 +65,16 @@ function LoginPageContent() {
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type');
+      let data;
+      
+      if (contentType && contentType.includes('application/json')) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        console.error('Non-JSON response:', text);
+        throw new Error(`خطأ في الخادم (Status ${response.status}). يرجى التحقق من سجلات Vercel.`);
+      }
 
       if (!response.ok) {
         throw new Error(data.error || 'فشل تسجيل الدخول');
