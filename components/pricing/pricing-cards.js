@@ -45,12 +45,25 @@ export default function PricingCards({ merchant }) {
     setLoading(plan.id);
     
     try {
+      // Validate priceId before attempting checkout
+      const priceId = plan.pricing?.[billingCycle]?.priceId;
+      
+      if (!priceId) {
+        alert('عذراً، معرّف السعر غير متوفر لهذه الباقة. يرجى التواصل مع الدعم.');
+        setLoading(null);
+        return;
+      }
+
       const paddle = await initializePaddle({
-        environment: process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT,
+        environment: process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT || 'sandbox',
         token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
       });
 
-      const priceId = plan.pricing[billingCycle].priceId;
+      if (!paddle) {
+        alert('حدث خطأ في تحميل بوابة الدفع. يرجى تحديث الصفحة والمحاولة مجدداً.');
+        setLoading(null);
+        return;
+      }
 
       paddle.Checkout.open({
         items: [{ priceId, quantity: 1 }],
@@ -62,11 +75,16 @@ export default function PricingCards({ merchant }) {
           planType: plan.id,
           billingCycle: billingCycle.toUpperCase(),
         },
-        successUrl: `${window.location.origin}/subscription?success=true`,
+        settings: {
+          displayMode: 'overlay',
+          theme: 'light',
+          locale: 'ar',
+          successUrl: `${window.location.origin}/dashboard/subscription/success`,
+        },
       });
     } catch (error) {
       console.error('Paddle checkout error:', error);
-      alert('حدث خطأ أثناء فتح صفحة الدفع');
+      alert('حدث خطأ أثناء فتح صفحة الدفع. يرجى المحاولة مرة أخرى.');
     } finally {
       setLoading(null);
     }

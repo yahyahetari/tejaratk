@@ -44,8 +44,19 @@ export const plans = [
     },
     paddleProductId: null,
     paddlePriceId: {
-      monthly: null,
-      annual: null,
+      monthly: process.env.PADDLE_BASIC_MONTHLY_PRICE_ID || null,
+      annual: process.env.PADDLE_BASIC_YEARLY_PRICE_ID || null,
+    },
+    pricing: {
+      monthly: {
+        amount: 49,
+        priceId: process.env.PADDLE_BASIC_MONTHLY_PRICE_ID || null,
+      },
+      yearly: {
+        amount: 490,
+        priceId: process.env.PADDLE_BASIC_YEARLY_PRICE_ID || null,
+        discount: '17%',
+      },
     }
   },
   {
@@ -86,8 +97,19 @@ export const plans = [
     },
     paddleProductId: null,
     paddlePriceId: {
-      monthly: null,
-      annual: null,
+      monthly: process.env.PADDLE_PREMIUM_MONTHLY_PRICE_ID || null,
+      annual: process.env.PADDLE_PREMIUM_YEARLY_PRICE_ID || null,
+    },
+    pricing: {
+      monthly: {
+        amount: 99,
+        priceId: process.env.PADDLE_PREMIUM_MONTHLY_PRICE_ID || null,
+      },
+      yearly: {
+        amount: 999,
+        priceId: process.env.PADDLE_PREMIUM_YEARLY_PRICE_ID || null,
+        discount: '17%',
+      },
     }
   },
   {
@@ -128,8 +150,19 @@ export const plans = [
     },
     paddleProductId: null,
     paddlePriceId: {
-      monthly: null,
-      annual: null,
+      monthly: process.env.PADDLE_ENTERPRISE_MONTHLY_PRICE_ID || null,
+      annual: process.env.PADDLE_ENTERPRISE_YEARLY_PRICE_ID || null,
+    },
+    pricing: {
+      monthly: {
+        amount: 999,
+        priceId: process.env.PADDLE_ENTERPRISE_MONTHLY_PRICE_ID || null,
+      },
+      yearly: {
+        amount: 9999,
+        priceId: process.env.PADDLE_ENTERPRISE_YEARLY_PRICE_ID || null,
+        discount: '17%',
+      },
     }
   },
 ];

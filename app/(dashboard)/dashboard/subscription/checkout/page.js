@@ -85,12 +85,17 @@ export default function CheckoutPage() {
       script.async = true;
       script.onload = () => {
         if (window.Paddle) {
-          window.Paddle.Environment.set(PADDLE_CONFIG.environment);
+          const env = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT || PADDLE_CONFIG.environment || 'sandbox';
+          window.Paddle.Environment.set(env);
           window.Paddle.Initialize({
             token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || '',
           });
           setPaddleLoaded(true);
         }
+      };
+      script.onerror = () => {
+        console.error('Failed to load Paddle script');
+        setError('فشل تحميل بوابة الدفع. يرجى تحديث الصفحة.');
       };
       document.body.appendChild(script);
     } else if (window.Paddle) {
