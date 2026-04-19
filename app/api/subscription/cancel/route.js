@@ -28,13 +28,12 @@ export async function POST(request) {
 
         // Call Paddle API to cancel the subscription (prevents future charges)
         if (subscription.paddleSubscriptionId) {
-            const { cancelPaddleSubscription } = await import('@/lib/payment/paddle');
-            const paddleCancel = await cancelPaddleSubscription(subscription.paddleSubscriptionId);
-            
-            if (!paddleCancel.success && paddleCancel.error !== 'Subscription is already canceled') {
-                 console.error('Failed to cancel Paddle subscription:', paddleCancel.error);
-                 // We log it, but optionally proceed to update DB or fail early
-                 // return NextResponse.json({ error: 'حدث خطأ أثناء إلغاء الاشتراك من بوابة الدفع' }, { status: 500 });
+            try {
+                const { cancelPaddleSubscription } = await import('@/lib/payment/paddle');
+                await cancelPaddleSubscription(subscription.paddleSubscriptionId);
+            } catch (paddleError) {
+                console.error('Failed to cancel Paddle subscription (proceeding locally):', paddleError);
+                // We proceed locally even if Paddle fails, to ensure the user isn't stuck natively.
             }
         }
 
