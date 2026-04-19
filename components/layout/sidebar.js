@@ -227,7 +227,7 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-[#12121a] rounded-xl shadow-lg flex items-center justify-center text-gray-400 hover:text-blue-400 transition-colors border border-white/5"
+        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-emerald-900 rounded-xl shadow-lg flex items-center justify-center text-emerald-100 hover:text-white transition-colors border border-emerald-700/30"
         aria-label="فتح القائمة"
       >
         <Menu className="h-6 w-6" />
@@ -245,7 +245,7 @@ export default function Sidebar({ merchant }) {
       <aside
         className={`
           hidden lg:flex
-          bg-[#0e0e16] border-r border-white/5 min-h-screen transition-all duration-300 flex-col
+          bg-emerald-950 border-r border-emerald-800/50 min-h-screen transition-all duration-300 flex-col
           ${collapsed ? 'w-20' : 'w-72'}
         `}
       >
@@ -255,7 +255,7 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Sidebar */}
       <aside
         className={`
-          lg:hidden fixed top-0 left-0 bottom-0 z-50 bg-[#0e0e16] border-r border-white/5 shadow-2xl flex flex-col
+          lg:hidden fixed top-0 left-0 bottom-0 z-50 bg-emerald-950 border-r border-emerald-800/50 shadow-2xl flex flex-col
           transition-transform duration-300 ease-in-out w-72
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
         `}

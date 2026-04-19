@@ -28,12 +28,12 @@ export default async function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0e0e16] flex relative">
+    <div className="min-h-screen bg-emerald-950 flex relative">
       {/* Sidebar */}
       <DashboardSidebar merchant={session.merchant} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-[#0a0a0f] lg:rounded-tr-[2.5rem] border-r border-[#1a1a24] relative z-10 transition-all duration-300">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-emerald-900 lg:rounded-tr-[2.5rem] border-r border-emerald-800/50 relative z-10 transition-all duration-300">
         {/* Header */}
         <DashboardHeader session={session} />
 
