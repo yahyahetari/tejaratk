@@ -93,8 +93,9 @@ export default function CheckoutPage() {
               throw new Error("لم يتم العثور على NEXT_PUBLIC_PADDLE_CLIENT_TOKEN.");
             }
 
+            // For Paddle v2 JS CDN, environment is set via Environment.set()
+            window.Paddle.Environment.set(env);
             window.Paddle.Initialize({
-              environment: env,
               token: clientToken,
             });
             setPaddleLoaded(true);
