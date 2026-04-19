@@ -33,6 +33,8 @@ export async function POST(request) {
       const { 
         merchantId, 
         status, 
+        planId,
+        planName,
         planType, 
         billingCycle, 
         currentPeriodStart, 
@@ -51,8 +53,10 @@ export async function POST(request) {
           where: { merchantId },
           update: { 
             status: prismaStatus, 
-            planType, 
-            billingCycle, 
+            planId: planId || planType || 'BASIC',
+            planName: planName || planType || 'Basic Plan',
+            planType: planType || 'BASIC', 
+            billingCycle: billingCycle || 'MONTHLY', 
             startDate: currentPeriodStart ? new Date(currentPeriodStart) : undefined, 
             endDate: currentPeriodEnd ? new Date(currentPeriodEnd) : undefined,
             paddleSubscriptionId,
@@ -61,6 +65,8 @@ export async function POST(request) {
           create: { 
             merchantId, 
             status: prismaStatus, 
+            planId: planId || planType || 'BASIC',
+            planName: planName || planType || 'Basic Plan',
             planType: planType || 'BASIC', 
             billingCycle: billingCycle || 'MONTHLY', 
             startDate: currentPeriodStart ? new Date(currentPeriodStart) : new Date(), 
