@@ -29,14 +29,45 @@ export async function POST(request) {
     }
 
     // Update subscription in database if needed
-    if (result.subscription) {
-      const { merchantId, status, planType, billingCycle, startDate, endDate } = result.subscription;
+    if (result.data && result.data.merchantId) {
+      const { 
+        merchantId, 
+        status, 
+        planType, 
+        billingCycle, 
+        currentPeriodStart, 
+        currentPeriodEnd,
+        paddleSubscriptionId 
+      } = result.data;
+
+      // Ensure status is correctly formatted for Prisma Enum (ACTIVE, CANCELLED, etc)
+      let prismaStatus = 'ACTIVE';
+      if (status) {
+        prismaStatus = status.toUpperCase().replace('-', '_');
+      }
 
       try {
         await prisma.subscription.upsert({
           where: { merchantId },
-          update: { status, planType, billingCycle, startDate, endDate, updatedAt: new Date() },
-          create: { merchantId, status, planType, billingCycle, startDate, endDate }
+          update: { 
+            status: prismaStatus, 
+            planType, 
+            billingCycle, 
+            startDate: currentPeriodStart ? new Date(currentPeriodStart) : undefined, 
+            endDate: currentPeriodEnd ? new Date(currentPeriodEnd) : undefined,
+            paddleSubscriptionId,
+            updatedAt: new Date() 
+          },
+          create: { 
+            merchantId, 
+            status: prismaStatus, 
+            planType: planType || 'BASIC', 
+            billingCycle: billingCycle || 'MONTHLY', 
+            startDate: currentPeriodStart ? new Date(currentPeriodStart) : new Date(), 
+            endDate: currentPeriodEnd ? new Date(currentPeriodEnd) : null,
+            paddleSubscriptionId,
+            amount: 0 // Default value, will be synced properly from transactions later
+          }
         });
       } catch (dbError) {
         console.error('Error updating subscription:', dbError);
