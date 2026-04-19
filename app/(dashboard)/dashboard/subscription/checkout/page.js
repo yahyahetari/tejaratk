@@ -85,9 +85,9 @@ export default function CheckoutPage() {
       script.async = true;
       script.onload = () => {
         if (window.Paddle) {
-          const env = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT || PADDLE_CONFIG.environment || 'sandbox';
-          window.Paddle.Environment.set(env);
+          const env = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT || 'sandbox';
           window.Paddle.Initialize({
+            environment: env,
             token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || '',
           });
           setPaddleLoaded(true);
