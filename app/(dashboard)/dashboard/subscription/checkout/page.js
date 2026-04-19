@@ -85,12 +85,24 @@ export default function CheckoutPage() {
       script.async = true;
       script.onload = () => {
         if (window.Paddle) {
-          const env = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT || 'sandbox';
-          window.Paddle.Initialize({
-            environment: env,
-            token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || '',
-          });
-          setPaddleLoaded(true);
+          try {
+            const env = process.env.NEXT_PUBLIC_PADDLE_ENVIRONMENT || 'sandbox';
+            const clientToken = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN;
+            
+            if (!clientToken) {
+              throw new Error("لم يتم العثور على NEXT_PUBLIC_PADDLE_CLIENT_TOKEN.");
+            }
+
+            window.Paddle.Initialize({
+              environment: env,
+              token: clientToken,
+            });
+            setPaddleLoaded(true);
+          } catch (e) {
+            console.error('Paddle Init Error:', e);
+            setError('خطأ في تهيئة بوابة الدفع: ' + e.message + ' - تأكد من إضافة مفتاح Client Token في Vercel وإعادة النشر (Redeploy).');
+            // Allow them to see the button is dead for a reason.
+          }
         }
       };
       script.onerror = () => {
