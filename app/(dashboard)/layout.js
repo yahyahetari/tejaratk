@@ -28,17 +28,17 @@ export default async function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] flex">
+    <div className="min-h-screen bg-[#0e0e16] flex relative">
       {/* Sidebar */}
       <DashboardSidebar merchant={session.merchant} />
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-gray-50 lg:rounded-tr-[2.5rem] relative z-10 transition-all duration-300 shadow-[-10px_0_30px_rgba(0,0,0,0.1)]">
         {/* Header */}
         <DashboardHeader session={session} />
 
         {/* Page Content */}
-        <main>
+        <main className="flex-1 overflow-y-auto px-4 py-8 sm:p-8 lg:p-12">
           {children}
         </main>
       </div>
