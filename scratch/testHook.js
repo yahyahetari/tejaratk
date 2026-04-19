@@ -11,8 +11,8 @@ async function testHook() {
       status: 'active',
       current_billing_period: { starts_at: new Date().toISOString(), ends_at: new Date().toISOString() },
       custom_data: {
-        merchantId: 'test_merchant_id_123',
-        userId: 'test_user_id_123'
+        merchantId: 'cmlyyou0e000nqhi1bmoy5xa1',
+        userId: 'cmlyyotpi000lqhi1x6aqbd23'
       }
     }
   };
