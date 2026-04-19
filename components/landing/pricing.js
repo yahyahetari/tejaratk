@@ -25,7 +25,8 @@ const iconMap = {
 
 export default function Pricing({
   showHeader = true,
-  ctaLink = '/register'
+  ctaLink = '/register',
+  activePlanId = null
 }) {
   const [isAnnual, setIsAnnual] = useState(false);
 
@@ -212,11 +213,18 @@ export default function Pricing({
                     ))}
                   </ul>
 
-                  <Link href={`${ctaLink}?plan=${plan.id}`}>
-                    <button className={`w-full py-3.5 rounded-2xl font-bold text-white bg-gradient-to-r ${plan.buttonGradient} shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95`}>
-                      {plan.buttonText}
+                  {activePlanId && activePlanId.toLowerCase() === plan.id.toLowerCase() ? (
+                    <button disabled className="w-full py-3.5 rounded-2xl font-bold text-gray-400 bg-white/10 border border-white/5 cursor-not-allowed flex items-center justify-center gap-2">
+                      <Check className="h-5 w-5" />
+                      هذه باقتك الحالية
                     </button>
-                  </Link>
+                  ) : (
+                    <Link href={`${ctaLink}?plan=${plan.id}`}>
+                      <button className={`w-full py-3.5 rounded-2xl font-bold text-white bg-gradient-to-r ${plan.buttonGradient} shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95`}>
+                        {plan.buttonText || 'ابدأ الآن'}
+                      </button>
+                    </Link>
+                  )}
                 </div>
               </div>
             );

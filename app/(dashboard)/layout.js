@@ -33,7 +33,7 @@ export default async function DashboardLayout({ children }) {
       <DashboardSidebar merchant={session.merchant} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-gray-50 lg:rounded-tr-[2.5rem] relative z-10 transition-all duration-300 shadow-[-10px_0_30px_rgba(0,0,0,0.1)]">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-[#0a0a0f] lg:rounded-tr-[2.5rem] border-r border-[#1a1a24] relative z-10 transition-all duration-300">
         {/* Header */}
         <DashboardHeader session={session} />
 
