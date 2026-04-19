@@ -88,7 +88,7 @@ export default async function SubscriptionPage() {
               <div>
                 <p className="text-sm text-gray-500 mb-1">الخطة</p>
                 <p className="text-lg font-bold text-gray-900">
-                  {getPlanById(subscription.planType || subscription.planId)?.name || subscription.planType || subscription.planId}
+                  {getPlanById(subscription.planId?.toLowerCase() || subscription.planType?.toLowerCase())?.name || subscription.planName || subscription.planType}
                 </p>
               </div>
             </div>
@@ -99,8 +99,13 @@ export default async function SubscriptionPage() {
               </div>
               <div>
                 <p className="text-sm text-gray-500 mb-1">السعر</p>
-                <p className="text-lg font-bold text-gray-900">
-                  {formatCurrency(subscription.amount, subscription.currency)} / 
+                <p className="text-lg font-bold text-gray-900" dir="ltr">
+                  {formatCurrency(
+                    subscription.amount && !isNaN(subscription.amount) && subscription.amount > 0
+                      ? subscription.amount 
+                      : (getPlanById(subscription.planId?.toLowerCase() || subscription.planType?.toLowerCase())?.monthlyPrice || 0), 
+                    subscription.currency || 'USD'
+                  )} / 
                   {subscription.billingCycle === 'MONTHLY' ? 'شهري' : 'سنوي'}
                 </p>
               </div>
@@ -150,15 +155,33 @@ export default async function SubscriptionPage() {
       )}
       
       {/* Pricing Plans Section */}
-      <div id="plans" className="scroll-mt-8">
-        <Pricing
-          showHeader={!hasActiveSubscription} 
-          ctaLink="/dashboard/subscription/checkout"
-        />
-      </div>
+      {!hasActiveSubscription ? (
+        <div id="plans" className="scroll-mt-8">
+          <Pricing
+            showHeader={true} 
+            ctaLink="/dashboard/subscription/checkout"
+          />
+        </div>
+      ) : (
+        <div id="plans" className="scroll-mt-8 bg-gray-950 rounded-[2.5rem] mt-16 pt-12 border border-gray-800 shadow-2xl shadow-indigo-500/10 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-600/10 pointer-events-none"></div>
+          <div className="text-center mb-6 relative z-10">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full mb-4 border border-blue-500/30">
+              <Sparkles className="h-4 w-4 text-purple-400" />
+              <span className="text-sm font-bold text-purple-300">أطلق العنان لمتجرك</span>
+            </div>
+            <h2 className="text-3xl font-black text-white">ترقية الباقة</h2>
+            <p className="text-gray-400 mt-2">هل تحتاج إلى مميزات أقوى؟ اختر الباقة الأنسب لتوسيع تجارتك.</p>
+          </div>
+          <Pricing
+            showHeader={false} 
+            ctaLink="/dashboard/subscription/checkout"
+          />
+        </div>
+      )}
       
       {/* Invoices Card */}
-      <div className="card-premium p-6 animate-fade-in-up delay-400">
+      <div className="card-premium p-6 mt-12 mb-12 animate-fade-in-up delay-400">
         <div className="flex items-center gap-4 mb-6">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-500 to-gray-600 flex items-center justify-center">
             <CreditCard className="h-5 w-5 text-white" />
