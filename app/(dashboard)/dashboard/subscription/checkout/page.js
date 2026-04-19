@@ -120,6 +120,13 @@ export default function CheckoutPage() {
     try {
       const priceId = getPaddlePriceId(planId, billingCycle);
       
+      // Validate that priceId is a real Paddle ID, not a fallback
+      if (!priceId || priceId.includes('premium_monthly') || priceId.includes('basic') || priceId.includes('enterprise')) {
+        setError('تعذر العثور على معرّف الدفع (Price ID). إذا قمت بتحديث Vercel مؤخراً، تذكر أنه يجب عليك إعادة نشر (Redeploy) المشروع لتدخل التحديثات حيز التنفيذ.');
+        setLoading(false);
+        return;
+      }
+
       window.Paddle.Checkout.open({
         items: [{ priceId, quantity: 1 }],
         customer: {
