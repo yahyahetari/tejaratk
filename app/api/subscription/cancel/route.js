@@ -26,11 +26,24 @@ export async function POST(request) {
             return NextResponse.json({ error: 'لا يوجد اشتراك فعال' }, { status: 404 });
         }
 
+        // Call Paddle API to cancel the subscription (prevents future charges)
+        if (subscription.paddleSubscriptionId) {
+            const { cancelPaddleSubscription } = await import('@/lib/payment/paddle');
+            const paddleCancel = await cancelPaddleSubscription(subscription.paddleSubscriptionId);
+            
+            if (!paddleCancel.success && paddleCancel.error !== 'Subscription is already canceled') {
+                 console.error('Failed to cancel Paddle subscription:', paddleCancel.error);
+                 // We log it, but optionally proceed to update DB or fail early
+                 // return NextResponse.json({ error: 'حدث خطأ أثناء إلغاء الاشتراك من بوابة الدفع' }, { status: 500 });
+            }
+        }
+
         // إلغاء الاشتراك - يبقى فعال حتى نهاية الفترة
         await prisma.subscription.update({
             where: { merchantId },
             data: {
                 status: 'CANCELLED',
+                cancelAtPeriodEnd: true, // It's better to flag this so the UI knows it's pending cancellation
                 cancelledAt: new Date(),
             }
         });
