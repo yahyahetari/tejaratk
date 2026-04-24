@@ -29,7 +29,9 @@ export async function GET(request) {
             subscription: {
               select: {
                 id: true,
-                planType: true,
+                planName: true,
+                amount: true,
+                currency: true,
                 billingCycle: true,
                 status: true,
                 currentPeriodStart: true,

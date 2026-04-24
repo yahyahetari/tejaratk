@@ -60,96 +60,130 @@ export default async function SubscriptionPage() {
       
       {/* Current Subscription Card */}
       {hasActiveSubscription && (
-        <div className="bg-[#12121a] border border-white/5 rounded-[2rem] p-6 shadow-2xl animate-fade-in-up">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-                <Check className="h-7 w-7 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">الاشتراك الحالي</h2>
-                <p className="text-gray-400">معلومات خطتك الحالية</p>
-              </div>
-            </div>
-            <span className="badge-success flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              نشط
-            </span>
-          </div>
+        <div className="relative group">
+          {/* Decorative Background Glow */}
+          <div className="absolute -inset-1 bg-gradient-to-r from-brand-500 to-gold-500 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000 group-hover:duration-200"></div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-brand-600/20 flex items-center justify-center">
-                <CreditCard className="h-5 w-5 text-brand-400" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-400 mb-1">الخطة</p>
-                <p className="text-lg font-bold text-white">
-                  {getPlanById(subscription.planId?.toLowerCase() || subscription.planType?.toLowerCase())?.name || subscription.planName || subscription.planType}
-                </p>
-              </div>
-            </div>
+          <div className="relative bg-gradient-to-br from-[#12121a] to-[#0a0a0f] border border-white/10 rounded-[2.5rem] p-8 shadow-3xl overflow-hidden">
+            {/* Background Texture */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-500/5 via-transparent to-transparent opacity-50"></div>
             
-            <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <CreditCard className="h-5 w-5 text-emerald-400" />
+            <div className="relative z-10">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                <div className="flex items-center gap-5">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 p-[1px]">
+                    <div className="w-full h-full rounded-2xl bg-[#12121a] flex items-center justify-center">
+                      <Check className="h-8 w-8 text-emerald-400" />
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-black text-white tracking-tight">الاشتراك الحالي</h2>
+                    <p className="text-gray-400 font-medium">نظرة عامة على باقتك ونظام الفوترة</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3">
+                  <span className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-emerald-400 text-sm font-bold flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    نشط الآن
+                  </span>
+                </div>
               </div>
-              <div>
-                <p className="text-sm text-gray-400 mb-1">السعر</p>
-                <p className="text-lg font-bold text-white" dir="ltr">
-                  {formatCurrency(
-                    subscription.amount && !isNaN(subscription.amount) && subscription.amount > 0
-                      ? subscription.amount 
-                      : (getPlanById(subscription.planId?.toLowerCase() || subscription.planType?.toLowerCase())?.monthlyPrice || 0), 
-                    subscription.currency || 'USD'
-                  )} / 
-                  {subscription.billingCycle === 'MONTHLY' ? 'شهري' : 'سنوي'}
-                </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                {/* Plan Info */}
+                <div className="relative p-6 bg-white/[0.03] border border-white/5 rounded-2xl group/card hover:bg-white/[0.05] transition-all">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-lg bg-brand-500/20 flex items-center justify-center">
+                      <Zap className="h-5 w-5 text-brand-400" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">الباقة</span>
+                  </div>
+                  <p className="text-2xl font-black text-white">
+                    {getPlanById(subscription.planId?.toUpperCase() || subscription.planType?.toUpperCase())?.name || subscription.planName || subscription.planType || 'خطة مخصصة'}
+                  </p>
+                </div>
+                
+                {/* Pricing Info */}
+                <div className="relative p-6 bg-white/[0.03] border border-white/5 rounded-2xl group/card hover:bg-white/[0.05] transition-all">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                      <DollarSign className="h-5 w-5 text-emerald-400" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">تكلفة الاشتراك</span>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-white" dir="ltr">
+                      {formatCurrency(
+                        subscription.amount !== undefined && subscription.amount !== null
+                          ? (subscription.amount / 100) // Assuming stored in cents
+                          : (getPlanById(subscription.planId?.toUpperCase() || subscription.planType?.toUpperCase())?.[subscription.billingCycle === 'YEARLY' ? 'annualPrice' : 'monthlyPrice'] || 0), 
+                        subscription.currency || 'USD'
+                      )}
+                    </span>
+                    <span className="text-gray-500 font-bold">/ {subscription.billingCycle === 'YEARLY' ? 'سنوي' : 'شهري'}</span>
+                  </div>
+                </div>
+                
+                {/* Renewal Info */}
+                <div className="relative p-6 bg-white/[0.03] border border-white/5 rounded-2xl group/card hover:bg-white/[0.05] transition-all">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-9 h-9 rounded-lg bg-gold-500/20 flex items-center justify-center">
+                      <Calendar className="h-5 w-5 text-gold-400" />
+                    </div>
+                    <span className="text-sm font-bold text-gray-400 uppercase tracking-wider">التجديد القادم</span>
+                  </div>
+                  <p className="text-2xl font-black text-white">
+                    {formatDate(subscription.currentPeriodEnd)}
+                  </p>
+                </div>
+              </div>
+              
+              {subscription.cancelAtPeriodEnd && (
+                <div className="mb-8 p-5 bg-red-500/5 border border-red-500/10 rounded-2xl flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-red-500/10 flex items-center justify-center flex-shrink-0">
+                    <AlertCircle className="h-6 w-6 text-red-500" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-white">الاشتراك قيد الإلغاء</h3>
+                    <p className="text-gray-400 text-sm">
+                      ستفقد صلاحيات الوصول في تاريخ {formatDate(subscription.currentPeriodEnd)}. يمكنك العودة في أي وقت.
+                    </p>
+                  </div>
+                  <Link href="/dashboard/subscription/resume" className="mr-auto">
+                    <button className="px-5 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl transition-all shadow-lg shadow-emerald-500/20">
+                      استئناف
+                    </button>
+                  </Link>
+                </div>
+              )}
+              
+              <div className="pt-6 border-t border-white/5 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Shield className="h-5 w-5 text-gray-500" />
+                  <span className="text-gray-500 font-medium">مدعوم بواسطة Paddle لضمان أعلى مستويات الأمان</span>
+                </div>
+                
+                <div className="flex items-center gap-4">
+                  {!subscription.cancelAtPeriodEnd ? (
+                    <button 
+                      onClick={() => window.location.href = '/dashboard/subscription/cancel'}
+                      className="text-gray-500 hover:text-red-400 font-bold transition-colors text-sm underline underline-offset-4 decoration-white/10"
+                    >
+                      إلغاء الاشتراك التلقائي
+                    </button>
+                  ) : null}
+                  
+                  <button className="btn-secondary py-3 px-6 rounded-2xl flex items-center gap-2 group/btn font-bold">
+                    إدارة وسيلة الدفع
+                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
               </div>
             </div>
-            
-            <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-gold-600/20 flex items-center justify-center">
-                <Calendar className="h-5 w-5 text-gold-400" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-400 mb-1">التجديد التالي</p>
-                <p className="text-lg font-bold text-white">
-                  {formatDate(subscription.currentPeriodEnd || subscription.endDate)}
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          {subscription.cancelAtPeriodEnd && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3 mb-6">
-              <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-semibold text-red-400">تنبيه: الاشتراك سينتهي قريباً</p>
-                <p className="text-sm text-red-300">
-                  سيتم إلغاء اشتراكك في {formatDate(subscription.currentPeriodEnd || subscription.endDate)}
-                </p>
-              </div>
-            </div>
-          )}
-          
-          <div className="flex flex-wrap gap-3">
-            {!subscription.cancelAtPeriodEnd ? (
-              <Link href="/dashboard/subscription/cancel">
-                <button className="btn-secondary text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300">
-                  إلغاء الاشتراك
-                </button>
-              </Link>
-            ) : (
-              <Link href="/dashboard/subscription/resume">
-                <button className="btn-primary">
-                  استئناف الاشتراك
-                </button>
-              </Link>
-            )}
           </div>
         </div>
       )}
