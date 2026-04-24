@@ -115,8 +115,8 @@ export default function AdminInvoicesPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <FileText className="w-5 h-5 text-blue-600" />
+            <div className="p-2 bg-brand-100 rounded-lg">
+              <FileText className="w-5 h-5 text-brand-700" />
             </div>
             <div>
               <p className="text-sm text-gray-600">إجمالي الفواتير</p>
@@ -175,7 +175,7 @@ export default function AdminInvoicesPage() {
               placeholder="البحث برقم الفاتورة أو اسم التاجر..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -183,7 +183,7 @@ export default function AdminInvoicesPage() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-600"
             >
               <option value="all">جميع الحالات</option>
               <option value="ACTIVE">مدفوعة</option>
@@ -198,7 +198,7 @@ export default function AdminInvoicesPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
           </div>
         ) : filteredInvoices.length === 0 ? (
           <div className="text-center py-12">
@@ -223,7 +223,7 @@ export default function AdminInvoicesPage() {
                 {filteredInvoices.map((invoice) => (
                   <tr key={invoice.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
-                      <span className="font-mono text-sm text-blue-600">{invoice.invoiceNumber}</span>
+                      <span className="font-mono text-sm text-brand-700">{invoice.invoiceNumber}</span>
                     </td>
                     <td className="px-6 py-4">
                       <div>
@@ -237,7 +237,7 @@ export default function AdminInvoicesPage() {
                     <td className="px-6 py-4 text-gray-600">{formatDate(invoice.createdAt)}</td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
+                        <button className="p-2 text-gray-400 hover:text-brand-700 hover:bg-brand-50 rounded-lg transition-colors">
                           <Eye className="w-4 h-4" />
                         </button>
                         <button className="p-2 text-gray-400 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors">

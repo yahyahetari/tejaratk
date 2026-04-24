@@ -42,10 +42,10 @@ const colorClasses = {
     shadow: 'shadow-amber-500/30',
   },
   info: {
-    gradient: 'from-blue-500 to-indigo-600',
-    bg: 'bg-blue-50',
-    text: 'text-blue-600',
-    shadow: 'shadow-blue-500/30',
+    gradient: 'from-brand-600 to-brand-600',
+    bg: 'bg-brand-50',
+    text: 'text-brand-700',
+    shadow: 'shadow-brand-600/30',
   },
   danger: {
     gradient: 'from-red-500 to-rose-600',
@@ -54,10 +54,10 @@ const colorClasses = {
     shadow: 'shadow-red-500/30',
   },
   primary: {
-    gradient: 'from-purple-500 to-pink-600',
-    bg: 'bg-purple-50',
-    text: 'text-purple-600',
-    shadow: 'shadow-purple-500/30',
+    gradient: 'from-brand-600 to-brand-700',
+    bg: 'bg-brand-50',
+    text: 'text-brand-700',
+    shadow: 'shadow-brand-600/30',
   },
 };
 

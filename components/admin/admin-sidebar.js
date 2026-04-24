@@ -83,8 +83,8 @@ export default function AdminSidebar() {
       <div className="p-6 border-b border-gray-800">
         <Link href="/admin/dashboard" className="flex items-center gap-3 group">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-indigo-600 blur-lg opacity-50 group-hover:opacity-75 transition-opacity rounded-xl"></div>
-            <div className="relative w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+            <div className="absolute inset-0 bg-gradient-to-br from-brand-600 to-brand-600 blur-lg opacity-50 group-hover:opacity-75 transition-opacity rounded-xl"></div>
+            <div className="relative w-12 h-12 bg-gradient-to-br from-brand-600 to-brand-600 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
               <ShoppingCart className="h-6 w-6 text-white" />
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function AdminSidebar() {
               className={`
                 flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
                 ${isActive
-                  ? 'bg-gradient-to-l from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/30'
+                  ? 'bg-gradient-to-l from-brand-700 to-brand-600 text-white shadow-lg shadow-brand-600/30'
                   : 'text-gray-400 hover:text-white hover:bg-gray-800'
                 }
               `}

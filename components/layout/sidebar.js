@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
@@ -115,13 +116,21 @@ export default function Sidebar({ merchant }) {
         <div className="p-5 border-b border-white/5">
           <Link href="/dashboard" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 blur-xl opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
-              <div className="relative w-11 h-11 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                <ShoppingCart className="h-5 w-5 text-white" />
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-700 to-gold-600 blur-xl opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
+              <div className="relative w-16 h-16 rounded-2xl overflow-hidden shadow-2xl shadow-brand-700/30 group-hover:scale-105 transition-transform bg-white border-2 border-brand-100/30">
+                <Image
+                  src="/images/WhatsApp Image 2026-04-23 at 6.58.50 AM.jpeg"
+                  alt="تجارتك"
+                  fill
+                  sizes="256px"
+                  className="object-cover scale-[1.5] transform-gpu"
+                  quality={100}
+                  priority
+                />
               </div>
             </div>
             {!collapsed && (
-              <span className="text-xl font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">
+              <span className="text-xl font-black bg-gradient-to-r from-brand-400 to-gold-400 bg-clip-text text-transparent">
                 تجارتك
               </span>
             )}
@@ -142,7 +151,7 @@ export default function Sidebar({ merchant }) {
                 className={`
                   flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group
                   ${active
-                    ? 'bg-blue-500/10 text-blue-400'
+                    ? 'bg-gold-500/10 text-gold-400'
                     : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                   }
                   ${collapsed ? 'justify-center' : ''}
@@ -150,14 +159,14 @@ export default function Sidebar({ merchant }) {
                 title={collapsed ? item.title : undefined}
               >
                 {active && (
-                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-blue-500 rounded-l-full"></div>
+                  <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gold-500 rounded-l-full"></div>
                 )}
-                <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-blue-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`} />
+                <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-gold-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`} />
                 {!collapsed && (
                   <>
-                    <span className={`font-semibold flex-1 ${active ? 'text-blue-400' : ''}`}>{item.title}</span>
+                    <span className={`font-semibold flex-1 ${active ? 'text-gold-400' : ''}`}>{item.title}</span>
                     {item.badge && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-500/10 text-blue-400'}`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-gold-500/20 text-gold-400' : 'bg-gold-500/10 text-gold-400'}`}>
                         {item.badge}
                       </span>
                     )}
@@ -172,14 +181,14 @@ export default function Sidebar({ merchant }) {
       {/* Upgrade Card */}
       {!collapsed && (
         <div className="p-4">
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/10">
+          <div className="p-4 rounded-2xl bg-gradient-to-br from-brand-700/10 to-gold-600/10 border border-brand-700/10">
             <div className="flex items-center gap-2 mb-2">
-              <Sparkles className="h-5 w-5 text-blue-400" />
+              <Sparkles className="h-5 w-5 text-gold-400" />
               <span className="font-bold text-gray-200">ترقية الخطة</span>
             </div>
             <p className="text-sm text-gray-500 mb-3">احصل على مميزات إضافية مع الخطة الاحترافية</p>
             <Link href="/dashboard/subscription">
-              <button className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+              <button className="w-full py-2.5 bg-gradient-to-r from-brand-700 to-brand-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-brand-700/20 transition-all">
                 ترقية الآن
               </button>
             </Link>
@@ -208,7 +217,7 @@ export default function Sidebar({ merchant }) {
       <div className="p-4 border-t border-white/5">
         {!collapsed && (
           <div className="flex items-center gap-3 mb-3 p-3 bg-white/[0.03] rounded-xl border border-white/5">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-700 to-brand-600 flex items-center justify-center">
               <User className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1 min-w-0">
@@ -227,7 +236,7 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setMobileOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-[#12121a] rounded-xl shadow-lg flex items-center justify-center text-gray-400 hover:text-blue-400 transition-colors border border-white/5"
+        className="lg:hidden fixed top-4 left-4 z-50 w-12 h-12 bg-brand-900 rounded-xl shadow-lg flex items-center justify-center text-gray-400 hover:text-gold-400 transition-colors border border-brand-800/30"
         aria-label="فتح القائمة"
       >
         <Menu className="h-6 w-6" />
@@ -245,7 +254,7 @@ export default function Sidebar({ merchant }) {
       <aside
         className={`
           hidden lg:flex
-          bg-[#0e0e16] border-r border-white/5 min-h-screen transition-all duration-300 flex-col
+          bg-brand-950 border-r border-brand-800/30 min-h-screen transition-all duration-300 flex-col
           ${collapsed ? 'w-20' : 'w-72'}
         `}
       >
@@ -255,7 +264,7 @@ export default function Sidebar({ merchant }) {
       {/* Mobile Sidebar */}
       <aside
         className={`
-          lg:hidden fixed top-0 left-0 bottom-0 z-50 bg-[#0e0e16] border-r border-white/5 shadow-2xl flex flex-col
+          lg:hidden fixed top-0 left-0 bottom-0 z-50 bg-brand-950 border-r border-brand-800/30 shadow-2xl flex flex-col
           transition-transform duration-300 ease-in-out w-72
           ${mobileOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
@@ -289,18 +298,18 @@ export default function Sidebar({ merchant }) {
                     className={`
                       flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all relative group
                       ${active
-                        ? 'bg-blue-500/10 text-blue-400'
+                        ? 'bg-gold-500/10 text-gold-400'
                         : 'text-gray-500 hover:bg-white/5 hover:text-gray-300'
                       }
                     `}
                   >
                     {active && (
-                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-blue-500 rounded-l-full"></div>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-7 bg-gold-500 rounded-l-full"></div>
                     )}
-                    <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-blue-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`} />
-                    <span className={`font-semibold flex-1 ${active ? 'text-blue-400' : ''}`}>{item.title}</span>
+                    <Icon className={`h-5 w-5 flex-shrink-0 ${active ? 'text-gold-400' : 'text-gray-600 group-hover:text-gray-400'} transition-colors`} />
+                    <span className={`font-semibold flex-1 ${active ? 'text-gold-400' : ''}`}>{item.title}</span>
                     {item.badge && (
-                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-500/10 text-blue-400'}`}>
+                      <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${active ? 'bg-gold-500/20 text-gold-400' : 'bg-gold-500/10 text-gold-400'}`}>
                         {item.badge}
                       </span>
                     )}
@@ -312,14 +321,14 @@ export default function Sidebar({ merchant }) {
 
           {/* Upgrade Card - Mobile */}
           <div className="p-4">
-            <div className="p-4 rounded-2xl bg-gradient-to-br from-blue-500/10 to-indigo-500/10 border border-blue-500/10">
+            <div className="p-4 rounded-2xl bg-gradient-to-br from-brand-700/10 to-gold-600/10 border border-brand-700/10">
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles className="h-5 w-5 text-blue-400" />
+                <Sparkles className="h-5 w-5 text-gold-400" />
                 <span className="font-bold text-gray-200">ترقية الخطة</span>
               </div>
               <p className="text-sm text-gray-500 mb-3">احصل على مميزات إضافية مع الخطة الاحترافية</p>
               <Link href="/dashboard/subscription">
-                <button className="w-full py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+                <button className="w-full py-2.5 bg-gradient-to-r from-brand-700 to-brand-600 text-white rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-brand-700/20 transition-all">
                   ترقية الآن
                 </button>
               </Link>
@@ -329,7 +338,7 @@ export default function Sidebar({ merchant }) {
           {/* User & Logout - Mobile */}
           <div className="p-4 border-t border-white/5">
             <div className="flex items-center gap-3 mb-3 p-3 bg-white/[0.03] rounded-xl border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-700 to-brand-600 flex items-center justify-center">
                 <User className="h-5 w-5 text-white" />
               </div>
               <div className="flex-1 min-w-0">

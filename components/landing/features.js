@@ -7,42 +7,42 @@ export default function Features() {
       icon: Zap,
       title: 'تسليم سريع',
       description: 'متجرك جاهز خلال 3-7 أيام عمل بتصميم كامل ومحتوى جاهز للإطلاق',
-      gradient: 'from-blue-500 to-blue-600',
+      gradient: 'from-brand-600 to-brand-700',
       highlight: 'سريع',
     },
     {
       icon: Target,
       title: 'ذكاء اصطناعي',
       description: 'إضافة وتوصيف المنتجات تلقائياً باستخدام أحدث تقنيات AI',
-      gradient: 'from-purple-500 to-purple-600',
+      gradient: 'from-gold-600 to-gold-700',
       highlight: 'ذكي',
     },
     {
       icon: DollarSign,
       title: 'أسعار منافسة',
       description: 'باقات مرنة تبدأ من $49 تناسب جميع أحجام المتاجر والميزانيات',
-      gradient: 'from-green-500 to-green-600',
+      gradient: 'from-emerald-500 to-teal-600',
       highlight: 'مرن',
     },
     {
       icon: Shield,
       title: 'ضمان الجودة',
       description: 'كود نظيف ومحسّن مع أعلى معايير الأمان وحماية البيانات',
-      gradient: 'from-orange-500 to-orange-600',
+      gradient: 'from-walnut-600 to-walnut-700',
       highlight: 'آمن',
     },
     {
       icon: Headphones,
       title: 'دعم فني متواصل',
       description: 'فريق دعم متخصص جاهز لمساعدتك على مدار الساعة',
-      gradient: 'from-pink-500 to-pink-600',
+      gradient: 'from-brand-500 to-brand-600',
       highlight: '24/7',
     },
     {
       icon: Code,
       title: 'تصميم مخصص',
       description: 'تصاميم فريدة مصممة خصيصاً لتعكس هوية علامتك التجارية',
-      gradient: 'from-indigo-500 to-indigo-600',
+      gradient: 'from-gold-500 to-walnut-600',
       highlight: 'فريد',
     },
   ];
@@ -52,12 +52,12 @@ export default function Features() {
       <div className="absolute inset-0 bg-transparent"></div>
       <div className="container-custom relative z-10">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full mb-5 shadow-lg shadow-amber-500/20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gold-600 to-gold-700 rounded-full mb-5 shadow-lg shadow-gold-600/20">
             <Star className="h-4 w-4 text-white" />
             <span className="text-sm font-bold text-white">لماذا تختارنا</span>
           </div>
           <h2 className="text-3xl lg:text-5xl font-black text-white mb-5 leading-tight">
-            مزايا حقيقية لنجاح <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">متجرك</span>
+            مزايا حقيقية لنجاح <span className="bg-gradient-to-r from-brand-400 via-gold-400 to-brand-300 bg-clip-text text-transparent">متجرك</span>
           </h2>
           <p className="text-lg text-gray-500">
             نقدم لك كل ما تحتاجه لإطلاق متجر إلكتروني ناجح ومميز
@@ -82,7 +82,7 @@ export default function Features() {
                     {item.highlight}
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
+                <h3 className="text-lg font-bold text-white mb-2 group-hover:text-brand-400 transition-colors">
                   {item.title}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed">{item.description}</p>

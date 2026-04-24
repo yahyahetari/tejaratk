@@ -14,18 +14,18 @@ const planIcons = {
 
 const planColors = {
   BASIC: {
-    gradient: 'from-blue-500 to-indigo-600',
-    bg: 'bg-blue-50',
-    border: 'border-blue-200',
-    text: 'text-blue-600',
-    shadow: 'shadow-blue-500/20',
+    gradient: 'from-brand-600 to-brand-600',
+    bg: 'bg-brand-50',
+    border: 'border-brand-200',
+    text: 'text-brand-700',
+    shadow: 'shadow-brand-600/20',
   },
   PREMIUM: {
-    gradient: 'from-purple-500 to-pink-600',
-    bg: 'bg-purple-50',
-    border: 'border-purple-200',
-    text: 'text-purple-600',
-    shadow: 'shadow-purple-500/20',
+    gradient: 'from-gold-600 to-walnut-600',
+    bg: 'bg-gold-50',
+    border: 'border-gold-200',
+    text: 'text-gold-700',
+    shadow: 'shadow-gold-600/20',
   },
   ENTERPRISE: {
     gradient: 'from-amber-500 to-orange-600',
@@ -133,14 +133,14 @@ export default function PricingCards({ merchant }) {
               key={plan.id}
               className={`relative card-premium overflow-hidden transition-all duration-300 hover:scale-[1.02] ${
                 plan.popular 
-                  ? 'border-2 border-purple-500 ring-4 ring-purple-100' 
+                  ? 'border-2 border-gold-600 ring-4 ring-gold-100' 
                   : ''
               }`}
             >
               {/* Popular Badge */}
               {plan.popular && (
                 <div className="absolute top-0 left-0 right-0">
-                  <div className="bg-gradient-to-r from-purple-500 to-pink-600 text-white text-center py-2 text-sm font-bold flex items-center justify-center gap-2">
+                  <div className="bg-gradient-to-r from-gold-600 to-walnut-600 text-white text-center py-2 text-sm font-bold flex items-center justify-center gap-2">
                     <Sparkles className="h-4 w-4" />
                     الأكثر شيوعاً
                   </div>

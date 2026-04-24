@@ -22,9 +22,9 @@ export function Badge({
     success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
     warning: 'bg-amber-50 text-amber-700 border-amber-200',
     danger: 'bg-red-50 text-red-700 border-red-200',
-    info: 'bg-blue-50 text-blue-700 border-blue-200',
-    primary: 'bg-gradient-to-r from-blue-500 to-indigo-600 text-white border-transparent',
-    secondary: 'bg-purple-50 text-purple-700 border-purple-200',
+    info: 'bg-brand-50 text-brand-800 border-brand-200',
+    primary: 'bg-gradient-to-r from-brand-600 to-brand-600 text-white border-transparent',
+    secondary: 'bg-gold-50 text-gold-700 border-gold-200',
   };
 
   const dotColors = {
@@ -32,9 +32,9 @@ export function Badge({
     success: 'bg-emerald-500',
     warning: 'bg-amber-500',
     danger: 'bg-red-500',
-    info: 'bg-blue-500',
+    info: 'bg-brand-600',
     primary: 'bg-white',
-    secondary: 'bg-purple-500',
+    secondary: 'bg-gold-600',
   };
 
   const sizes = {

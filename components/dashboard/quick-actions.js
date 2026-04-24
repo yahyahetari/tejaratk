@@ -10,11 +10,11 @@ export default function QuickActions({ hasStoreSetup = false }) {
       description: hasStoreSetup ? 'تعديل إعدادات المتجر' : 'قم بإعداد متجرك الإلكتروني',
       icon: Store,
       href: '/dashboard/store-setup',
-      gradient: 'from-blue-500 to-indigo-600',
-      hoverBg: 'hover:bg-blue-500/10 hover:border-blue-500/20',
-      iconBg: 'bg-blue-500/10',
-      iconColor: 'text-blue-400',
-      shadow: 'shadow-blue-500/20',
+      gradient: 'from-brand-600 to-brand-700',
+      hoverBg: 'hover:bg-brand-700/10 hover:border-brand-700/20',
+      iconBg: 'bg-brand-700/10',
+      iconColor: 'text-brand-400',
+      shadow: 'shadow-brand-700/20',
       featured: !hasStoreSetup,
     },
     {
@@ -33,29 +33,29 @@ export default function QuickActions({ hasStoreSetup = false }) {
       description: 'تحميل وعرض الفواتير',
       icon: FileDown,
       href: '/dashboard/invoices',
-      gradient: 'from-purple-500 to-pink-600',
-      hoverBg: 'hover:bg-purple-500/10 hover:border-purple-500/20',
-      iconBg: 'bg-purple-500/10',
-      iconColor: 'text-purple-400',
-      shadow: 'shadow-purple-500/20',
+      gradient: 'from-gold-600 to-gold-700',
+      hoverBg: 'hover:bg-gold-600/10 hover:border-gold-600/20',
+      iconBg: 'bg-gold-600/10',
+      iconColor: 'text-gold-400',
+      shadow: 'shadow-gold-600/20',
     },
     {
       title: 'تخصيص التصميم',
       description: 'تخصيص مظهر متجرك',
       icon: Palette,
       href: '/dashboard/design',
-      gradient: 'from-amber-500 to-orange-600',
-      hoverBg: 'hover:bg-amber-500/10 hover:border-amber-500/20',
-      iconBg: 'bg-amber-500/10',
-      iconColor: 'text-amber-400',
-      shadow: 'shadow-amber-500/20',
+      gradient: 'from-walnut-500 to-walnut-600',
+      hoverBg: 'hover:bg-walnut-500/10 hover:border-walnut-500/20',
+      iconBg: 'bg-walnut-500/10',
+      iconColor: 'text-walnut-400',
+      shadow: 'shadow-walnut-500/20',
     },
   ];
 
   return (
     <div>
       <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-5 lg:mb-6">
-        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+        <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-gold-600 to-gold-700 flex items-center justify-center">
           <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
         </div>
         <h2 className="text-lg sm:text-xl lg:text-2xl font-black text-white">إجراءات سريعة</h2>
@@ -67,11 +67,11 @@ export default function QuickActions({ hasStoreSetup = false }) {
           return (
             <Link key={action.href} href={action.href}>
               <div className={`bg-white/[0.03] p-3 sm:p-4 lg:p-5 group hover:scale-[1.03] transition-all duration-300 relative h-full rounded-lg sm:rounded-xl lg:rounded-2xl border border-white/5 ${action.hoverBg} ${action.featured
-                ? 'border-blue-500/30 ring-2 sm:ring-4 ring-blue-500/10'
+                ? 'border-brand-700/30 ring-2 sm:ring-4 ring-brand-700/10'
                 : ''
                 }`}>
                 {action.featured && (
-                  <div className="absolute top-8 right-24 lg:right-24 bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 lg:px-3 py-0.5 sm:py-1 lg:py-1.5 rounded-full shadow-lg flex items-center gap-1">
+                  <div className="absolute top-8 right-24 lg:right-24 bg-gradient-to-r from-brand-700 to-brand-600 text-white text-[10px] sm:text-xs font-bold px-2 sm:px-2.5 lg:px-3 py-0.5 sm:py-1 lg:py-1.5 rounded-full shadow-lg flex items-center gap-1">
                     <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                     <span className="inline">ابدأ هنا</span>
                   </div>
@@ -86,7 +86,7 @@ export default function QuickActions({ hasStoreSetup = false }) {
                 </h3>
                 <p className="text-xs sm:text-sm lg:text-base text-gray-400 mb-2 sm:mb-3 lg:mb-4 line-clamp-2">{action.description}</p>
 
-                <div className="flex items-center text-blue-400 text-[10px] sm:text-xs lg:text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center text-brand-400 text-[10px] sm:text-xs lg:text-sm font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                   <span>المتابعة</span>
                   <ArrowLeft className="h-3 w-3 sm:h-3.5 sm:w-3.5 lg:h-4 lg:w-4 mr-1 group-hover:-translate-x-1 transition-transform" />
                 </div>

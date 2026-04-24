@@ -3,19 +3,20 @@
 import { useState, useRef, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Logo from '@/components/common/logo';
 import {
   Mail,
   Lock,
   Eye,
   EyeOff,
   Loader2,
-  ShoppingCart,
   Sparkles,
   ArrowRight,
   Shield,
   CheckCircle,
   RefreshCw
 } from 'lucide-react';
+import Image from 'next/image';
 
 function LoginPageContent() {
   const router = useRouter();
@@ -233,7 +234,7 @@ function LoginPageContent() {
           <div className="flex items-center justify-center gap-3 mb-8">
             <div className="relative">
               <div className="absolute inset-0 gradient-primary blur-xl opacity-50 rounded-full"></div>
-              <div className="relative w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <div className="relative w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-brand-600/30">
                 <Mail className="h-7 w-7 text-white" />
               </div>
             </div>
@@ -247,7 +248,7 @@ function LoginPageContent() {
             <p className="text-gray-500">
               أرسلنا رمز تحقق مكون من 6 أرقام إلى
             </p>
-            <p className="text-blue-600 font-semibold mt-1" dir="ltr">
+            <p className="text-brand-700 font-semibold mt-1" dir="ltr">
               {userEmail}
             </p>
           </div>
@@ -274,7 +275,7 @@ function LoginPageContent() {
                 onChange={(e) => handleCodeChange(index, e.target.value)}
                 onKeyDown={(e) => handleCodeKeyDown(index, e)}
                 onPaste={handleCodePaste}
-                className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 outline-none transition-all"
                 disabled={verifying}
               />
             ))}
@@ -305,7 +306,7 @@ function LoginPageContent() {
             <button
               onClick={handleResendCode}
               disabled={resending || resendCooldown > 0}
-              className="text-blue-600 font-semibold hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto"
+              className="text-brand-700 font-semibold hover:text-brand-800 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto"
             >
               {resending ? (
                 <>
@@ -351,17 +352,9 @@ function LoginPageContent() {
         <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-30"></div>
 
         <div className="w-full max-w-md relative z-10 animate-fade-in-up">
-          <Link href="/" className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-10 group">
-            <div className="relative">
-              <div className="absolute inset-0 gradient-primary blur-xl opacity-50 group-hover:opacity-75 transition-opacity rounded-full"></div>
-              <div className="relative w-12 h-12 sm:w-14 sm:h-14 gradient-primary rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
-                <ShoppingCart className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
-              </div>
-            </div>
-            <span className="text-2xl sm:text-3xl font-black gradient-text">
-              تجارتك
-            </span>
-          </Link>
+          <div className="flex justify-center mb-6 sm:mb-10">
+            <Logo />
+          </div>
 
           <div className="text-center mb-6 sm:mb-8">
             <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mb-2 sm:mb-3">
@@ -391,7 +384,7 @@ function LoginPageContent() {
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center pointer-events-none">
-                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                  <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                 </div>
                 <input
                   id="email"
@@ -414,7 +407,7 @@ function LoginPageContent() {
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 right-0 pr-3 sm:pr-4 flex items-center pointer-events-none">
-                  <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                  <Lock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                 </div>
                 <input
                   id="password"
@@ -445,7 +438,7 @@ function LoginPageContent() {
               <label className="flex items-center gap-2 cursor-pointer group">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer transition-all"
+                  className="w-4 h-4 sm:w-5 sm:h-5 text-brand-700 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-brand-600 focus:ring-offset-2 cursor-pointer transition-all"
                 />
                 <span className="text-xs sm:text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
                   تذكرني
@@ -453,7 +446,7 @@ function LoginPageContent() {
               </label>
               <Link
                 href="/forgot-password"
-                className="text-xs sm:text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                className="text-xs sm:text-sm font-semibold text-brand-700 hover:text-brand-800 transition-colors"
               >
                 نسيت كلمة المرور؟
               </Link>
@@ -492,7 +485,7 @@ function LoginPageContent() {
               ليس لديك حساب؟{' '}
               <Link
                 href="/register"
-                className="font-bold text-blue-600 hover:text-blue-700 transition-colors inline-flex items-center gap-1"
+                className="font-bold text-brand-700 hover:text-brand-800 transition-colors inline-flex items-center gap-1"
               >
                 سجل الآن مجاناً
                 <Sparkles className="h-3 w-3 sm:h-4 sm:w-4" />
@@ -514,7 +507,7 @@ export default function LoginPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-700"></div>
       </div>
     }>
       <LoginPageContent />

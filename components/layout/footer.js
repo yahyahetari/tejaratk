@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   ShoppingCart, 
   Mail, 
@@ -68,13 +69,13 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-gray-900 text-gray-300 relative overflow-hidden">
+    <footer className="bg-brand-950 text-gray-300 relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0YzAtMi4yMS0xLjc5LTQtNC00cy00IDEuNzktNCA0IDEuNzkgNCA0IDQgNC0xLjc5IDQtNHoiLz48L2c+PC9nPjwvc3ZnPg==')]"></div>
       
       {/* Gradient Blobs */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-700/10 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gold-700/10 rounded-full blur-3xl"></div>
 
       <div className="container-custom relative z-10">
         {/* Main Footer Content */}
@@ -84,8 +85,16 @@ export default function Footer() {
             <Link href="/" className="flex items-center gap-3 mb-6 group">
               <div className="relative">
                 <div className="absolute inset-0 gradient-primary blur-xl opacity-50 group-hover:opacity-75 transition-opacity rounded-full"></div>
-                <div className="relative w-12 h-12 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
-                  <ShoppingCart className="h-6 w-6 text-white" />
+                <div className="relative w-16 h-16 rounded-2xl overflow-hidden shadow-2xl shadow-brand-700/40 group-hover:scale-105 transition-transform bg-white border-2 border-brand-100/30">
+                  <Image
+                    src="/images/WhatsApp Image 2026-04-23 at 6.58.50 AM.jpeg"
+                    alt="تجارتك"
+                    fill
+                    sizes="256px"
+                    className="object-cover scale-[1.5] transform-gpu"
+                    quality={100}
+                    priority
+                  />
                 </div>
               </div>
               <span className="text-2xl font-black text-white">تجارتك</span>
@@ -97,7 +106,7 @@ export default function Footer() {
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               <a href="mailto:support@tejaratk.com" className="flex items-center gap-3 text-gray-400 hover:text-white transition-colors group">
-                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors">
+                <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-brand-700/20 transition-colors">
                   <Mail className="h-4 w-4" />
                 </div>
                 <span>support@tejaratk.com</span>
@@ -119,7 +128,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all hover:scale-110"
+                  className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-gray-400 hover:bg-brand-700 hover:text-white transition-all hover:scale-110"
                 >
                   <social.icon className="h-5 w-5" />
                 </a>
@@ -138,7 +147,7 @@ export default function Footer() {
                       href={link.href}
                       className="text-gray-400 hover:text-white transition-colors flex items-center gap-2 group"
                     >
-                      <span className="w-0 h-0.5 bg-blue-500 group-hover:w-3 transition-all"></span>
+                      <span className="w-0 h-0.5 bg-gold-500 group-hover:w-3 transition-all"></span>
                       {link.name}
                     </Link>
                   </li>
@@ -153,7 +162,7 @@ export default function Footer() {
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             <div className="text-center lg:text-right">
               <h3 className="text-xl font-bold text-white mb-2 flex items-center gap-2 justify-center lg:justify-start">
-                <Sparkles className="h-5 w-5 text-blue-400" />
+                <Sparkles className="h-5 w-5 text-gold-400" />
                 اشترك في نشرتنا البريدية
               </h3>
               <p className="text-gray-400">احصل على آخر الأخبار والعروض الحصرية</p>
@@ -162,7 +171,7 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="بريدك الإلكتروني"
-                className="flex-1 lg:w-72 px-5 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all"
+                className="flex-1 lg:w-72 px-5 py-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-brand-600 focus:bg-white/10 transition-all"
                 dir="ltr"
               />
               <button className="btn-primary flex items-center gap-2">
@@ -211,7 +220,7 @@ export default function Footer() {
           {/* Scroll to Top Button */}
           <button
             onClick={scrollToTop}
-            className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-blue-500/30"
+            className="w-10 h-10 rounded-xl gradient-primary flex items-center justify-center transition-all hover:scale-110 shadow-lg shadow-brand-700/30"
             aria-label="العودة للأعلى"
           >
             <ArrowUp className="h-5 w-5 text-white" />

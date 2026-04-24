@@ -50,6 +50,28 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        // Brand Colors — Deep Teal & Amber Gold Identity
+        brand: {
+          950: '#071f24', 900: '#0d3d45', 800: '#135c68',
+          700: '#1a7b8a', 600: '#2196aa', 500: '#28b0c4',
+          400: '#4dc9db', 300: '#7ddae8', 200: '#b3e9f2',
+          100: '#e0f5f9', 50: '#f0fafb',
+        },
+        walnut: {
+          950: '#1a1209', 900: '#3d2b1f', 800: '#5c3d2e',
+          700: '#7a5240', 600: '#956850', 500: '#a87e65',
+          400: '#b89880', 300: '#c4a78e', 200: '#d8c4b0',
+          100: '#f0e8df', 50: '#faf6f2',
+        },
+        gold: {
+          950: '#3d2e0a', 900: '#7a5c14', 800: '#a07a1e',
+          700: '#c4913a', 600: '#d4a54a', 500: '#e0b85c',
+          400: '#e8cb7d', 300: '#f0dda0', 200: '#f5ebc4',
+          100: '#faf5e0', 50: '#fdfaf0',
+        },
+        cream: {
+          50: '#faf8f5', 100: '#f5f0e8', 200: '#ede5d8',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',

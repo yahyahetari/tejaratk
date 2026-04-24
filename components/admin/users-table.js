@@ -66,9 +66,9 @@ export default function UsersTable({ users, total, pages, currentPage, searchPar
   const getRoleInfo = (role) => {
     switch (role) {
       case 'ADMIN':
-        return { label: 'مسؤول', icon: Shield, color: 'bg-purple-100 text-purple-700' };
+        return { label: 'مسؤول', icon: Shield, color: 'bg-gold-100 text-gold-700' };
       case 'MERCHANT':
-        return { label: 'تاجر', icon: ShoppingBag, color: 'bg-blue-100 text-blue-700' };
+        return { label: 'تاجر', icon: ShoppingBag, color: 'bg-brand-100 text-brand-800' };
       default:
         return { label: role, icon: Users, color: 'bg-gray-100 text-gray-700' };
     }
@@ -101,7 +101,7 @@ export default function UsersTable({ users, total, pages, currentPage, searchPar
                 placeholder="بحث بالبريد الإلكتروني..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pr-10 pl-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full pr-10 pl-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 focus:bg-white transition-all"
               />
             </div>
           </form>
@@ -112,7 +112,7 @@ export default function UsersTable({ users, total, pages, currentPage, searchPar
             <select
               value={roleFilter}
               onChange={(e) => handleRoleFilter(e.target.value)}
-              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 cursor-pointer"
             >
               <option value="">جميع الأدوار</option>
               <option value="ADMIN">المسؤولين</option>
@@ -145,7 +145,7 @@ export default function UsersTable({ users, total, pages, currentPage, searchPar
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${
-                        user.role === 'ADMIN' ? 'from-purple-500 to-pink-600' : 'from-blue-500 to-indigo-600'
+                        user.role === 'ADMIN' ? 'from-gold-600 to-walnut-600' : 'from-brand-600 to-brand-600'
                       } flex items-center justify-center`}>
                         <span className="text-white font-bold text-sm">
                           {user.email?.charAt(0).toUpperCase()}
@@ -265,7 +265,7 @@ export default function UsersTable({ users, total, pages, currentPage, searchPar
                   onClick={() => handlePageChange(pageNum)}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center font-medium transition-colors ${
                     currentPage === pageNum
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-brand-700 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >

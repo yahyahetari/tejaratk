@@ -33,13 +33,13 @@ function getActivityIcon(action) {
   const actionLower = action?.toLowerCase() || '';
   if (actionLower.includes('login')) return { icon: LogIn, color: 'bg-emerald-100 text-emerald-600' };
   if (actionLower.includes('logout')) return { icon: LogOut, color: 'bg-gray-100 text-gray-600' };
-  if (actionLower.includes('store') || actionLower.includes('merchant')) return { icon: Store, color: 'bg-blue-100 text-blue-600' };
-  if (actionLower.includes('subscription') || actionLower.includes('payment')) return { icon: CreditCard, color: 'bg-purple-100 text-purple-600' };
+  if (actionLower.includes('store') || actionLower.includes('merchant')) return { icon: Store, color: 'bg-brand-100 text-brand-700' };
+  if (actionLower.includes('subscription') || actionLower.includes('payment')) return { icon: CreditCard, color: 'bg-purple-100 text-gold-700' };
   if (actionLower.includes('user') || actionLower.includes('register')) return { icon: User, color: 'bg-amber-100 text-amber-600' };
-  if (actionLower.includes('setting')) return { icon: Settings, color: 'bg-indigo-100 text-indigo-600' };
+  if (actionLower.includes('setting')) return { icon: Settings, color: 'bg-indigo-100 text-brand-600' };
   if (actionLower.includes('invoice')) return { icon: FileText, color: 'bg-teal-100 text-teal-600' };
   if (actionLower.includes('key') || actionLower.includes('activation')) return { icon: Key, color: 'bg-orange-100 text-orange-600' };
-  if (actionLower.includes('email') || actionLower.includes('verification')) return { icon: Mail, color: 'bg-pink-100 text-pink-600' };
+  if (actionLower.includes('email') || actionLower.includes('verification')) return { icon: Mail, color: 'bg-pink-100 text-walnut-600' };
   return { icon: Activity, color: 'bg-gray-100 text-gray-600' };
 }
 
@@ -69,7 +69,7 @@ export default function AdminActivityPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function AdminActivityPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-gold-700 flex items-center justify-center shadow-lg shadow-brand-500/30">
             <Activity className="h-6 w-6 text-white" />
           </div>
           <div>

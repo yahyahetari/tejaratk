@@ -1,4 +1,8 @@
 import Link from 'next/link';
+import Navbar from '@/components/layout/navbar';
+import Footer from '@/components/layout/footer';
+import { ArrowLeft, Cookie, Info } from 'lucide-react';
+import ScrollReveal from '@/components/ui/scroll-reveal';
 
 export const metadata = {
   title: 'سياسة ملفات تعريف الارتباط | تجارتك',
@@ -7,102 +11,86 @@ export const metadata = {
 
 export default function CookiesPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-6 py-12">
-          <Link href="/" className="text-blue-600 hover:text-blue-700 mb-4 inline-block">
-            &rarr; العودة للرئيسية
-          </Link>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">سياسة ملفات تعريف الارتباط</h1>
-          <p className="text-gray-600">آخر تحديث: يناير 2025</p>
+    <div className="min-h-screen bg-brand-950 text-white overflow-hidden">
+      <Navbar />
+      
+      {/* Header section */}
+      <section className="relative pt-32 pb-16 overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.02)_1px,transparent_1px)] [background-size:24px_24px]"></div>
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand-700/10 rounded-full blur-[120px]"></div>
         </div>
-      </div>
+        
+        <div className="container-custom relative z-10 text-center max-w-4xl mx-auto">
+          <ScrollReveal animation="animate-fade-in-up" threshold={0.01}>
+            <Link href="/" className="inline-flex items-center gap-2 text-brand-400 hover:text-gold-400 mb-6 font-bold transition-all group">
+              <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
+              العودة للرئيسية
+            </Link>
+            <h1 className="text-4xl md:text-5xl font-black text-white mb-4">سياسة ملفات تعريف الارتباط</h1>
+            <p className="text-gray-500 font-bold">آخر تحديث: يناير 2026</p>
+          </ScrollReveal>
+        </div>
+      </section>
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <div className="bg-white rounded-2xl border border-gray-200 p-8 space-y-8">
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">ما هي ملفات تعريف الارتباط؟</h2>
-            <p className="text-gray-600 leading-relaxed">
-              ملفات تعريف الارتباط (Cookies) هي ملفات نصية صغيرة يتم تخزينها على جهازك عند زيارة موقعنا. تساعدنا هذه الملفات في تحسين تجربتك وتقديم خدمات أفضل.
-            </p>
-          </section>
+      {/* Main content body */}
+      <section className="pb-24">
+        <div className="container-custom max-w-4xl mx-auto">
+          <ScrollReveal animation="animate-fade-in-up">
+            <div className="bg-white/[0.03] rounded-[2.5rem] border border-white/5 p-8 md:p-12 space-y-12 shadow-2xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-brand-700/5 rounded-full blur-[100px]"></div>
 
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">أنواع ملفات تعريف الارتباط التي نستخدمها</h2>
-            
-            <div className="space-y-6">
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h3 className="font-semibold text-gray-900 mb-2">ملفات تعريف الارتباط الضرورية</h3>
-                <p className="text-gray-600 text-sm">
-                  هذه الملفات ضرورية لعمل الموقع بشكل صحيح، مثل تسجيل الدخول والحفاظ على جلسة المستخدم. لا يمكن تعطيلها.
+              <section className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-gold-600/10 flex items-center justify-center border border-gold-600/20">
+                        <Cookie className="h-5 w-5 text-gold-400" />
+                    </div>
+                    <h2 className="text-2xl font-black text-white">ما هي ملفات تعريف الارتباط؟</h2>
+                </div>
+                <p className="text-gray-400 leading-relaxed text-lg">
+                    ملفات تعريف الارتباط (Cookies) هي ملفات نصية صغيرة يتم تخزينها على جهازك عند زيارة موقعنا. تساعدنا هذه الملفات في تحسين تجربتك وتقديم خدمات أفضل.
                 </p>
-              </div>
+              </section>
 
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h3 className="font-semibold text-gray-900 mb-2">ملفات تعريف الارتباط التحليلية</h3>
-                <p className="text-gray-600 text-sm">
-                  تساعدنا في فهم كيفية استخدام الزوار للموقع، مما يمكننا من تحسين الأداء والمحتوى.
-                </p>
-              </div>
+              <section className="relative z-10">
+                <h2 className="text-2xl font-black text-white mb-8">أنواع ملفات تعريف الارتباط التي نستخدمها</h2>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {[
+                    { title: 'ضرورية', desc: 'لعمل الموقع وتأمين الجلسات' },
+                    { title: 'تحليلية', desc: 'لفهم كيفية تحسين الأداء' },
+                    { title: 'وظيفية', desc: 'لتذكر تفضيلاتك كاللغة' },
+                    { title: 'تسويقية', desc: 'لعرض ما يهمك من عروض' }
+                  ].map((item, i) => (
+                    <div key={i} className="p-6 bg-white/5 rounded-2xl border border-white/5">
+                      <h3 className="font-bold text-white mb-2">{item.title}</h3>
+                      <p className="text-sm text-gray-500">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </section>
 
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h3 className="font-semibold text-gray-900 mb-2">ملفات تعريف الارتباط الوظيفية</h3>
-                <p className="text-gray-600 text-sm">
-                  تتيح لنا تذكر تفضيلاتك مثل اللغة والمنطقة الزمنية لتقديم تجربة مخصصة.
-                </p>
-              </div>
+              <section className="relative z-10 py-8 px-8 bg-brand-900/20 rounded-3xl border border-brand-800/30 flex items-start gap-4">
+                <Info className="h-6 w-6 text-brand-400 flex-shrink-0 mt-1" />
+                <div>
+                    <h2 className="text-xl font-black text-white mb-2">إدارة الملفات</h2>
+                    <p className="text-gray-400 leading-relaxed">
+                        يمكنك دائماً التحكم في تعطيل أو تفعيل ملفات تعريف الارتباط من خلال إعدادات متصفحك الخاص، ولكن قد يؤثر ذلك على عمل بعض ميزات المنصة.
+                    </p>
+                </div>
+              </section>
 
-              <div className="p-4 bg-gray-50 rounded-xl">
-                <h3 className="font-semibold text-gray-900 mb-2">ملفات تعريف الارتباط التسويقية</h3>
-                <p className="text-gray-600 text-sm">
-                  تُستخدم لعرض إعلانات ذات صلة باهتماماتك. يمكنك إلغاء الاشتراك في هذه الملفات.
-                </p>
-              </div>
+              <section className="relative z-10 pt-8 border-t border-white/5 text-center">
+                <h2 className="text-2xl font-black text-white mb-6">للتواصل</h2>
+                <a href="mailto:privacy@tejaratk.com" className="px-10 py-4 bg-white/5 text-gray-300 rounded-2xl border border-white/10 hover:bg-white/10 transition-all font-black inline-block">
+                  privacy@tejaratk.com
+                </a>
+              </section>
             </div>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">ملفات تعريف الارتباط من جهات خارجية</h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              قد نستخدم خدمات من جهات خارجية تضع ملفات تعريف ارتباط خاصة بها، مثل:
-            </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-2 mr-4">
-              <li>Google Analytics - لتحليل حركة المرور</li>
-              <li>بوابات الدفع - لمعالجة المدفوعات بشكل آمن</li>
-              <li>خدمات الدردشة - لتقديم الدعم الفني</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">كيفية إدارة ملفات تعريف الارتباط</h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
-              يمكنك التحكم في ملفات تعريف الارتباط من خلال إعدادات متصفحك:
-            </p>
-            <ul className="list-disc list-inside text-gray-600 space-y-2 mr-4">
-              <li><strong>Chrome:</strong> الإعدادات &gt; الخصوصية والأمان &gt; ملفات تعريف الارتباط</li>
-              <li><strong>Firefox:</strong> الخيارات &gt; الخصوصية والأمان &gt; ملفات تعريف الارتباط</li>
-              <li><strong>Safari:</strong> التفضيلات &gt; الخصوصية &gt; إدارة بيانات الموقع</li>
-              <li><strong>Edge:</strong> الإعدادات &gt; ملفات تعريف الارتباط وأذونات الموقع</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">تأثير تعطيل ملفات تعريف الارتباط</h2>
-            <p className="text-gray-600 leading-relaxed">
-              قد يؤدي تعطيل ملفات تعريف الارتباط إلى عدم عمل بعض ميزات الموقع بشكل صحيح، مثل تسجيل الدخول أو حفظ تفضيلاتك.
-            </p>
-          </section>
-
-          <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-4">التواصل معنا</h2>
-            <p className="text-gray-600 leading-relaxed">
-              إذا كانت لديك أسئلة حول سياسة ملفات تعريف الارتباط، تواصل معنا عبر: <a href="mailto:privacy@tejaratk.com" className="text-blue-600 hover:underline">privacy@tejaratk.com</a>
-            </p>
-          </section>
+          </ScrollReveal>
         </div>
-      </div>
+      </section>
+
+      <Footer />
     </div>
   );
 }

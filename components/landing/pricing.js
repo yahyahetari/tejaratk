@@ -31,17 +31,17 @@ export default function Pricing({
   const [isAnnual, setIsAnnual] = useState(false);
 
   const guarantees = [
-    { icon: Shield, title: 'دفع آمن', color: 'from-blue-500 to-blue-600', emoji: '🔐' },
-    { icon: DollarSign, title: 'استرداد المال', color: 'from-green-500 to-emerald-600', emoji: '💰' },
-    { icon: Clock, title: 'تفعيل 3-7 أيام', color: 'from-purple-500 to-purple-600', emoji: '⏱️' },
-    { icon: Headphones, title: 'دعم 24/7', color: 'from-pink-500 to-rose-600', emoji: '🎧' }
+    { icon: Shield, title: 'دفع آمن', color: 'from-brand-600 to-brand-700', emoji: '🔐' },
+    { icon: DollarSign, title: 'استرداد المال', color: 'from-emerald-500 to-teal-600', emoji: '💰' },
+    { icon: Clock, title: 'تفعيل 3-7 أيام', color: 'from-gold-600 to-gold-700', emoji: '⏱️' },
+    { icon: Headphones, title: 'دعم 24/7', color: 'from-walnut-600 to-walnut-700', emoji: '🎧' }
   ];
 
   return (
     <div className="relative overflow-hidden bg-transparent rounded-3xl">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] animate-pulse"></div>
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/8 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-700/10 rounded-full blur-[100px] animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gold-700/8 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '1s' }}></div>
       </div>
 
       <div className="relative z-10 px-4 py-12">
@@ -54,7 +54,7 @@ export default function Pricing({
 
             <h1 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
               اختر الباقة
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 mt-2">
+              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-brand-400 via-gold-400 to-brand-300 mt-2">
                 التي تناسبك
               </span>
             </h1>
@@ -71,13 +71,13 @@ export default function Pricing({
             <button
               onClick={() => setIsAnnual(true)}
               className={`px-5 py-2.5 rounded-xl font-bold transition-all relative ${isAnnual
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-brand-700 to-brand-600 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
                 }`}
             >
               سنوي
               {isAnnual && (
-                <div className="absolute -top-2 -left-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
+                <div className="absolute -top-2 -left-2 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
                   -17%
                 </div>
               )}
@@ -85,7 +85,7 @@ export default function Pricing({
             <button
               onClick={() => setIsAnnual(false)}
               className={`px-5 py-2.5 rounded-xl font-bold transition-all ${!isAnnual
-                ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
+                ? 'bg-gradient-to-r from-brand-700 to-brand-600 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white'
                 }`}
             >
@@ -96,7 +96,7 @@ export default function Pricing({
 
         {isAnnual && (
           <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full text-sm font-bold shadow-lg shadow-green-500/20">
+            <div className="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full text-sm font-bold shadow-lg shadow-emerald-500/20">
               <Gift className="h-4 w-4" />
               🎉 شهر مجاني + خصم 17%
             </div>
@@ -138,7 +138,7 @@ export default function Pricing({
               <div
                 key={i}
                 className={`relative bg-white/[0.03] backdrop-blur-sm rounded-3xl transition-all duration-500 hover:scale-105 group ${plan.popular
-                  ? 'md:-mt-6 md:mb-6 shadow-2xl shadow-blue-500/20 border-2 border-blue-500/50'
+                  ? 'md:-mt-6 md:mb-6 shadow-2xl shadow-gold-600/20 border-2 border-gold-600/50'
                   : 'shadow-xl border border-white/5 hover:border-white/10'
                   }`}
               >
@@ -146,7 +146,7 @@ export default function Pricing({
 
                 {plan.popular && (
                   <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-10">
-                    <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-black shadow-2xl shadow-blue-500/30 flex items-center gap-2">
+                    <div className="bg-gradient-to-r from-brand-700 via-brand-600 to-gold-600 text-white px-6 py-2 rounded-full text-sm font-black shadow-2xl shadow-brand-700/30 flex items-center gap-2">
                       <Star className="h-4 w-4 fill-white" />
                       الأكثر اختياراً
                     </div>
@@ -155,7 +155,7 @@ export default function Pricing({
 
                 {isAnnual && (
                   <div className="absolute top-3 left-3 z-10">
-                    <div className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                    <div className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                       وفر ${savings}
                     </div>
                   </div>
@@ -191,7 +191,7 @@ export default function Pricing({
                     {plan.allFeatures.map((feature, j) => (
                       <li key={j} className="flex items-start gap-2.5">
                         <div className={`w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${feature.highlight
-                          ? 'bg-gradient-to-r from-green-500 to-emerald-600'
+                          ? 'bg-gradient-to-r from-emerald-500 to-teal-600'
                           : 'bg-white/10'
                           }`}>
                           <Check className={`h-3.5 w-3.5 ${feature.highlight ? 'text-white' : 'text-gray-500'}`} />

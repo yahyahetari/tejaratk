@@ -29,7 +29,7 @@ const Input = forwardRef(({
           className={cn(
             "w-full rounded-xl border-2 bg-white px-4 py-3 text-gray-900 placeholder-gray-400",
             "outline-none transition-all duration-200",
-            "focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
+            "focus:border-brand-600 focus:ring-4 focus:ring-brand-600/10",
             "disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed",
             error 
               ? "border-red-300 focus:border-red-500 focus:ring-red-500/10" 
@@ -82,7 +82,7 @@ export const Textarea = forwardRef(({
         className={cn(
           "w-full rounded-xl border-2 bg-white px-4 py-3 text-gray-900 placeholder-gray-400",
           "outline-none transition-all duration-200 resize-none",
-          "focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10",
+          "focus:border-brand-600 focus:ring-4 focus:ring-brand-600/10",
           "disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed",
           error 
             ? "border-red-300 focus:border-red-500 focus:ring-red-500/10" 

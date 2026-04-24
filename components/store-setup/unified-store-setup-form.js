@@ -34,7 +34,7 @@ function Section({ id, icon: Icon, title, description, children, badge, isExpand
         className="w-full px-6 py-5 flex items-center justify-between text-right hover:bg-gray-50 transition-colors"
       >
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-600/20">
             <Icon className="h-6 w-6 text-white" />
           </div>
           <div>
@@ -49,7 +49,7 @@ function Section({ id, icon: Icon, title, description, children, badge, isExpand
             <p className="text-sm text-gray-500 mt-0.5">{description}</p>
           </div>
         </div>
-        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isExpanded ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500'}`}>
+        <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${isExpanded ? 'bg-brand-100 text-brand-700' : 'bg-gray-100 text-gray-500'}`}>
           {isExpanded ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
         </div>
       </button>
@@ -311,7 +311,7 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
     <div className="space-y-6" dir="rtl">
       {/* Header */}
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 shadow-xl shadow-blue-500/30 mb-4">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-600 shadow-xl shadow-brand-600/30 mb-4">
           <Store className="h-8 w-8 text-white" />
         </div>
         <h1 className="text-3xl font-black text-gray-900 mb-2">
@@ -448,18 +448,18 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                 type="button"
                 onClick={() => handleChange('hasLicense', true)}
                 className={`flex-1 p-4 rounded-xl border-2 transition-all ${formData.hasLicense
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  ? 'border-brand-600 bg-brand-50 text-brand-800'
                   : 'border-gray-200 hover:border-gray-300'
                   }`}
               >
-                <Check className={`h-5 w-5 mx-auto mb-2 ${formData.hasLicense ? 'text-blue-600' : 'text-gray-400'}`} />
+                <Check className={`h-5 w-5 mx-auto mb-2 ${formData.hasLicense ? 'text-brand-700' : 'text-gray-400'}`} />
                 <span className="font-semibold">نعم، لدي ترخيص</span>
               </button>
               <button
                 type="button"
                 onClick={() => handleChange('hasLicense', false)}
                 className={`flex-1 p-4 rounded-xl border-2 transition-all ${!formData.hasLicense
-                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                  ? 'border-brand-600 bg-brand-50 text-brand-800'
                   : 'border-gray-200 hover:border-gray-300'
                   }`}
               >
@@ -505,8 +505,8 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               </div>
             )}
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <p className="text-sm text-blue-800">
+            <div className="bg-brand-50 border border-brand-200 rounded-xl p-4">
+              <p className="text-sm text-brand-800">
                 <strong>ملاحظة:</strong> الترخيص التجاري يساعد في زيادة مصداقية متجرك والحصول على مميزات إضافية.
               </p>
             </div>
@@ -533,7 +533,7 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                     type="button"
                     onClick={() => togglePaymentGateway(gateway.id)}
                     className={`p-4 rounded-xl border-2 text-right transition-all ${isSelected
-                      ? 'border-blue-500 bg-blue-50'
+                      ? 'border-brand-600 bg-brand-50'
                       : 'border-gray-200 hover:border-gray-300'
                       }`}
                   >
@@ -545,12 +545,12 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                             <span className="px-1.5 py-0.5 text-xs bg-emerald-100 text-emerald-700 rounded">موصى به</span>
                           )}
                           {gateway.popular && (
-                            <span className="px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded">شائع</span>
+                            <span className="px-1.5 py-0.5 text-xs bg-brand-100 text-brand-800 rounded">شائع</span>
                           )}
                         </div>
                         <p className="text-sm text-gray-500 mt-1">{gateway.description}</p>
                       </div>
-                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-blue-500 bg-blue-500' : 'border-gray-300'
+                      <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center ${isSelected ? 'border-brand-600 bg-brand-600' : 'border-gray-300'
                         }`}>
                         {isSelected && <Check className="h-4 w-4 text-white" />}
                       </div>
@@ -688,7 +688,7 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
               <div>
                 <label className="text-sm font-semibold text-gray-700 mb-3 block">شعار المتجر</label>
                 <label className="block cursor-pointer">
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 hover:bg-blue-50/50 transition-all">
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-brand-400 hover:bg-brand-50/50 transition-all">
                     <Upload className="h-10 w-10 mx-auto text-gray-400 mb-3" />
                     <p className="text-sm font-medium text-gray-700">اضغط لرفع الشعار</p>
                     <p className="text-xs text-gray-500 mt-1">PNG, JPG, SVG (حتى 2MB)</p>
@@ -729,7 +729,7 @@ export default function UnifiedStoreSetupForm({ merchantId, initialData = {}, is
                       setFormData(prev => ({ ...prev, primaryColor: preset.primary, secondaryColor: preset.secondary }));
                     }}
                     className={`p-3 rounded-xl border-2 transition-all hover:scale-105 ${formData.primaryColor === preset.primary
-                      ? 'border-blue-500 ring-2 ring-blue-200'
+                      ? 'border-brand-600 ring-2 ring-brand-200'
                       : 'border-gray-200'
                       }`}
                   >

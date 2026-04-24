@@ -82,7 +82,7 @@ export default function AdminSubscriptionsPage() {
   const getStatusBadge = (status) => {
     const cfg = {
       ACTIVE: { l: 'نشط', c: 'bg-emerald-100 text-emerald-700', icon: CheckCircle },
-      TRIALING: { l: 'تجريبي', c: 'bg-blue-100 text-blue-700', icon: Clock },
+      TRIALING: { l: 'تجريبي', c: 'bg-brand-100 text-brand-800', icon: Clock },
       EXPIRED: { l: 'منتهي', c: 'bg-red-100 text-red-700', icon: XCircle },
       CANCELLED: { l: 'ملغي', c: 'bg-gray-100 text-gray-700', icon: XCircle },
       PAUSED: { l: 'متوقف', c: 'bg-yellow-100 text-yellow-700', icon: Clock },
@@ -101,21 +101,21 @@ export default function AdminSubscriptionsPage() {
   };
 
   const statCards = [
-    { label: 'إجمالي الاشتراكات', value: stats.total, icon: CreditCard, gradient: 'from-blue-500 to-indigo-600' },
+    { label: 'إجمالي الاشتراكات', value: stats.total, icon: CreditCard, gradient: 'from-brand-600 to-brand-600' },
     { label: 'اشتراكات نشطة', value: stats.active, icon: CheckCircle, gradient: 'from-emerald-500 to-teal-600' },
     { label: 'فترة تجريبية', value: stats.trial, icon: Clock, gradient: 'from-amber-500 to-orange-600' },
-    { label: 'جدد (لم يتم عرضهم)', value: subscriptions.filter(s => isNewSub(s)).length, icon: Sparkles, gradient: 'from-pink-500 to-rose-600' },
+    { label: 'جدد (لم يتم عرضهم)', value: subscriptions.filter(s => isNewSub(s)).length, icon: Sparkles, gradient: 'from-walnut-500 to-rose-600' },
   ];
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-purple-600" /></div>;
+    return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-gold-700" /></div>;
   }
 
   return (
     <div className="space-y-6 lg:space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gold-600 to-walnut-600 flex items-center justify-center shadow-lg shadow-gold-600/30">
           <CreditCard className="h-6 w-6 text-white" />
         </div>
         <div>
@@ -144,7 +144,7 @@ export default function AdminSubscriptionsPage() {
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-gray-400" />
           <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500">
+            className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gold-600">
             <option value="all">جميع الحالات</option>
             <option value="ACTIVE">نشط</option>
             <option value="TRIALING">تجريبي</option>
@@ -166,7 +166,7 @@ export default function AdminSubscriptionsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="relative">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-600 to-walnut-600 flex items-center justify-center">
                           <CreditCard className="h-5 w-5 text-white" />
                         </div>
                         {isNewSub(sub) && (
@@ -175,7 +175,7 @@ export default function AdminSubscriptionsPage() {
                       </div>
                       <div>
                         <button onClick={() => handleViewSub(sub)}
-                          className="font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer">
+                          className="font-semibold text-brand-700 hover:text-brand-800 hover:underline cursor-pointer">
                           {sub.merchant?.businessName || 'غير محدد'}
                         </button>
                         <p className="text-sm text-gray-500">{sub.planName || sub.planType || 'أساسي'} • {sub.billingCycle === 'YEARLY' ? 'سنوي' : 'شهري'}</p>
@@ -206,12 +206,12 @@ export default function AdminSubscriptionsPage() {
               <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
             </div>
             {detailLoading ? (
-              <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-purple-600" /></div>
+              <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-gold-700" /></div>
             ) : selectedSub && (
               <div className="p-6 space-y-6">
                 {/* معلومات التاجر */}
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-gold-600 to-walnut-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                     {(selectedSub.merchant?.businessName || selectedSub.merchantDetails?.businessName || 'S').charAt(0)}
                   </div>
                   <div>
@@ -223,7 +223,7 @@ export default function AdminSubscriptionsPage() {
 
                 {/* الجدول الزمني */}
                 <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5">
-                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-purple-600" />الجدول الزمني للاشتراك</h4>
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-gold-700" />الجدول الزمني للاشتراك</h4>
                   <div className="space-y-3">
                     {selectedSub.merchantDetails && (
                       <>
@@ -262,7 +262,7 @@ export default function AdminSubscriptionsPage() {
 
                 {/* تفاصيل الاشتراك */}
                 <div className="bg-white border border-gray-200 rounded-xl p-5">
-                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-purple-600" />تفاصيل الخطة</h4>
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-gold-700" />تفاصيل الخطة</h4>
                   <div className="grid md:grid-cols-3 gap-3">
                     <div className="bg-gray-50 rounded-lg p-3"><p className="text-xs text-gray-500">الخطة</p><p className="font-bold">{selectedSub.planName || 'أساسي'}</p></div>
                     <div className="bg-gray-50 rounded-lg p-3"><p className="text-xs text-gray-500">الدورة</p><p className="font-medium">{selectedSub.billingCycle === 'YEARLY' ? 'سنوي' : 'شهري'}</p></div>

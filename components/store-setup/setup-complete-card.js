@@ -36,7 +36,7 @@ export default function SetupCompleteCard({ formData, onComplete, onPrevious, lo
         {/* المعلومات الأساسية */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Store className="h-5 w-5 text-blue-600" />
+            <Store className="h-5 w-5 text-brand-700" />
             المعلومات الأساسية
           </h3>
           <div className="grid md:grid-cols-2 gap-4 mr-7">
@@ -64,7 +64,7 @@ export default function SetupCompleteCard({ formData, onComplete, onPrevious, lo
         {/* الترخيص */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <FileText className="h-5 w-5 text-blue-600" />
+            <FileText className="h-5 w-5 text-brand-700" />
             الترخيص التجاري
           </h3>
           <div className="mr-7">
@@ -96,7 +96,7 @@ export default function SetupCompleteCard({ formData, onComplete, onPrevious, lo
         {/* بوابات الدفع */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <CreditCard className="h-5 w-5 text-blue-600" />
+            <CreditCard className="h-5 w-5 text-brand-700" />
             بوابات الدفع
           </h3>
           <div className="mr-7">
@@ -114,7 +114,7 @@ export default function SetupCompleteCard({ formData, onComplete, onPrevious, lo
         {/* الهوية البصرية */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold flex items-center gap-2">
-            <Palette className="h-5 w-5 text-blue-600" />
+            <Palette className="h-5 w-5 text-brand-700" />
             الهوية البصرية
           </h3>
           <div className="mr-7 space-y-3">

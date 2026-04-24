@@ -44,7 +44,7 @@ export default function AdminStoresPage() {
   }, [fetchStores]);
 
   const statCards = [
-    { label: 'إجمالي المتاجر', value: stats.total, icon: Store, gradient: 'from-blue-500 to-indigo-600' },
+    { label: 'إجمالي المتاجر', value: stats.total, icon: Store, gradient: 'from-brand-600 to-brand-600' },
     { label: 'المتاجر النشطة', value: stats.active, icon: CheckCircle, gradient: 'from-emerald-500 to-teal-600' },
     { label: 'في انتظار التفعيل', value: stats.pending, icon: Clock, gradient: 'from-amber-500 to-orange-600' },
     { label: 'المتاجر المعلقة', value: stats.suspended, icon: XCircle, gradient: 'from-red-500 to-rose-600' },

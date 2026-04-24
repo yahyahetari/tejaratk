@@ -30,7 +30,7 @@ export default function ReportsCharts({ monthlyData }) {
             onClick={() => setActiveChart('users')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               activeChart === 'users' 
-                ? 'bg-white text-blue-600 shadow-sm' 
+                ? 'bg-white text-brand-700 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -52,7 +52,7 @@ export default function ReportsCharts({ monthlyData }) {
             onClick={() => setActiveChart('both')}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               activeChart === 'both' 
-                ? 'bg-white text-purple-600 shadow-sm' 
+                ? 'bg-white text-gold-700 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >
@@ -70,7 +70,7 @@ export default function ReportsCharts({ monthlyData }) {
               <div className="w-full flex items-end justify-center gap-1 h-48">
                 {(activeChart === 'users' || activeChart === 'both') && (
                   <div 
-                    className="w-full max-w-8 bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg transition-all duration-500 hover:from-blue-600 hover:to-blue-500"
+                    className="w-full max-w-8 bg-gradient-to-t from-brand-600 to-brand-400 rounded-t-lg transition-all duration-500 hover:from-brand-700 hover:to-brand-600"
                     style={{ 
                       height: `${(data.users / maxValue) * 100}%`,
                       minHeight: data.users > 0 ? '8px' : '0'
@@ -105,7 +105,7 @@ export default function ReportsCharts({ monthlyData }) {
         <div className="flex items-center justify-center gap-6 mt-6 pt-6 border-t border-gray-100">
           {(activeChart === 'users' || activeChart === 'both') && (
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded bg-gradient-to-r from-blue-500 to-blue-400"></div>
+              <div className="w-4 h-4 rounded bg-gradient-to-r from-brand-600 to-brand-400"></div>
               <span className="text-sm text-gray-600">المستخدمين</span>
             </div>
           )}

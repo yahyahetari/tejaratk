@@ -103,9 +103,9 @@ export default function StoresTable({ stores, total, pages, currentPage, searchP
       case 'FREE':
         return { label: 'مجاني', color: 'bg-gray-100 text-gray-700' };
       case 'BASIC':
-        return { label: 'أساسي', color: 'bg-blue-100 text-blue-700' };
+        return { label: 'أساسي', color: 'bg-brand-100 text-brand-800' };
       case 'PRO':
-        return { label: 'احترافي', color: 'bg-purple-100 text-purple-700' };
+        return { label: 'احترافي', color: 'bg-gold-100 text-gold-700' };
       case 'ENTERPRISE':
         return { label: 'مؤسسي', color: 'bg-amber-100 text-amber-700' };
       default:
@@ -127,7 +127,7 @@ export default function StoresTable({ stores, total, pages, currentPage, searchP
                 placeholder="بحث باسم المتجر أو صاحب المتجر..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pr-10 pl-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+                className="w-full pr-10 pl-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 focus:bg-white transition-all"
               />
             </div>
           </form>
@@ -138,7 +138,7 @@ export default function StoresTable({ stores, total, pages, currentPage, searchP
             <select
               value={statusFilter}
               onChange={(e) => handleStatusFilter(e.target.value)}
-              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 cursor-pointer"
             >
               <option value="">جميع الحالات</option>
               <option value="ACTIVE">نشط</option>
@@ -300,7 +300,7 @@ export default function StoresTable({ stores, total, pages, currentPage, searchP
                   onClick={() => handlePageChange(pageNum)}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center font-medium transition-colors ${
                     currentPage === pageNum
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-brand-700 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >

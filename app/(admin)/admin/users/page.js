@@ -101,14 +101,14 @@ export default function AdminUsersPage() {
   const formatDateTime = (d) => d ? new Date(d).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'غير محدد';
 
   const getSubStatusBadge = (status) => {
-    const cfg = { ACTIVE: { l: 'نشط', c: 'bg-emerald-100 text-emerald-700' }, TRIALING: { l: 'تجريبي', c: 'bg-blue-100 text-blue-700' }, EXPIRED: { l: 'منتهي', c: 'bg-red-100 text-red-700' } };
+    const cfg = { ACTIVE: { l: 'نشط', c: 'bg-emerald-100 text-emerald-700' }, TRIALING: { l: 'تجريبي', c: 'bg-brand-100 text-brand-800' }, EXPIRED: { l: 'منتهي', c: 'bg-red-100 text-red-700' } };
     const s = cfg[status] || { l: status || 'غير محدد', c: 'bg-gray-100 text-gray-700' };
     return <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${s.c}`}>{s.l}</span>;
   };
 
   const statCards = [
-    { label: 'إجمالي المستخدمين', value: stats.total, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
-    { label: 'المسؤولين', value: stats.admins, icon: Shield, gradient: 'from-purple-500 to-pink-600' },
+    { label: 'إجمالي المستخدمين', value: stats.total, icon: Users, gradient: 'from-brand-600 to-brand-600' },
+    { label: 'المسؤولين', value: stats.admins, icon: Shield, gradient: 'from-gold-600 to-walnut-600' },
     { label: 'التجار', value: stats.merchants, icon: ShoppingBag, gradient: 'from-emerald-500 to-teal-600' },
     { label: 'جدد (لم يتم عرضهم)', value: users.filter(u => isNewUser(u)).length, icon: Sparkles, gradient: 'from-amber-500 to-orange-600' },
   ];
@@ -118,7 +118,7 @@ export default function AdminUsersPage() {
   );
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>;
+    return <div className="flex items-center justify-center min-h-[400px]"><Loader2 className="w-8 h-8 animate-spin text-brand-700" /></div>;
   }
 
   return (
@@ -126,7 +126,7 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-600/30">
             <Users className="h-6 w-6 text-white" />
           </div>
           <div>
@@ -162,12 +162,12 @@ export default function AdminUsersPage() {
           <div className="flex-1 relative">
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input type="text" placeholder="البحث بالبريد أو الاسم..." value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600" />
           </div>
           <div className="flex items-center gap-2">
             <Filter className="w-5 h-5 text-gray-400" />
             <select value={roleFilter} onChange={(e) => setRoleFilter(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-600">
               <option value="all">جميع الأدوار</option>
               <option value="ADMIN">مسؤول</option>
               <option value="MERCHANT">تاجر</option>
@@ -187,7 +187,7 @@ export default function AdminUsersPage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="relative">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center text-white font-bold">
                         {user.businessName?.charAt(0) || user.user?.email?.charAt(0) || 'U'}
                       </div>
                       {isNewUser(user) && (
@@ -196,7 +196,7 @@ export default function AdminUsersPage() {
                     </div>
                     <div>
                       <button onClick={() => handleViewUser(user)}
-                        className="font-semibold text-blue-600 hover:text-blue-800 hover:underline cursor-pointer">
+                        className="font-semibold text-brand-700 hover:text-brand-800 hover:underline cursor-pointer">
                         {user.businessName || 'غير محدد'}
                       </button>
                       <p className="text-sm text-gray-500">{user.user?.email}</p>
@@ -221,11 +221,11 @@ export default function AdminUsersPage() {
               <button onClick={() => setShowModal(false)} className="p-2 hover:bg-gray-100 rounded-lg"><X className="w-5 h-5" /></button>
             </div>
             {detailLoading ? (
-              <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-blue-600" /></div>
+              <div className="flex items-center justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-brand-700" /></div>
             ) : selectedUser && (
               <div className="p-6 space-y-6">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-brand-600 to-brand-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                     {selectedUser.businessName?.charAt(0) || 'U'}
                   </div>
                   <div>
@@ -235,8 +235,8 @@ export default function AdminUsersPage() {
                 </div>
 
                 {/* الجدول الزمني */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5">
-                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-blue-600" />الجدول الزمني</h4>
+                <div className="bg-gradient-to-br from-brand-50 to-indigo-50 rounded-xl p-5">
+                  <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><Calendar className="w-5 h-5 text-brand-700" />الجدول الزمني</h4>
                   <div className="space-y-3">
                     <div className="flex items-center justify-between bg-white rounded-lg p-3">
                       <span className="text-sm text-gray-600">📝 تاريخ التسجيل</span>
@@ -270,7 +270,7 @@ export default function AdminUsersPage() {
                 {/* الاشتراك */}
                 {selectedUser.subscription && (
                   <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5">
-                    <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-purple-600" />الاشتراك</h4>
+                    <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2"><CreditCard className="w-5 h-5 text-gold-700" />الاشتراك</h4>
                     <div className="grid md:grid-cols-3 gap-3">
                       <div className="bg-white rounded-lg p-3"><p className="text-xs text-gray-500">الخطة</p><p className="font-bold">{selectedUser.subscription.planName || 'أساسي'}</p></div>
                       <div className="bg-white rounded-lg p-3"><p className="text-xs text-gray-500">الحالة</p>{getSubStatusBadge(selectedUser.subscription.status)}</div>

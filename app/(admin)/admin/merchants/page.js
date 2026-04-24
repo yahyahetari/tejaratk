@@ -130,7 +130,7 @@ export default function AdminMerchantsPage() {
   const getSubStatusBadge = (status) => {
     const cfg = {
       ACTIVE: { label: 'نشط', color: 'bg-emerald-100 text-emerald-700' },
-      TRIALING: { label: 'تجريبي', color: 'bg-blue-100 text-blue-700' },
+      TRIALING: { label: 'تجريبي', color: 'bg-brand-100 text-brand-800' },
       EXPIRED: { label: 'منتهي', color: 'bg-red-100 text-red-700' },
       CANCELLED: { label: 'ملغي', color: 'bg-gray-100 text-gray-700' },
       PAUSED: { label: 'متوقف', color: 'bg-yellow-100 text-yellow-700' },
@@ -176,7 +176,7 @@ export default function AdminMerchantsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg"><Store className="w-5 h-5 text-blue-600" /></div>
+            <div className="p-2 bg-brand-100 rounded-lg"><Store className="w-5 h-5 text-brand-700" /></div>
             <div>
               <p className="text-sm text-gray-600">إجمالي التجار</p>
               <p className="text-xl font-bold text-gray-900">{pagination.total}</p>
@@ -219,12 +219,12 @@ export default function AdminMerchantsPage() {
             <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input type="text" placeholder="البحث باسم التاجر أو البريد..."
               value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600" />
           </div>
           <div className="flex items-center gap-2">
             <Filter className="w-5 h-5 text-gray-400" />
             <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-brand-600">
               <option value="all">جميع الحالات</option>
               <option value="ACTIVE">نشط</option>
               <option value="INACTIVE">غير نشط</option>
@@ -238,7 +238,7 @@ export default function AdminMerchantsPage() {
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
           </div>
         ) : filteredMerchants.length === 0 ? (
           <div className="text-center py-12">
@@ -264,7 +264,7 @@ export default function AdminMerchantsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="relative">
-                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center text-white font-bold">
+                          <div className="w-10 h-10 bg-gradient-to-br from-brand-600 to-gold-700 rounded-lg flex items-center justify-center text-white font-bold">
                             {merchant.businessName?.charAt(0) || 'T'}
                           </div>
                           {isNewMerchant(merchant) && (
@@ -276,7 +276,7 @@ export default function AdminMerchantsPage() {
                         <div>
                           <button
                             onClick={() => handleViewMerchant(merchant)}
-                            className="font-medium text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                            className="font-medium text-brand-700 hover:text-brand-800 hover:underline cursor-pointer"
                           >
                             {merchant.businessName}
                           </button>
@@ -307,7 +307,7 @@ export default function AdminMerchantsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
                         <button onClick={() => handleViewMerchant(merchant)}
-                          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="عرض التفاصيل">
+                          className="p-2 text-gray-400 hover:text-brand-700 hover:bg-brand-50 rounded-lg transition-colors" title="عرض التفاصيل">
                           <Eye className="w-4 h-4" />
                         </button>
                         <div className="relative">
@@ -329,7 +329,7 @@ export default function AdminMerchantsPage() {
                                 </button>
                               )}
                               <button onClick={() => handleAction(merchant.id, 'extend')} disabled={actionLoading}
-                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50">
+                                className="w-full flex items-center gap-2 px-4 py-2 text-sm text-brand-700 hover:bg-brand-50">
                                 <Clock className="w-4 h-4" />تمديد الاشتراك
                               </button>
                               <div className="border-t border-gray-100 my-1"></div>
@@ -379,13 +379,13 @@ export default function AdminMerchantsPage() {
 
             {detailLoading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
               </div>
             ) : selectedMerchant && (
               <div className="p-6 space-y-6">
                 {/* المعلومات الأساسية */}
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
+                  <div className="w-16 h-16 bg-gradient-to-br from-brand-600 to-gold-700 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
                     {selectedMerchant.businessName?.charAt(0) || 'T'}
                   </div>
                   <div>
@@ -398,9 +398,9 @@ export default function AdminMerchantsPage() {
                 </div>
 
                 {/* الجدول الزمني */}
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5">
+                <div className="bg-gradient-to-br from-brand-50 to-indigo-50 rounded-xl p-5">
                   <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                    <Calendar className="w-5 h-5 text-blue-600" />
+                    <Calendar className="w-5 h-5 text-brand-700" />
                     الجدول الزمني
                   </h4>
                   <div className="space-y-3">
@@ -466,7 +466,7 @@ export default function AdminMerchantsPage() {
                 {selectedMerchant.subscription && (
                   <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-5">
                     <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <CreditCard className="w-5 h-5 text-purple-600" />
+                      <CreditCard className="w-5 h-5 text-gold-700" />
                       معلومات الاشتراك
                     </h4>
                     <div className="grid md:grid-cols-3 gap-4">
@@ -564,7 +564,7 @@ export default function AdminMerchantsPage() {
                 {selectedMerchant.brandIdentity && (
                   <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-xl p-5">
                     <h4 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
-                      <Sparkles className="w-5 h-5 text-pink-600" />
+                      <Sparkles className="w-5 h-5 text-walnut-600" />
                       الهوية البصرية
                     </h4>
                     <div className="grid md:grid-cols-2 gap-4">
@@ -626,7 +626,7 @@ export default function AdminMerchantsPage() {
                 {/* الإحصائيات */}
                 {selectedMerchant._count && (
                   <div className="grid grid-cols-3 gap-4">
-                    <div className="bg-blue-50 rounded-xl p-4 text-center">
+                    <div className="bg-brand-50 rounded-xl p-4 text-center">
                       <p className="text-2xl font-bold text-gray-900">{selectedMerchant._count.invoices || 0}</p>
                       <p className="text-xs text-gray-500">فاتورة</p>
                     </div>

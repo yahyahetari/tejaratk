@@ -33,12 +33,12 @@ export function Button({
   
   const variants = {
     primary: `
-      bg-gradient-to-r from-blue-600 to-indigo-600 
+      bg-gradient-to-r from-brand-700 to-brand-600 
       text-white 
-      hover:from-blue-700 hover:to-indigo-700 
-      focus:ring-blue-500/30
-      shadow-lg shadow-blue-500/30
-      hover:shadow-xl hover:shadow-blue-500/40
+      hover:from-brand-800 hover:to-brand-700 
+      focus:ring-brand-500/30
+      shadow-lg shadow-brand-700/30
+      hover:shadow-xl hover:shadow-brand-700/40
     `,
     secondary: `
       bg-gray-100 
@@ -48,10 +48,10 @@ export function Button({
       border border-gray-200
     `,
     outline: `
-      border-2 border-blue-600 
-      text-blue-600 
-      hover:bg-blue-50 
-      focus:ring-blue-500/30
+      border-2 border-brand-700 
+      text-brand-700 
+      hover:bg-brand-50 
+      focus:ring-brand-500/30
     `,
     ghost: `
       text-gray-700 
@@ -73,11 +73,11 @@ export function Button({
       shadow-lg shadow-emerald-500/30
     `,
     warning: `
-      bg-gradient-to-r from-amber-500 to-orange-500 
+      bg-gradient-to-r from-gold-600 to-gold-700 
       text-white 
-      hover:from-amber-600 hover:to-orange-600 
-      focus:ring-amber-500/30
-      shadow-lg shadow-amber-500/30
+      hover:from-gold-700 hover:to-gold-800 
+      focus:ring-gold-500/30
+      shadow-lg shadow-gold-600/30
     `,
   };
   

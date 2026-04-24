@@ -62,7 +62,7 @@ export default function AdminSettingsForm() {
               type="text"
               value={settings.siteName}
               onChange={(e) => handleChange('siteName', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all"
             />
           </div>
 
@@ -75,7 +75,7 @@ export default function AdminSettingsForm() {
               type="email"
               value={settings.supportEmail}
               onChange={(e) => handleChange('supportEmail', e.target.value)}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all"
               dir="ltr"
             />
           </div>
@@ -87,7 +87,7 @@ export default function AdminSettingsForm() {
             value={settings.siteDescription}
             onChange={(e) => handleChange('siteDescription', e.target.value)}
             rows={3}
-            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"
+            className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all resize-none"
           />
         </div>
 
@@ -111,7 +111,7 @@ export default function AdminSettingsForm() {
                   onChange={(e) => handleChange('maintenanceMode', e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-blue-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <div className="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-700"></div>
               </div>
             </label>
 
@@ -127,7 +127,7 @@ export default function AdminSettingsForm() {
                   onChange={(e) => handleChange('allowRegistration', e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-blue-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <div className="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-700"></div>
               </div>
             </label>
 
@@ -143,7 +143,7 @@ export default function AdminSettingsForm() {
                   onChange={(e) => handleChange('requireEmailVerification', e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-blue-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                <div className="w-11 h-6 bg-gray-300 peer-focus:ring-4 peer-focus:ring-brand-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-700"></div>
               </div>
             </label>
           </div>
@@ -159,7 +159,7 @@ export default function AdminSettingsForm() {
               onChange={(e) => handleChange('defaultTrialDays', parseInt(e.target.value))}
               min={0}
               max={90}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all"
             />
           </div>
 
@@ -170,7 +170,7 @@ export default function AdminSettingsForm() {
               value={settings.maxProductsPerStore}
               onChange={(e) => handleChange('maxProductsPerStore', parseInt(e.target.value))}
               min={10}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent transition-all"
             />
           </div>
         </div>
@@ -188,7 +188,7 @@ export default function AdminSettingsForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-xl font-medium shadow-lg shadow-blue-500/30 hover:shadow-xl disabled:opacity-50 transition-all"
+            className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-brand-600 to-brand-600 text-white rounded-xl font-medium shadow-lg shadow-brand-600/30 hover:shadow-xl disabled:opacity-50 transition-all"
           >
             {loading ? (
               <>

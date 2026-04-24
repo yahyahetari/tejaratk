@@ -24,7 +24,7 @@ export default function AdminSettingsPage() {
       title: 'الإعدادات العامة',
       description: 'إعدادات المنصة الأساسية',
       icon: Globe,
-      gradient: 'from-blue-500 to-indigo-600'
+      gradient: 'from-brand-600 to-brand-600'
     },
     {
       id: 'email',
@@ -38,7 +38,7 @@ export default function AdminSettingsPage() {
       title: 'بوابات الدفع',
       description: 'إعداد بوابات الدفع الافتراضية',
       icon: CreditCard,
-      gradient: 'from-purple-500 to-pink-600'
+      gradient: 'from-gold-600 to-walnut-600'
     },
     {
       id: 'security',
@@ -59,7 +59,7 @@ export default function AdminSettingsPage() {
       title: 'المظهر',
       description: 'تخصيص مظهر المنصة',
       icon: Palette,
-      gradient: 'from-pink-500 to-rose-600'
+      gradient: 'from-walnut-500 to-rose-600'
     }
   ];
 

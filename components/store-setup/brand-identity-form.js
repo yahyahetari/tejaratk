@@ -128,7 +128,7 @@ export default function BrandIdentityForm({ initialData = {}, onNext, onPrevious
                     }}
                     className={`
                       p-3 rounded-lg border-2 transition-all hover:scale-105
-                      ${formData.primaryColor === preset.primary ? 'border-blue-600 ring-2 ring-blue-200' : 'border-gray-200'}
+                      ${formData.primaryColor === preset.primary ? 'border-brand-700 ring-2 ring-brand-200' : 'border-gray-200'}
                     `}
                   >
                     <div className="flex gap-1 mb-2">
@@ -211,7 +211,7 @@ export default function BrandIdentityForm({ initialData = {}, onNext, onPrevious
           </div>
 
           {/* ملاحظة */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-brand-50 border border-brand-200 rounded-lg p-4">
             <p className="text-sm text-blue-900">
               <strong>ملاحظة:</strong> الهوية البصرية اختيارية ويمكنك تعديلها لاحقاً من لوحة التحكم.
             </p>

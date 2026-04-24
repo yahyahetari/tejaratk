@@ -69,7 +69,7 @@ export default function PaymentGatewaySelector({ initialData = {}, onNext, onPre
                   key={gateway.id}
                   className={`
                     border rounded-lg transition-all
-                    ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}
+                    ${isSelected ? 'border-brand-600 bg-brand-50' : 'border-gray-200'}
                   `}
                 >
                   {/* رأس البوابة */}
@@ -80,7 +80,7 @@ export default function PaymentGatewaySelector({ initialData = {}, onNext, onPre
                     <div className="flex items-center gap-4">
                       <div className={`
                         w-12 h-12 rounded-lg flex items-center justify-center
-                        ${isSelected ? 'bg-blue-600' : 'bg-gray-100'}
+                        ${isSelected ? 'bg-brand-700' : 'bg-gray-100'}
                       `}>
                         {isSelected ? (
                           <Check className="h-6 w-6 text-white" />
@@ -98,7 +98,7 @@ export default function PaymentGatewaySelector({ initialData = {}, onNext, onPre
                         <Badge className="bg-green-100 text-green-800">موصى به</Badge>
                       )}
                       {gateway.popular && (
-                        <Badge className="bg-blue-100 text-blue-800">الأكثر استخداماً</Badge>
+                        <Badge className="bg-brand-100 text-brand-800">الأكثر استخداماً</Badge>
                       )}
                     </div>
                   </div>
@@ -140,7 +140,7 @@ export default function PaymentGatewaySelector({ initialData = {}, onNext, onPre
                           href={gateway.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-sm text-blue-600 hover:underline flex items-center"
+                          className="text-sm text-brand-700 hover:underline flex items-center"
                         >
                           زيارة موقع {gateway.nameAr}
                         </a>
@@ -162,11 +162,11 @@ export default function PaymentGatewaySelector({ initialData = {}, onNext, onPre
           )}
 
           {selectedGateways.length > 0 && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="bg-brand-50 border border-brand-200 rounded-lg p-4">
               <p className="text-sm text-blue-900">
                 <strong>تم اختيار {selectedGateways.length} بوابة دفع</strong>
               </p>
-              <p className="text-xs text-blue-800 mt-1">
+              <p className="text-xs text-brand-800 mt-1">
                 يمكنك تعديل الإعدادات لاحقاً من لوحة التحكم
               </p>
             </div>

@@ -75,15 +75,15 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
                   className={`
                     relative p-6 rounded-lg border-2 text-right transition-all
                     ${isSelected 
-                      ? 'border-blue-600 bg-blue-50 shadow-lg scale-105' 
-                      : 'border-gray-200 hover:border-blue-300'
+                      ? 'border-brand-700 bg-brand-50 shadow-lg scale-105' 
+                      : 'border-gray-200 hover:border-brand-300'
                     }
-                    ${plan.popular ? 'ring-2 ring-blue-200' : ''}
+                    ${plan.popular ? 'ring-2 ring-brand-200' : ''}
                   `}
                 >
                   {plan.popular && (
                     <div className="absolute -top-3 right-4">
-                      <Badge className="bg-blue-600 text-white">
+                      <Badge className="bg-brand-700 text-white">
                         <Sparkles className="ml-1 h-3 w-3" />
                         الأكثر شعبية
                       </Badge>
@@ -93,7 +93,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
                   <div className="space-y-3">
                     <h3 className="text-xl font-bold">{plan.nameAr}</h3>
                     
-                    <div className="text-3xl font-bold text-blue-600">
+                    <div className="text-3xl font-bold text-brand-700">
                       {price} ر.س
                       <span className="text-sm text-muted-foreground font-normal">
                         /{selectedCycle === 'MONTHLY' ? 'شهر' : 'سنة'}
@@ -108,7 +108,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
 
                     {isSelected && (
                       <div className="flex items-center justify-center pt-2">
-                        <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                        <div className="w-6 h-6 rounded-full bg-brand-700 flex items-center justify-center">
                           <Check className="h-4 w-4 text-white" />
                         </div>
                       </div>
@@ -138,8 +138,8 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
               className={`
                 p-6 rounded-lg border-2 text-right transition-all
                 ${selectedCycle === 'MONTHLY'
-                  ? 'border-blue-600 bg-blue-50 shadow-lg'
-                  : 'border-gray-200 hover:border-blue-300'
+                  ? 'border-brand-700 bg-brand-50 shadow-lg'
+                  : 'border-gray-200 hover:border-brand-300'
                 }
               `}
             >
@@ -148,7 +148,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
                 <p className="text-sm text-muted-foreground">
                   ادفع كل شهر
                 </p>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-brand-700">
                   {calculatePrice(selectedPlan, 'MONTHLY')} ر.س/شهر
                 </div>
               </div>
@@ -161,8 +161,8 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
               className={`
                 relative p-6 rounded-lg border-2 text-right transition-all
                 ${selectedCycle === 'YEARLY'
-                  ? 'border-blue-600 bg-blue-50 shadow-lg'
-                  : 'border-gray-200 hover:border-blue-300'
+                  ? 'border-brand-700 bg-brand-50 shadow-lg'
+                  : 'border-gray-200 hover:border-brand-300'
                 }
               `}
             >
@@ -177,7 +177,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
                 <p className="text-sm text-muted-foreground">
                   ادفع مرة واحدة سنوياً
                 </p>
-                <div className="text-2xl font-bold text-blue-600">
+                <div className="text-2xl font-bold text-brand-700">
                   {calculatePrice(selectedPlan, 'YEARLY')} ر.س/سنة
                 </div>
                 <p className="text-sm text-green-600 font-semibold">
@@ -190,7 +190,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
       </Card>
 
       {/* ملخص الطلب */}
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-brand-200 bg-brand-50">
         <CardHeader>
           <CardTitle>ملخص الطلب</CardTitle>
         </CardHeader>
@@ -217,7 +217,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
           )}
           <div className="border-t pt-4 flex justify-between text-2xl font-bold">
             <span>الإجمالي:</span>
-            <span className="text-blue-600">
+            <span className="text-brand-700">
               {calculatePrice(selectedPlan, selectedCycle)} ر.س
             </span>
           </div>
@@ -225,7 +225,7 @@ export default function RenewalForm({ currentSubscription, onSubmit, loading = f
           <Button 
             type="submit" 
             size="lg" 
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-brand-700 hover:bg-brand-800"
             disabled={loading}
           >
             {loading ? (

@@ -178,11 +178,11 @@ export default function LicenseForm({ initialData = {}, onNext, onPrevious, load
           )}
 
           {/* ملاحظة */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-brand-50 border border-brand-200 rounded-lg p-4">
             <p className="text-sm text-blue-900">
               <strong>ملاحظة:</strong> الترخيص التجاري اختياري ولكنه يساعد في:
             </p>
-            <ul className="text-sm text-blue-800 mt-2 mr-4 space-y-1">
+            <ul className="text-sm text-brand-800 mt-2 mr-4 space-y-1">
               <li>• زيادة مصداقية متجرك</li>
               <li>• الحصول على دعم أسرع</li>
               <li>• إمكانية الوصول لمميزات إضافية</li>

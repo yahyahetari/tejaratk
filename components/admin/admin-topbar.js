@@ -69,7 +69,7 @@ export default function AdminTopbar({ user }) {
             <input
               type="text"
               placeholder="بحث في لوحة التحكم..."
-              className="w-full pr-10 pl-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              className="w-full pr-10 pl-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 focus:bg-white transition-all"
             />
           </div>
         </div>
@@ -97,13 +97,13 @@ export default function AdminTopbar({ user }) {
                 <div className="absolute left-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-200 z-20 overflow-hidden">
                   <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                     <h3 className="font-bold text-gray-900">الإشعارات</h3>
-                    <span className="text-xs text-blue-600 hover:underline cursor-pointer">تحديد الكل كمقروء</span>
+                    <span className="text-xs text-brand-700 hover:underline cursor-pointer">تحديد الكل كمقروء</span>
                   </div>
                   <div className="max-h-80 overflow-y-auto">
                     {notifications.map(notification => (
                       <div
                         key={notification.id}
-                        className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer ${!notification.read ? 'bg-blue-50/50' : ''}`}
+                        className={`p-4 border-b border-gray-50 hover:bg-gray-50 cursor-pointer ${!notification.read ? 'bg-brand-50/50' : ''}`}
                       >
                         <p className="text-sm text-gray-900">{notification.text}</p>
                         <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
@@ -111,7 +111,7 @@ export default function AdminTopbar({ user }) {
                     ))}
                   </div>
                   <div className="p-3 bg-gray-50 text-center">
-                    <a href="/admin/activity" className="text-sm text-blue-600 font-medium hover:underline">
+                    <a href="/admin/activity" className="text-sm text-brand-700 font-medium hover:underline">
                       عرض جميع الإشعارات
                     </a>
                   </div>
@@ -126,7 +126,7 @@ export default function AdminTopbar({ user }) {
               onClick={() => setShowDropdown(!showDropdown)}
               className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-100 transition-colors"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center">
                 <Shield className="h-5 w-5 text-white" />
               </div>
               <div className="hidden sm:block text-right">

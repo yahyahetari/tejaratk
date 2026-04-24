@@ -70,7 +70,7 @@ export default function SubscriptionsTable({ subscriptions, total, pages, curren
       case 'ACTIVE':
         return { label: 'نشط', icon: CheckCircle, color: 'bg-emerald-100 text-emerald-700' };
       case 'TRIAL':
-        return { label: 'تجريبي', icon: Clock, color: 'bg-blue-100 text-blue-700' };
+        return { label: 'تجريبي', icon: Clock, color: 'bg-brand-100 text-brand-800' };
       case 'EXPIRED':
         return { label: 'منتهي', icon: XCircle, color: 'bg-red-100 text-red-700' };
       case 'CANCELLED':
@@ -85,9 +85,9 @@ export default function SubscriptionsTable({ subscriptions, total, pages, curren
       case 'FREE':
         return { label: 'مجاني', icon: Star, color: 'bg-gray-100 text-gray-700', gradient: 'from-gray-400 to-gray-600' };
       case 'BASIC':
-        return { label: 'أساسي', icon: Zap, color: 'bg-blue-100 text-blue-700', gradient: 'from-blue-500 to-indigo-600' };
+        return { label: 'أساسي', icon: Zap, color: 'bg-brand-100 text-brand-800', gradient: 'from-brand-600 to-brand-600' };
       case 'PRO':
-        return { label: 'احترافي', icon: Crown, color: 'bg-purple-100 text-purple-700', gradient: 'from-purple-500 to-pink-600' };
+        return { label: 'احترافي', icon: Crown, color: 'bg-gold-100 text-gold-700', gradient: 'from-gold-600 to-walnut-600' };
       case 'ENTERPRISE':
         return { label: 'مؤسسي', icon: Crown, color: 'bg-amber-100 text-amber-700', gradient: 'from-amber-500 to-orange-600' };
       default:
@@ -106,7 +106,7 @@ export default function SubscriptionsTable({ subscriptions, total, pages, curren
             <select
               value={planFilter}
               onChange={(e) => handlePlanFilter(e.target.value)}
-              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 cursor-pointer"
             >
               <option value="">جميع الخطط</option>
               <option value="FREE">مجاني</option>
@@ -121,7 +121,7 @@ export default function SubscriptionsTable({ subscriptions, total, pages, curren
             <select
               value={statusFilter}
               onChange={(e) => handleStatusFilter(e.target.value)}
-              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              className="px-4 py-2.5 bg-gray-100 border-0 rounded-xl text-sm focus:ring-2 focus:ring-brand-600 cursor-pointer"
             >
               <option value="">جميع الحالات</option>
               <option value="ACTIVE">نشط</option>
@@ -206,7 +206,7 @@ export default function SubscriptionsTable({ subscriptions, total, pages, curren
                               <Edit className="h-4 w-4" />
                               تعديل الخطة
                             </button>
-                            <button className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-blue-600 hover:bg-blue-50 transition-colors">
+                            <button className="w-full flex items-center gap-2 px-4 py-2.5 text-sm text-brand-700 hover:bg-brand-50 transition-colors">
                               <RefreshCw className="h-4 w-4" />
                               تجديد الاشتراك
                             </button>
@@ -264,7 +264,7 @@ export default function SubscriptionsTable({ subscriptions, total, pages, curren
                   onClick={() => handlePageChange(pageNum)}
                   className={`w-10 h-10 rounded-xl flex items-center justify-center font-medium transition-colors ${
                     currentPage === pageNum
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-brand-700 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >

@@ -105,15 +105,15 @@ export default function AdminReportsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
       </div>
     );
   }
 
   const mainStats = [
-    { title: 'إجمالي المستخدمين', value: data.totalUsers, change: data.userGrowth, icon: Users, gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'إجمالي المستخدمين', value: data.totalUsers, change: data.userGrowth, icon: Users, gradient: 'from-brand-600 to-brand-600' },
     { title: 'إجمالي المتاجر', value: data.totalMerchants, change: data.merchantGrowth, icon: Store, gradient: 'from-emerald-500 to-teal-600' },
-    { title: 'المتاجر النشطة', value: data.activeMerchants, percentage: data.totalMerchants > 0 ? Math.round((data.activeMerchants / data.totalMerchants) * 100) : 0, icon: TrendingUp, gradient: 'from-purple-500 to-pink-600' },
+    { title: 'المتاجر النشطة', value: data.activeMerchants, percentage: data.totalMerchants > 0 ? Math.round((data.activeMerchants / data.totalMerchants) * 100) : 0, icon: TrendingUp, gradient: 'from-gold-600 to-walnut-600' },
     { title: 'معدل التحويل', value: data.totalUsers > 0 ? Math.round((data.totalMerchants / data.totalUsers) * 100) : 0, suffix: '%', icon: BarChart3, gradient: 'from-amber-500 to-orange-600' }
   ];
 
@@ -122,7 +122,7 @@ export default function AdminReportsPage() {
       {/* Header */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-gold-700 flex items-center justify-center shadow-lg shadow-brand-500/30">
             <BarChart3 className="h-6 w-6 text-white" />
           </div>
           <div>
@@ -160,7 +160,7 @@ export default function AdminReportsPage() {
                 </div>
               )}
               {stat.percentage !== undefined && (
-                <div className="px-2 py-1 rounded-lg text-xs font-bold bg-blue-100 text-blue-700">
+                <div className="px-2 py-1 rounded-lg text-xs font-bold bg-brand-100 text-brand-800">
                   {stat.percentage}% نشط
                 </div>
               )}
@@ -175,13 +175,13 @@ export default function AdminReportsPage() {
 
       {/* Summary Cards */}
       <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-br from-brand-600 to-brand-600 rounded-2xl p-6 text-white">
           <div className="flex items-center gap-3 mb-4">
             <Users className="h-8 w-8 opacity-80" />
             <h3 className="text-lg font-bold">المستخدمين الجدد</h3>
           </div>
           <p className="text-4xl font-black mb-2">{data.usersThisMonth}</p>
-          <p className="text-blue-100">مستخدم جديد هذا الشهر</p>
+          <p className="text-brand-100">مستخدم جديد هذا الشهر</p>
         </div>
 
         <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-6 text-white">
@@ -193,7 +193,7 @@ export default function AdminReportsPage() {
           <p className="text-emerald-100">متجر جديد هذا الشهر</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl p-6 text-white">
+        <div className="bg-gradient-to-br from-gold-600 to-walnut-600 rounded-2xl p-6 text-white">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp className="h-8 w-8 opacity-80" />
             <h3 className="text-lg font-bold">معدل النمو</h3>

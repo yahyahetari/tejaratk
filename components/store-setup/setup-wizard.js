@@ -113,7 +113,7 @@ export default function SetupWizard({ initialData = {}, initialStep = 1 }) {
                         currentStep > step.id
                           ? 'bg-green-600 text-white'
                           : currentStep === step.id
-                          ? 'bg-blue-600 text-white ring-4 ring-blue-100'
+                          ? 'bg-brand-700 text-white ring-4 ring-brand-100'
                           : 'bg-gray-200 text-gray-600'
                       }
                     `}

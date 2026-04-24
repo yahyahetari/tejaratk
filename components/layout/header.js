@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { ShoppingCart, Menu, X, Sparkles } from 'lucide-react';
+import { Menu, X, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Navbar() {
@@ -53,10 +54,20 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-tr from-blue-500 to-purple-500 blur-xl opacity-50 group-hover:opacity-75 transition-opacity"></div>
-              <ShoppingCart className="h-8 w-8 sm:h-10 sm:w-10 text-blue-600 relative z-10 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-tr from-brand-700 to-gold-600 blur-xl opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
+              <div className="relative w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden shadow-2xl shadow-brand-700/30 group-hover:scale-105 transition-transform bg-white border-2 border-brand-100/50">
+                <Image
+                  src="/images/WhatsApp Image 2026-04-23 at 6.58.50 AM.jpeg"
+                  alt="تجارتك"
+                  fill
+                  sizes="256px"
+                  className="object-cover scale-[1.5]"
+                  quality={100}
+                  priority
+                />
+              </div>
             </div>
-            <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-brand-700 via-brand-600 to-gold-600 bg-clip-text text-transparent">
               تجارتك
             </span>
           </Link>
@@ -69,12 +80,12 @@ export default function Navbar() {
                 href={item.href}
                 className={`font-medium transition-colors relative group ${
                   pathname === item.href
-                    ? 'text-blue-600'
-                    : 'text-gray-700 hover:text-blue-600'
+                    ? 'text-brand-700'
+                    : 'text-gray-700 hover:text-brand-700'
                 }`}
               >
                 {item.name}
-                <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 transition-all duration-300 ${
+                <span className={`absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-brand-700 to-gold-600 transition-all duration-300 ${
                   pathname === item.href ? 'w-full' : 'w-0 group-hover:w-full'
                 }`}></span>
               </Link>
@@ -86,13 +97,13 @@ export default function Navbar() {
             <Link href="/login">
               <Button 
                 variant="ghost" 
-                className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all"
+                className="text-gray-700 hover:text-brand-700 hover:bg-brand-50 transition-all"
               >
                 تسجيل الدخول
               </Button>
             </Link>
             <Link href="/register">
-              <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30 hover:shadow-xl hover:shadow-blue-500/40 transition-all hover:scale-105">
+              <Button className="bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700 shadow-lg shadow-brand-700/30 hover:shadow-xl hover:shadow-brand-700/40 transition-all hover:scale-105">
                 <Sparkles className="ml-2 h-4 w-4" />
                 ابدأ الآن
               </Button>
@@ -124,8 +135,8 @@ export default function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`font-medium transition-colors py-2 px-2 rounded-lg ${
                     pathname === item.href
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-700 hover:text-blue-600 hover:bg-gray-50'
+                      ? 'text-brand-700 bg-brand-50'
+                      : 'text-gray-700 hover:text-brand-700 hover:bg-gray-50'
                   }`}
                 >
                   {item.name}
@@ -138,7 +149,7 @@ export default function Navbar() {
                   </Button>
                 </Link>
                 <Link href="/register" onClick={() => setIsMobileMenuOpen(false)}>
-                  <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                  <Button className="w-full bg-gradient-to-r from-brand-700 to-brand-600 hover:from-brand-800 hover:to-brand-700">
                     <Sparkles className="ml-2 h-4 w-4" />
                     ابدأ الآن
                   </Button>

@@ -39,7 +39,7 @@ export default async function SubscriptionPage() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center">
               <CreditCard className="h-5 w-5 text-white" />
             </div>
             <h1 className="text-3xl font-black text-white">الاشتراك والفواتير</h1>
@@ -82,8 +82,8 @@ export default async function SubscriptionPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
-                <CreditCard className="h-5 w-5 text-blue-400" />
+              <div className="w-10 h-10 rounded-xl bg-brand-600/20 flex items-center justify-center">
+                <CreditCard className="h-5 w-5 text-brand-400" />
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-1">الخطة</p>
@@ -112,8 +112,8 @@ export default async function SubscriptionPage() {
             </div>
             
             <div className="flex items-start gap-4 p-4 bg-white/5 rounded-xl border border-white/5">
-              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                <Calendar className="h-5 w-5 text-purple-400" />
+              <div className="w-10 h-10 rounded-xl bg-gold-600/20 flex items-center justify-center">
+                <Calendar className="h-5 w-5 text-gold-400" />
               </div>
               <div>
                 <p className="text-sm text-gray-400 mb-1">التجديد التالي</p>
@@ -163,12 +163,12 @@ export default async function SubscriptionPage() {
           />
         </div>
       ) : (
-        <div id="plans" className="scroll-mt-8 bg-gray-950 rounded-[2.5rem] mt-16 pt-12 border border-gray-800 shadow-2xl shadow-indigo-500/10 overflow-hidden relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-600/10 pointer-events-none"></div>
+        <div id="plans" className="scroll-mt-8 bg-gray-950 rounded-[2.5rem] mt-16 pt-12 border border-gray-800 shadow-2xl shadow-brand-500/10 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-500/10 to-gold-700/10 pointer-events-none"></div>
           <div className="text-center mb-6 relative z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full mb-4 border border-blue-500/30">
-              <Sparkles className="h-4 w-4 text-purple-400" />
-              <span className="text-sm font-bold text-purple-300">أطلق العنان لمتجرك</span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-600/20 to-gold-600/20 rounded-full mb-4 border border-brand-600/30">
+              <Sparkles className="h-4 w-4 text-gold-400" />
+              <span className="text-sm font-bold text-gold-300">أطلق العنان لمتجرك</span>
             </div>
             <h2 className="text-3xl font-black text-white">ترقية الباقة</h2>
             <p className="text-gray-400 mt-2">هل تحتاج إلى مميزات أقوى؟ اختر الباقة الأنسب لتوسيع تجارتك.</p>

@@ -22,8 +22,8 @@ const planIcons = {
 };
 
 const planColors = {
-  BASIC: 'from-blue-500 to-indigo-600',
-  PREMIUM: 'from-purple-500 to-pink-600',
+  BASIC: 'from-brand-600 to-brand-600',
+  PREMIUM: 'from-gold-600 to-walnut-600',
   ENTERPRISE: 'from-amber-500 to-orange-600',
 };
 

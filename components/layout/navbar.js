@@ -50,7 +50,7 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
         ? isDark
-          ? 'bg-[#0a0a0f]/90 backdrop-blur-xl shadow-lg shadow-black/20 border-b border-white/5'
+          ? 'bg-brand-950/90 backdrop-blur-xl shadow-lg shadow-black/20 border-b border-brand-800/30'
           : 'bg-white/90 backdrop-blur-xl shadow-lg shadow-gray-200/50 border-b border-gray-100'
         : 'bg-transparent'
         }`}
@@ -67,8 +67,8 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={`px-4 py-2 rounded-xl font-semibold transition-all ${isActive(link.href)
-                  ? isDark ? 'text-blue-400 bg-blue-500/10' : 'text-blue-600 bg-blue-50'
-                  : isDark ? 'text-gray-400 hover:text-blue-400 hover:bg-white/5' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                  ? isDark ? 'text-gold-400 bg-gold-500/10' : 'text-brand-700 bg-brand-50'
+                  : isDark ? 'text-gray-400 hover:text-gold-400 hover:bg-white/5' : 'text-gray-600 hover:text-brand-700 hover:bg-gray-50'
                   }`}
               >
                 {link.label}
@@ -79,13 +79,13 @@ export default function Navbar() {
           {/* Desktop Auth Buttons */}
           <div className="hidden lg:flex items-center gap-3">
             <Link href="/dashboard">
-              <button className={`px-4 py-2 font-semibold transition-colors flex items-center gap-2 rounded-xl ${isDark ? 'text-gray-400 hover:text-blue-400 hover:bg-white/5' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'}`}>
+              <button className={`px-4 py-2 font-semibold transition-colors flex items-center gap-2 rounded-xl ${isDark ? 'text-gray-400 hover:text-gold-400 hover:bg-white/5' : 'text-gray-600 hover:text-brand-700 hover:bg-gray-50'}`}>
                 <LayoutDashboard className="h-4 w-4" />
                 لوحة التحكم
               </button>
             </Link>
             <Link href="/login">
-              <button className={`px-5 py-2.5 font-semibold transition-colors flex items-center gap-2 ${isDark ? 'text-gray-300 hover:text-blue-400' : 'text-gray-700 hover:text-blue-600'}`}>
+              <button className={`px-5 py-2.5 font-semibold transition-colors flex items-center gap-2 ${isDark ? 'text-gray-300 hover:text-gold-400' : 'text-gray-700 hover:text-brand-700'}`}>
                 <LogIn className="h-4 w-4" />
                 تسجيل الدخول
               </button>
@@ -114,7 +114,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <div
-        className={`lg:hidden absolute top-full left-0 right-0 shadow-xl transition-all duration-300 ${isDark ? 'bg-[#12121a] border-b border-white/5' : 'bg-white border-b border-gray-100'} ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+        className={`lg:hidden absolute top-full left-0 right-0 shadow-xl transition-all duration-300 ${isDark ? 'bg-brand-900 border-b border-brand-800/30' : 'bg-white border-b border-gray-100'} ${isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
       >
         <div className="container-custom py-6 space-y-2">
           {navLinks.map((link) => (
@@ -123,8 +123,8 @@ export default function Navbar() {
               href={link.href}
               onClick={() => setIsOpen(false)}
               className={`block px-4 py-3 rounded-xl font-semibold transition-all ${isActive(link.href)
-                ? isDark ? 'text-blue-400 bg-blue-500/10' : 'text-blue-600 bg-blue-50'
-                : isDark ? 'text-gray-400 hover:text-blue-400 hover:bg-white/5' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
+                ? isDark ? 'text-gold-400 bg-gold-500/10' : 'text-brand-700 bg-brand-50'
+                : isDark ? 'text-gray-400 hover:text-gold-400 hover:bg-white/5' : 'text-gray-600 hover:text-brand-700 hover:bg-gray-50'
                 }`}
             >
               {link.label}
@@ -134,7 +134,7 @@ export default function Navbar() {
           <Link
             href="/dashboard"
             onClick={() => setIsOpen(false)}
-            className={`block px-4 py-3 rounded-xl font-semibold transition-all ${isDark ? 'text-gray-400 hover:text-blue-400 hover:bg-white/5' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'}`}
+            className={`block px-4 py-3 rounded-xl font-semibold transition-all ${isDark ? 'text-gray-400 hover:text-gold-400 hover:bg-white/5' : 'text-gray-600 hover:text-brand-700 hover:bg-gray-50'}`}
           >
             <span className="flex items-center gap-2">
               <LayoutDashboard className="h-4 w-4" />

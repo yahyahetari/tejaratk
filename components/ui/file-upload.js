@@ -128,8 +128,8 @@ export default function FileUpload({
       {!uploadedFile && (
         <div
           className={`relative border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${dragActive
-            ? 'border-blue-500 bg-blue-50'
-            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+            ? 'border-brand-600 bg-brand-50'
+            : 'border-gray-300 hover:border-brand-400 hover:bg-gray-50'
             } ${uploading ? 'pointer-events-none opacity-50' : ''}`}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
@@ -149,13 +149,13 @@ export default function FileUpload({
 
           {uploading ? (
             <div className="flex flex-col items-center gap-3">
-              <Loader2 className="h-12 w-12 text-blue-500 animate-spin" />
+              <Loader2 className="h-12 w-12 text-brand-600 animate-spin" />
               <p className="text-gray-600">جاري رفع الملف...</p>
             </div>
           ) : (
             <div className="flex flex-col items-center gap-3">
-              <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                <Upload className="h-8 w-8 text-blue-600" />
+              <div className="w-16 h-16 rounded-full bg-brand-100 flex items-center justify-center">
+                <Upload className="h-8 w-8 text-brand-700" />
               </div>
               <div>
                 <p className="text-gray-700 font-medium">{label}</p>
@@ -181,8 +181,8 @@ export default function FileUpload({
             </div>
           ) : (
             <div className="p-6 flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                <File className="h-6 w-6 text-blue-600" />
+              <div className="w-12 h-12 rounded-xl bg-brand-100 flex items-center justify-center">
+                <File className="h-6 w-6 text-brand-700" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-gray-900 truncate">

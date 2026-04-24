@@ -3,6 +3,8 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
+import Logo from '@/components/common/logo';
 import {
   Mail,
   Lock,
@@ -12,7 +14,6 @@ import {
   EyeOff,
   Loader2,
   CheckCircle,
-  ShoppingCart,
   ArrowRight,
   Shield,
   RefreshCw,
@@ -250,9 +251,9 @@ export default function RegisterPage() {
           </div>
           <h2 className="text-3xl font-black text-gray-900 mb-3">مبروك! 🎉</h2>
           <p className="text-gray-600 text-lg mb-2">تم تأكيد بريدك الإلكتروني وإنشاء حسابك بنجاح</p>
-          <p className="text-blue-600 font-semibold">جاري تحويلك إلى لوحة التحكم...</p>
+          <p className="text-brand-700 font-semibold">جاري تحويلك إلى لوحة التحكم...</p>
           <div className="mt-8">
-            <Loader2 className="h-10 w-10 animate-spin mx-auto text-blue-600" />
+            <Loader2 className="h-10 w-10 animate-spin mx-auto text-brand-700" />
           </div>
         </div>
       </div>
@@ -267,7 +268,7 @@ export default function RegisterPage() {
           <div className="flex items-center justify-center gap-3 mb-8">
             <div className="relative">
               <div className="absolute inset-0 gradient-primary blur-xl opacity-50 rounded-full"></div>
-              <div className="relative w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30">
+              <div className="relative w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-brand-600/30">
                 <Mail className="h-7 w-7 text-white" />
               </div>
             </div>
@@ -280,7 +281,7 @@ export default function RegisterPage() {
             <p className="text-gray-500">
               أرسلنا رمز تحقق مكون من 6 أرقام إلى
             </p>
-            <p className="text-blue-600 font-semibold mt-1" dir="ltr">
+            <p className="text-brand-700 font-semibold mt-1" dir="ltr">
               {formData.email}
             </p>
           </div>
@@ -303,7 +304,7 @@ export default function RegisterPage() {
                 onChange={(e) => handleCodeChange(index, e.target.value)}
                 onKeyDown={(e) => handleCodeKeyDown(index, e)}
                 onPaste={handleCodePaste}
-                className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all"
+                className="w-12 h-14 text-center text-2xl font-bold border-2 border-gray-200 rounded-xl focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 outline-none transition-all"
                 disabled={verifying}
               />
             ))}
@@ -332,7 +333,7 @@ export default function RegisterPage() {
             <button
               onClick={handleResendCode}
               disabled={resending || resendCooldown > 0}
-              className="text-blue-600 font-semibold hover:text-blue-700 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto"
+              className="text-brand-700 font-semibold hover:text-brand-800 disabled:text-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2 mx-auto"
             >
               {resending ? (
                 <>
@@ -377,17 +378,9 @@ export default function RegisterPage() {
         <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-30"></div>
 
         <div className="w-full max-w-lg relative z-10 animate-fade-in-up py-8">
-          <Link href="/" className="lg:hidden flex items-center justify-center gap-3 mb-10 group">
-            <div className="relative">
-              <div className="absolute inset-0 gradient-primary blur-xl opacity-50 group-hover:opacity-75 transition-opacity rounded-full"></div>
-              <div className="relative w-14 h-14 gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform">
-                <ShoppingCart className="h-7 w-7 text-white" />
-              </div>
-            </div>
-            <span className="text-3xl font-black gradient-text">
-              تجارتك
-            </span>
-          </Link>
+          <div className="lg:hidden flex justify-center mb-10">
+            <Logo />
+          </div>
 
           <div className="text-center mb-8">
             <h1 className="text-3xl font-black text-gray-900 mb-3">
@@ -406,7 +399,7 @@ export default function RegisterPage() {
                   <p className="text-red-700 font-medium">خطأ</p>
                   <p className="text-red-600 text-sm mt-1">{error}</p>
                   {error.includes('مستخدم مسبقاً') && (
-                    <Link href="/login" className="inline-block mt-2 text-blue-600 hover:text-blue-700 font-semibold text-sm">
+                    <Link href="/login" className="inline-block mt-2 text-brand-700 hover:text-brand-800 font-semibold text-sm">
                       اذهب إلى صفحة تسجيل الدخول ←
                     </Link>
                   )}
@@ -423,7 +416,7 @@ export default function RegisterPage() {
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <Building2 className="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                    <Building2 className="h-5 w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                   </div>
                   <input
                     id="businessName"
@@ -445,7 +438,7 @@ export default function RegisterPage() {
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <User className="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                    <User className="h-5 w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                   </div>
                   <input
                     id="contactName"
@@ -468,7 +461,7 @@ export default function RegisterPage() {
               </label>
               <div className="relative group">
                 <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                  <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                 </div>
                 <input
                   id="email"
@@ -492,7 +485,7 @@ export default function RegisterPage() {
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                   </div>
                   <input
                     id="password"
@@ -525,7 +518,7 @@ export default function RegisterPage() {
                 </label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
-                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-blue-600 transition-colors" />
+                    <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-brand-700 transition-colors" />
                   </div>
                   <input
                     id="confirmPassword"
@@ -569,15 +562,15 @@ export default function RegisterPage() {
                 type="checkbox"
                 checked={acceptTerms}
                 onChange={(e) => setAcceptTerms(e.target.checked)}
-                className="w-5 h-5 mt-0.5 text-blue-600 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer transition-all"
+                className="w-5 h-5 mt-0.5 text-brand-700 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-brand-600 focus:ring-offset-2 cursor-pointer transition-all"
               />
               <span className="text-sm text-gray-600 leading-relaxed">
                 بالتسجيل، أوافق على{' '}
-                <Link href="/terms" className="text-blue-600 hover:underline font-semibold">
+                <Link href="/terms" className="text-brand-700 hover:underline font-semibold">
                   الشروط والأحكام
                 </Link>
                 {' '}و{' '}
-                <Link href="/privacy" className="text-blue-600 hover:underline font-semibold">
+                <Link href="/privacy" className="text-brand-700 hover:underline font-semibold">
                   سياسة الخصوصية
                 </Link>
               </span>
@@ -616,7 +609,7 @@ export default function RegisterPage() {
               لديك حساب بالفعل؟{' '}
               <Link
                 href="/login"
-                className="font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                className="font-bold text-brand-700 hover:text-brand-800 transition-colors"
               >
                 سجل دخولك
               </Link>

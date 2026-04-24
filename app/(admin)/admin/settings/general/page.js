@@ -61,7 +61,7 @@ export default function GeneralSettingsPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
             </div>
         );
     }
@@ -70,14 +70,14 @@ export default function GeneralSettingsPage() {
         <div className="space-y-6">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Link href="/admin/settings" className="hover:text-blue-600">الإعدادات</Link>
+                <Link href="/admin/settings" className="hover:text-brand-700">الإعدادات</Link>
                 <ArrowRight className="w-4 h-4" />
                 <span className="text-gray-900">الإعدادات العامة</span>
             </div>
 
             {/* Header */}
             <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center shadow-lg">
                     <Globe className="h-6 w-6 text-white" />
                 </div>
                 <div>
@@ -95,7 +95,7 @@ export default function GeneralSettingsPage() {
                             type="text"
                             value={settings.appName}
                             onChange={(e) => setSettings({ ...settings, appName: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
                         />
                     </div>
                     <div>
@@ -104,7 +104,7 @@ export default function GeneralSettingsPage() {
                             type="email"
                             value={settings.supportEmail}
                             onChange={(e) => setSettings({ ...settings, supportEmail: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
                         />
                     </div>
                 </div>
@@ -115,7 +115,7 @@ export default function GeneralSettingsPage() {
                         value={settings.appDescription}
                         onChange={(e) => setSettings({ ...settings, appDescription: e.target.value })}
                         rows={3}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
                     />
                 </div>
 
@@ -125,7 +125,7 @@ export default function GeneralSettingsPage() {
                         <select
                             value={settings.defaultCurrency}
                             onChange={(e) => setSettings({ ...settings, defaultCurrency: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
                         >
                             <option value="OMR">ريال عماني (OMR)</option>
                             <option value="SAR">ريال سعودي (SAR)</option>
@@ -138,7 +138,7 @@ export default function GeneralSettingsPage() {
                         <select
                             value={settings.defaultLanguage}
                             onChange={(e) => setSettings({ ...settings, defaultLanguage: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
                         >
                             <option value="ar">العربية</option>
                             <option value="en">English</option>
@@ -149,7 +149,7 @@ export default function GeneralSettingsPage() {
                         <select
                             value={settings.defaultTimezone}
                             onChange={(e) => setSettings({ ...settings, defaultTimezone: e.target.value })}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-600"
                         >
                             <option value="Asia/Muscat">عُمان (GMT+4)</option>
                             <option value="Asia/Riyadh">السعودية (GMT+3)</option>
@@ -175,7 +175,7 @@ export default function GeneralSettingsPage() {
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-brand-700 hover:bg-brand-800 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
                     >
                         {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                         <span>{saving ? 'جاري الحفظ...' : 'حفظ الإعدادات'}</span>

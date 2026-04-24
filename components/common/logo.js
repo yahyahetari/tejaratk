@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
 
 export default function Logo({ size = 'default', showText = true }) {
   const sizes = {
-    small: { container: 'w-8 h-8', icon: 'h-4 w-4', text: 'text-lg' },
-    default: { container: 'w-11 h-11', icon: 'h-5 w-5', text: 'text-2xl' },
-    large: { container: 'w-14 h-14', icon: 'h-7 w-7', text: 'text-3xl' },
+    small: { container: 'w-10 h-10', text: 'text-lg' },
+    default: { container: 'w-14 h-14', text: 'text-2xl' },
+    large: { container: 'w-24 h-24', text: 'text-3xl' },
   };
 
   const currentSize = sizes[size] || sizes.default;
@@ -13,13 +13,24 @@ export default function Logo({ size = 'default', showText = true }) {
   return (
     <Link href="/" className="flex items-center gap-3 group">
       <div className="relative">
-        <div className="absolute inset-0 gradient-primary blur-xl opacity-50 group-hover:opacity-75 transition-opacity rounded-full"></div>
-        <div className={`relative ${currentSize.container} gradient-primary rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-110 transition-transform`}>
-          <ShoppingCart className={`${currentSize.icon} text-white`} />
+        {/* Glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-700/30 to-gold-600/30 blur-2xl opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
+        
+        {/* Logo Container */}
+        <div className={`relative ${currentSize.container} rounded-xl overflow-hidden shadow-xl shadow-brand-700/20 group-hover:scale-105 transition-transform bg-white border border-brand-100/50`}>
+          <Image
+            src="/images/WhatsApp Image 2026-04-23 at 6.58.50 AM.jpeg"
+            alt="تجارتك"
+            fill
+            sizes="256px"
+            className="object-cover scale-[1.5] transform-gpu"
+            quality={100}
+            priority
+          />
         </div>
       </div>
       {showText && (
-        <span className={`${currentSize.text} font-black gradient-text`}>
+        <span className={`${currentSize.text} font-black gradient-text tracking-tight`}>
           تجارتك
         </span>
       )}

@@ -67,7 +67,7 @@ export default function AppearanceSettingsPage() {
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <Loader2 className="w-8 h-8 animate-spin text-pink-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-walnut-600" />
             </div>
         );
     }
@@ -82,14 +82,14 @@ export default function AppearanceSettingsPage() {
         <div className="space-y-6">
             {/* Breadcrumb */}
             <div className="flex items-center gap-2 text-sm text-gray-500">
-                <Link href="/admin/settings" className="hover:text-pink-600">الإعدادات</Link>
+                <Link href="/admin/settings" className="hover:text-walnut-600">الإعدادات</Link>
                 <ArrowRight className="w-4 h-4" />
                 <span className="text-gray-900">المظهر</span>
             </div>
 
             {/* Header */}
             <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-pink-500 to-rose-600 flex items-center justify-center shadow-lg">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-walnut-500 to-rose-600 flex items-center justify-center shadow-lg">
                     <Palette className="h-6 w-6 text-white" />
                 </div>
                 <div>
@@ -106,10 +106,10 @@ export default function AppearanceSettingsPage() {
                         <button
                             key={theme.key}
                             onClick={() => setSettings({ ...settings, theme: theme.key })}
-                            className={`p-4 rounded-xl border-2 transition-all ${settings.theme === theme.key ? 'border-pink-500 bg-pink-50' : 'border-gray-200 hover:border-gray-300'}`}
+                            className={`p-4 rounded-xl border-2 transition-all ${settings.theme === theme.key ? 'border-walnut-500 bg-pink-50' : 'border-gray-200 hover:border-gray-300'}`}
                         >
-                            <theme.icon className={`w-8 h-8 mx-auto mb-2 ${settings.theme === theme.key ? 'text-pink-600' : 'text-gray-400'}`} />
-                            <p className={`text-center font-medium ${settings.theme === theme.key ? 'text-pink-600' : 'text-gray-600'}`}>
+                            <theme.icon className={`w-8 h-8 mx-auto mb-2 ${settings.theme === theme.key ? 'text-walnut-600' : 'text-gray-400'}`} />
+                            <p className={`text-center font-medium ${settings.theme === theme.key ? 'text-walnut-600' : 'text-gray-600'}`}>
                                 {theme.label}
                             </p>
                         </button>
@@ -153,7 +153,7 @@ export default function AppearanceSettingsPage() {
                             value={settings.logoUrl}
                             onChange={(e) => setSettings({ ...settings, logoUrl: e.target.value })}
                             placeholder="https://example.com/logo.png"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-walnut-500"
                         />
                     </div>
                     <div>
@@ -163,7 +163,7 @@ export default function AppearanceSettingsPage() {
                             value={settings.faviconUrl}
                             onChange={(e) => setSettings({ ...settings, faviconUrl: e.target.value })}
                             placeholder="https://example.com/favicon.ico"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-walnut-500"
                         />
                     </div>
                 </div>
@@ -173,7 +173,7 @@ export default function AppearanceSettingsPage() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-pink-600 hover:bg-pink-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                    className="flex items-center gap-2 px-6 py-2.5 bg-walnut-600 hover:bg-pink-700 text-white rounded-lg font-medium transition-colors disabled:opacity-50"
                 >
                     {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                     <span>{saving ? 'جاري الحفظ...' : 'حفظ الإعدادات'}</span>

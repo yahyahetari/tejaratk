@@ -1,6 +1,7 @@
 import { getSession } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import QuickActions from '@/components/dashboard/quick-actions';
 import ScrollReveal from '@/components/ui/scroll-reveal';
 import {
@@ -75,18 +76,26 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-brand-950">
       {/* Mobile Header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#0e0e16]/95 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/20">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-brand-950/95 backdrop-blur-xl border-b border-brand-800/30 shadow-lg shadow-black/20">
         <div className="flex items-center justify-end h-16 px-4">
           <Link href="/dashboard" className="absolute mt-5 right-2 flex gap-2 group">
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-600 blur-lg opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
-              <div className="relative w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-110 transition-transform">
-                <ShoppingCart className="h-6 w-6 text-white" />
+              <div className="absolute inset-0 bg-gradient-to-r from-brand-700 to-gold-600 blur-lg opacity-40 group-hover:opacity-60 transition-opacity rounded-full"></div>
+              <div className="relative w-14 h-14 rounded-2xl overflow-hidden shadow-xl shadow-brand-700/30 group-hover:scale-105 transition-transform bg-white border-2 border-brand-100/30">
+                <Image
+                  src="/images/WhatsApp Image 2026-04-23 at 6.58.50 AM.jpeg"
+                  alt="تجارتك"
+                  fill
+                  sizes="256px"
+                  className="object-cover scale-[1.5] transform-gpu"
+                  quality={100}
+                  priority
+                />
               </div>
             </div>
-            <span className="text-lg mt-1 font-black bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">تجارتك</span>
+            <span className="text-lg mt-1 font-black bg-gradient-to-r from-brand-400 to-gold-400 bg-clip-text text-transparent">تجارتك</span>
           </Link>
         </div>
       </div>
@@ -102,7 +111,7 @@ export default async function DashboardPage() {
             {/* Welcome Header */}
             <ScrollReveal animation="animate-fade-in-up">
               <div className="relative overflow-hidden rounded-xl lg:rounded-2xl shadow-xl shadow-black/20">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-700 via-brand-600 to-gold-600"></div>
                 <div className="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-white/10 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 w-32 h-32 sm:w-48 sm:h-48 lg:w-64 lg:h-64 bg-white/10 rounded-full blur-3xl"></div>
 
@@ -120,14 +129,14 @@ export default async function DashboardPage() {
                       <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-black mb-1.5 sm:mb-2">
                         مرحباً، {merchantData.contactName || 'المستخدم'}! 👋
                       </h1>
-                      <p className="text-blue-100 text-sm sm:text-base lg:text-lg">
+                      <p className="text-brand-100 text-sm sm:text-base lg:text-lg">
                         مرحباً بك في منصة تجارتك لإدارة الاشتراكات وإعداد متجرك.
                       </p>
                     </div>
 
                     <div className="flex flex-row gap-2 sm:gap-3">
                       <Link href="/dashboard/store-setup" className="flex-1 sm:flex-initial">
-                        <button className="w-full px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 bg-white text-blue-600 rounded-lg sm:rounded-xl font-semibold hover:bg-gray-100 transition-all shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm lg:text-base">
+                        <button className="w-full px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 bg-white text-brand-700 rounded-lg sm:rounded-xl font-semibold hover:bg-gray-100 transition-all shadow-lg flex items-center justify-center gap-2 text-xs sm:text-sm lg:text-base">
                           <Store className="h-4 w-4 sm:h-5 sm:w-5" />
                           <span>إعداد المتجر</span>
                         </button>
@@ -172,9 +181,9 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
               {[
                 { title: 'إجمالي المبيعات', value: '$0.00', icon: DollarSign, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-                { title: 'الطلبات النشطة', value: '0', icon: ShoppingBag, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-                { title: 'زيارات المتجر', value: '0', icon: Users, color: 'text-purple-400', bg: 'bg-purple-500/10' },
-                { title: 'صافي الأرباح', value: '$0.00', icon: TrendingUp, color: 'text-amber-400', bg: 'bg-amber-500/10' },
+                { title: 'الطلبات النشطة', value: '0', icon: ShoppingBag, color: 'text-brand-400', bg: 'bg-brand-700/10' },
+                { title: 'زيارات المتجر', value: '0', icon: Users, color: 'text-gold-400', bg: 'bg-gold-600/10' },
+                { title: 'صافي الأرباح', value: '$0.00', icon: TrendingUp, color: 'text-walnut-400', bg: 'bg-walnut-600/10' },
               ].map((stat, i) => (
                 <ScrollReveal
                   key={i}
@@ -208,12 +217,12 @@ export default async function DashboardPage() {
                 <div className="bg-white/[0.03] p-4 sm:p-5 lg:p-6 rounded-xl lg:rounded-2xl border border-white/5 h-full">
                   <div className="flex items-center justify-between gap-2 mb-4 sm:mb-5">
                     <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-gradient-to-br from-brand-700 to-brand-600 flex items-center justify-center">
                         <Bell className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                       </div>
                       <h2 className="text-base sm:text-lg font-bold text-white">النشاط الأخير</h2>
                     </div>
-                    <span className="text-xs font-bold text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <span className="text-xs font-bold text-gold-400 bg-gold-500/10 px-2.5 py-1 rounded-full flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       <span className="mr-1">اليوم</span>
                     </span>
@@ -222,8 +231,8 @@ export default async function DashboardPage() {
                   <div className="space-y-3">
                     {recentActivities.map((activity, i) => {
                       const ActivityIcon = activity.icon;
-                      const bgColorClass = activity.color === 'blue' ? 'bg-blue-500/10' : 'bg-emerald-500/10';
-                      const textColorClass = activity.color === 'blue' ? 'text-blue-400' : 'text-emerald-400';
+                      const bgColorClass = activity.color === 'blue' ? 'bg-brand-700/10' : 'bg-emerald-500/10';
+                      const textColorClass = activity.color === 'blue' ? 'text-brand-400' : 'text-emerald-400';
                       return (
                         <div
                           key={i}
@@ -250,12 +259,12 @@ export default async function DashboardPage() {
                       </div>
                       <div className="w-full bg-white/5 rounded-full h-2">
                         <div
-                          className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all"
+                          className="bg-gradient-to-r from-brand-700 to-gold-600 h-2 rounded-full transition-all"
                           style={{ width: `${(merchantData.storeSetupStep / 4) * 100}% ` }}
                         ></div>
                       </div>
                       <Link href="/dashboard/store-setup" className="mt-3 block">
-                        <button className="w-full text-sm text-blue-400 font-semibold hover:text-blue-300">
+                        <button className="w-full text-sm text-gold-400 font-semibold hover:text-gold-300">
                           متابعة الإعداد →
                         </button>
                       </Link>

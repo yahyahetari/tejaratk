@@ -19,7 +19,7 @@ export default async function DashboardLayout({ children }) {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-white mb-2">خطأ في الجلسة</h1>
           <p className="text-gray-400 mb-4">لم يتم العثور على بيانات الجلسة</p>
-          <a href="/login" className="text-blue-400 hover:underline">
+          <a href="/login" className="text-brand-400 hover:underline">
             العودة لتسجيل الدخول
           </a>
         </div>
@@ -28,12 +28,12 @@ export default async function DashboardLayout({ children }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0e0e16] flex relative">
+    <div className="min-h-screen bg-brand-950 flex relative">
       {/* Sidebar */}
       <DashboardSidebar merchant={session.merchant} />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-[#0a0a0f] lg:rounded-tr-[2.5rem] border-r border-[#1a1a24] relative z-10 transition-all duration-300">
+      <div className="flex-1 flex flex-col min-h-screen overflow-hidden bg-brand-950 lg:rounded-tr-[2.5rem] border-r border-brand-800/30 relative z-10 transition-all duration-300">
         {/* Header */}
         <DashboardHeader session={session} />
 

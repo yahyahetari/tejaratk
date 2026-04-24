@@ -90,7 +90,7 @@ export default function HelpPage() {
             placeholder="ابحث عن سؤالك..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pr-12 pl-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent"
           />
         </div>
       </div>
@@ -103,10 +103,10 @@ export default function HelpPage() {
             <a
               key={index}
               href={resource.link}
-              className="p-6 bg-white border border-gray-200 rounded-2xl hover:shadow-lg hover:border-blue-200 transition-all group"
+              className="p-6 bg-white border border-gray-200 rounded-2xl hover:shadow-lg hover:border-brand-200 transition-all group"
             >
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-500 transition-colors">
-                <Icon className="h-6 w-6 text-blue-600 group-hover:text-white transition-colors" />
+              <div className="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-brand-600 transition-colors">
+                <Icon className="h-6 w-6 text-brand-700 group-hover:text-white transition-colors" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-1">{resource.title}</h3>
               <p className="text-sm text-gray-600">{resource.description}</p>
@@ -146,7 +146,7 @@ export default function HelpPage() {
       </div>
 
       {/* Contact Support */}
-      <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8">
+      <div className="bg-gradient-to-br from-brand-50 to-gold-50 rounded-2xl p-8">
         <h2 className="text-xl font-bold text-gray-900 mb-2">هل تحتاج مساعدة إضافية؟</h2>
         <p className="text-gray-600 mb-6">فريق الدعم الفني متاح لمساعدتك</p>
         
@@ -155,8 +155,8 @@ export default function HelpPage() {
             href="mailto:support@tejaratk.com"
             className="flex items-center gap-3 p-4 bg-white rounded-xl hover:shadow-md transition-shadow"
           >
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <Mail className="h-5 w-5 text-blue-600" />
+            <div className="w-10 h-10 bg-brand-100 rounded-lg flex items-center justify-center">
+              <Mail className="h-5 w-5 text-brand-700" />
             </div>
             <div>
               <p className="font-medium text-gray-900">البريد الإلكتروني</p>
@@ -183,8 +183,8 @@ export default function HelpPage() {
             href="tel:+96812345678"
             className="flex items-center gap-3 p-4 bg-white rounded-xl hover:shadow-md transition-shadow"
           >
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-              <Phone className="h-5 w-5 text-purple-600" />
+            <div className="w-10 h-10 bg-gold-100 rounded-lg flex items-center justify-center">
+              <Phone className="h-5 w-5 text-gold-700" />
             </div>
             <div>
               <p className="font-medium text-gray-900">الهاتف</p>

@@ -70,7 +70,7 @@ export default function AdminDashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
       </div>
     );
   }
@@ -82,8 +82,8 @@ export default function AdminDashboardPage() {
       change: '+12%',
       changeType: 'increase',
       icon: Users,
-      gradient: 'from-blue-500 to-indigo-600',
-      shadowColor: 'shadow-blue-500/20'
+      gradient: 'from-brand-600 to-brand-600',
+      shadowColor: 'shadow-brand-600/20'
     },
     {
       name: 'المتاجر النشطة',
@@ -109,15 +109,15 @@ export default function AdminDashboardPage() {
       change: '+15%',
       changeType: 'increase',
       icon: ShoppingBag,
-      gradient: 'from-purple-500 to-pink-600',
-      shadowColor: 'shadow-purple-500/20'
+      gradient: 'from-gold-600 to-walnut-600',
+      shadowColor: 'shadow-gold-600/20'
     },
   ];
 
   const quickActions = [
-    { title: 'إدارة المستخدمين', desc: 'عرض وإدارة جميع المستخدمين', icon: Users, href: '/admin/users', gradient: 'from-blue-500 to-indigo-600' },
+    { title: 'إدارة المستخدمين', desc: 'عرض وإدارة جميع المستخدمين', icon: Users, href: '/admin/users', gradient: 'from-brand-600 to-brand-600' },
     { title: 'إدارة المتاجر', desc: 'مراجعة وإدارة المتاجر', icon: Store, href: '/admin/stores', gradient: 'from-emerald-500 to-teal-600' },
-    { title: 'الاشتراكات', desc: 'إدارة خطط الاشتراك', icon: CreditCard, href: '/admin/subscriptions', gradient: 'from-purple-500 to-pink-600' },
+    { title: 'الاشتراكات', desc: 'إدارة خطط الاشتراك', icon: CreditCard, href: '/admin/subscriptions', gradient: 'from-gold-600 to-walnut-600' },
     { title: 'التقارير', desc: 'عرض التقارير والإحصائيات', icon: BarChart3, href: '/admin/reports', gradient: 'from-amber-500 to-orange-600' },
   ];
 
@@ -134,7 +134,7 @@ export default function AdminDashboardPage() {
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <div className="flex items-center gap-3 mb-2">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-600 flex items-center justify-center shadow-lg shadow-brand-600/30">
               <BarChart3 className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -182,7 +182,7 @@ export default function AdminDashboardPage() {
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
         <div className="p-5 lg:p-6 border-b border-gray-100">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gold-600 to-walnut-600 flex items-center justify-center">
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <div>

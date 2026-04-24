@@ -143,7 +143,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
       </div>
     );
   }
@@ -160,7 +160,7 @@ export default function SettingsPage() {
       <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
         <div className="p-6">
           <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2 mb-4">
-            <User className="w-5 h-5 text-blue-600" />
+            <User className="w-5 h-5 text-brand-700" />
             معلومات الحساب
           </h2>
           <div className="grid md:grid-cols-2 gap-4">
@@ -180,7 +180,7 @@ export default function SettingsPage() {
             </div>
           </div>
           {user?.merchant?.subscription && (
-            <div className="mt-4 bg-gradient-to-l from-blue-50 to-indigo-50 rounded-xl p-4">
+            <div className="mt-4 bg-gradient-to-l from-brand-50 to-indigo-50 rounded-xl p-4">
               <p className="text-xs text-gray-500 mb-1 flex items-center gap-1">
                 <CreditCard className="w-3.5 h-3.5" /> الاشتراك الحالي
               </p>
@@ -226,7 +226,7 @@ export default function SettingsPage() {
                   value={passwords.current}
                   onChange={(e) => setPasswords(p => ({ ...p, current: e.target.value }))}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent outline-none transition-all"
                   dir="ltr"
                   placeholder="••••••••"
                 />
@@ -248,7 +248,7 @@ export default function SettingsPage() {
                     onChange={(e) => setPasswords(p => ({ ...p, new: e.target.value }))}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent outline-none transition-all"
                     dir="ltr"
                     placeholder="••••••••"
                   />
@@ -267,7 +267,7 @@ export default function SettingsPage() {
                     onChange={(e) => setPasswords(p => ({ ...p, confirm: e.target.value }))}
                     required
                     minLength={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-600 focus:border-transparent outline-none transition-all"
                     dir="ltr"
                     placeholder="••••••••"
                   />

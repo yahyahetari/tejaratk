@@ -42,7 +42,7 @@ export default function AdminAnalyticsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-700" />
       </div>
     );
   }
@@ -99,12 +99,12 @@ export default function AdminAnalyticsPage() {
   ];
 
   const colorClasses = {
-    blue: 'bg-blue-100 text-blue-600',
-    purple: 'bg-purple-100 text-purple-600',
+    blue: 'bg-brand-100 text-brand-700',
+    purple: 'bg-purple-100 text-gold-700',
     green: 'bg-green-100 text-green-600',
     orange: 'bg-orange-100 text-orange-600',
     emerald: 'bg-emerald-100 text-emerald-600',
-    pink: 'bg-pink-100 text-pink-600',
+    pink: 'bg-pink-100 text-walnut-600',
   };
 
   return (
@@ -121,7 +121,7 @@ export default function AdminAnalyticsPage() {
           <select
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-600"
           >
             <option value="week">هذا الأسبوع</option>
             <option value="month">هذا الشهر</option>

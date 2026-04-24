@@ -3,24 +3,24 @@ import { Target, Lightbulb, Code, Smartphone, Headphones, Zap, Heart, Award } fr
 
 export default function About() {
   const capabilities = [
-    { icon: Code, title: 'تطوير احترافي', desc: 'كود نظيف ومحسّن', gradient: 'from-blue-500 to-purple-600' },
-    { icon: Smartphone, title: 'تصاميم متجاوبة', desc: 'جميع الأجهزة', gradient: 'from-purple-500 to-pink-600' },
-    { icon: Headphones, title: 'دعم متواصل', desc: 'متابعة مستمرة', gradient: 'from-green-500 to-emerald-600' },
-    { icon: Zap, title: 'تسليم سريع', desc: 'أيام معدودة', gradient: 'from-orange-500 to-red-600' },
+    { icon: Code, title: 'تطوير احترافي', desc: 'كود نظيف ومحسّن', gradient: 'from-brand-600 to-brand-700' },
+    { icon: Smartphone, title: 'تصاميم متجاوبة', desc: 'جميع الأجهزة', gradient: 'from-gold-600 to-gold-700' },
+    { icon: Headphones, title: 'دعم متواصل', desc: 'متابعة مستمرة', gradient: 'from-emerald-500 to-teal-600' },
+    { icon: Zap, title: 'تسليم سريع', desc: 'أيام معدودة', gradient: 'from-walnut-600 to-walnut-700' },
   ];
 
   return (
     <section className="py-20 relative overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 bg-transparent"></div>
-      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px]"></div>
-      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-purple-600/5 rounded-full blur-[100px]"></div>
+      <div className="absolute top-0 left-0 w-[400px] h-[400px] bg-brand-700/5 rounded-full blur-[100px]"></div>
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-gold-700/5 rounded-full blur-[100px]"></div>
 
       <div className="container-custom relative z-10">
         <div className="grid lg:grid-cols-2 gap-14 items-center">
           {/* Vision Card */}
           <div className="relative animate-fade-in-up">
-            <div className="bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-3xl p-10 text-white shadow-2xl shadow-blue-600/10 relative overflow-hidden">
+            <div className="bg-gradient-to-br from-brand-700 via-brand-600 to-gold-700 rounded-3xl p-10 text-white shadow-2xl shadow-brand-700/10 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
 
@@ -30,18 +30,18 @@ export default function About() {
                 </div>
 
                 <h3 className="text-2xl font-bold mb-4">رؤيتي</h3>
-                <p className="text-blue-100 leading-relaxed text-lg mb-8">
+                <p className="text-brand-100 leading-relaxed text-lg mb-8">
                   أؤمن بقوة التجارة الإلكترونية في تحويل الأفكار إلى مشاريع ناجحة. هدفي مساعدتك في بناء متجر احترافي يعكس هوية علامتك ويحقق أهدافك باستخدام أحدث التقنيات والذكاء الاصطناعي.
                 </p>
 
                 <div className="flex items-center gap-4 pt-4 border-t border-white/20">
                   <div className="flex items-center gap-2">
-                    <Heart className="h-5 w-5 text-pink-300" />
-                    <span className="text-blue-100 text-sm font-semibold">شغف بالتطوير</span>
+                    <Heart className="h-5 w-5 text-gold-300" />
+                    <span className="text-brand-100 text-sm font-semibold">شغف بالتطوير</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Award className="h-5 w-5 text-amber-300" />
-                    <span className="text-blue-100 text-sm font-semibold">جودة عالية</span>
+                    <Award className="h-5 w-5 text-gold-300" />
+                    <span className="text-brand-100 text-sm font-semibold">جودة عالية</span>
                   </div>
                 </div>
               </div>
@@ -50,14 +50,14 @@ export default function About() {
 
           {/* Info Side */}
           <div className="space-y-6 animate-fade-in-up delay-200">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full shadow-lg shadow-blue-500/20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-700 to-brand-600 rounded-full shadow-lg shadow-brand-700/20">
               <Target className="h-4 w-4 text-white" />
               <span className="text-sm font-bold text-white">من أنا</span>
             </div>
 
             <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
               مطور متخصص في<br />
-              <span className="bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent">المتاجر الإلكترونية</span>
+              <span className="bg-gradient-to-r from-brand-400 via-gold-400 to-brand-300 bg-clip-text text-transparent">المتاجر الإلكترونية</span>
             </h2>
 
             <p className="text-lg text-gray-400 leading-relaxed">
