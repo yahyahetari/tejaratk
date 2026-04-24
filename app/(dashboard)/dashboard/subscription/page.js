@@ -1,7 +1,7 @@
 import { getSession } from '@/lib/auth/session';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { getPlanById, calculateSavings } from '@/config/plans';
+import { getPlanById } from '@/config/plans';
 import { formatCurrency, formatDate } from '@/lib/utils/helpers';
 import { 
   CreditCard, 
@@ -11,15 +11,9 @@ import {
   Check,
   Sparkles,
   Shield,
-  Clock,
-  ArrowRight,
-  Gift,
   DollarSign,
-  Headphones,
-  Star,
-  Award,
-  Zap,
-  X
+  ArrowRight,
+  Zap
 } from 'lucide-react';
 import Pricing from '@/components/landing/pricing';
 
@@ -33,6 +27,25 @@ export default async function SubscriptionPage() {
   const { merchant } = session;
   const subscription = merchant?.subscription;
   const hasActiveSubscription = subscription?.status === 'ACTIVE';
+  
+  // Calculate renewal date if missing from DB
+  const getRenewalDate = () => {
+    if (subscription?.currentPeriodEnd) return subscription.currentPeriodEnd;
+    
+    // Fallback: 1 month from start or creation
+    const startDate = subscription?.currentPeriodStart || merchant?.createdAt || new Date();
+    const renewalDate = new Date(startDate);
+    
+    if (subscription?.billingCycle === 'YEARLY') {
+      renewalDate.setFullYear(renewalDate.getFullYear() + 1);
+    } else {
+      renewalDate.setMonth(renewalDate.getMonth() + 1);
+    }
+    
+    return renewalDate;
+  };
+
+  const renewalDate = getRenewalDate();
   
   return (
     <div className="space-y-8 animate-fade-in px-4 sm:px-0">
@@ -62,11 +75,9 @@ export default async function SubscriptionPage() {
       {/* Current Subscription Card */}
       {hasActiveSubscription && (
         <div className="relative group animate-fade-in-up">
-          {/* Decorative Background Glow */}
           <div className="absolute -inset-1 bg-gradient-to-r from-brand-500 to-gold-500 rounded-[2.5rem] blur opacity-10 group-hover:opacity-20 transition duration-1000"></div>
           
           <div className="relative bg-[#12121a] border border-white/5 rounded-[2.5rem] p-6 sm:p-8 shadow-3xl overflow-hidden text-right" dir="rtl">
-            {/* Background Texture */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_hsla(187,68%,32%,0.05)_0%,transparent_50%)]"></div>
             
             <div className="relative z-10">
@@ -93,7 +104,6 @@ export default async function SubscriptionPage() {
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10 text-right">
-                {/* Plan Info */}
                 <div className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-white/[0.05] transition-all">
                   <p className="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">الباقة</p>
                   <p className="text-2xl font-black text-white">
@@ -101,7 +111,6 @@ export default async function SubscriptionPage() {
                   </p>
                 </div>
                 
-                {/* Pricing Info */}
                 <div className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-white/[0.05] transition-all">
                   <p className="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">السعر</p>
                   <div className="flex items-baseline gap-2">
@@ -117,11 +126,10 @@ export default async function SubscriptionPage() {
                   </div>
                 </div>
                 
-                {/* Renewal Info */}
                 <div className="p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-white/[0.05] transition-all">
                   <p className="text-xs font-bold text-gray-500 uppercase mb-4 tracking-widest">التجديد القادم</p>
                   <p className="text-2xl font-black text-white">
-                    {formatDate(subscription.currentPeriodEnd)}
+                    {formatDate(renewalDate)}
                   </p>
                 </div>
               </div>
@@ -134,7 +142,7 @@ export default async function SubscriptionPage() {
                   <div className="flex-1">
                     <h3 className="font-bold text-white">الاشتراك قيد الإلغاء</h3>
                     <p className="text-gray-400 text-sm">
-                      ستفقد صلاحيات الوصول في تاريخ {formatDate(subscription.currentPeriodEnd)}.
+                      ستفقد صلاحيات الوصول في تاريخ {formatDate(renewalDate)}.
                     </p>
                   </div>
                   <Link href="/dashboard/subscription/resume">
